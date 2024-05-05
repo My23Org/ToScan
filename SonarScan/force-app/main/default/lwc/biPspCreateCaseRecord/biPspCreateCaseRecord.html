@@ -1,0 +1,56 @@
+<!-- This component is consolidate component used for creating Case object records. -->
+<template>
+	<lightning-card title="Create Case">
+		<div class="slds-p-around_medium">
+			<div class="slds-form-element__control">
+				<div class="createcase">
+					<label class="input-label" data-field="physician">Patient</label>
+					<lightning-input label="Referring Practitioner" type="search" onclick={showPicklistOptions1}
+						onchange={search1} value={selectedValue1} variant="label-hidden" placeholder="Enter name here"
+						field-name="HealthCloudGA__ReferringPractitioner__c" class="textInput" data-field="physician"
+						onblur={handleOnBlur1} disabled={accordionStatus}>
+					</lightning-input>
+					<div if:true={searchResults1} class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid"
+						role="listbox">
+						<ul class="slds-listbox slds-listbox_vertical" role="presentation">
+							<template for:each={searchResults1} for:item="searchResult1">
+								<li key={searchResult1.value} data-value={searchResult1.value} role="presentation"
+									onclick={selectSearchResult1} class="slds-listbox__item">
+									<div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+										role="option">
+										<span class="slds-media__body">
+											<span class="slds-truncate" title={searchResult1.label}>
+												{searchResult1.label}
+											</span>
+										</span>
+									</div>
+								</li>
+							</template>
+						</ul>
+					</div>
+				</div>
+				<p if:true={isPatientEmpty} class="slds-text-color_error">Patient is required</p>
+				<lightning-combobox class="Type" label="Type" value={selectedType} options={typeOptions}
+					onchange={handleTypeChange}>
+				</lightning-combobox>
+				<p if:true={isTypeEmpty} class="slds-text-color_error">Type is required</p>
+				<lightning-combobox label="Subtype" class="Subtype" value={selectedSubtype} options={subtypeOptions}
+					onchange={handleSubtypeChange}>
+					<!-- disabled={!selectedType}> -->
+				</lightning-combobox>
+				<p if:true={isSubTypeEmpty} class="slds-text-color_error">Subtype is required</p>
+				<!-- <lightning-input label="Subject" value={subject} onchange={handleSubjectChange}></lightning-input> -->
+				<lightning-input label="Description" class="description" value={description}
+					onchange={handleDescriptionChange}></lightning-input>
+				<p if:true={isDescriptionEmpty} class="slds-text-color_error">Description is required</p>
+				<lightning-combobox label="Status" value={status} class="Status" options={statusOptions}
+					onchange={handleStatusChange}>
+				</lightning-combobox>
+				<lightning-button variant="brand" class="Createbutton" label="Create Case"
+					onclick={createCase}></lightning-button>&nbsp;&nbsp;
+				<lightning-button variant="brand" class="Draftbutton" label="Draft Case"
+					onclick={draftCase}></lightning-button>
+			</div>
+		</div>
+	</lightning-card>
+</template>

@@ -1,0 +1,22 @@
+<!--This LWC (BiPspbReminderNotificationSett) creates a reminder notification interface. 
+It features an icon and text to prompt users to choose their preferred reminder method and includes a link to the notification settings page for configuring preferences.-->
+<template>
+  <div class="reminder-container">
+    <img src={Boxedicon} class="box-icon" />
+    <div>
+      <p class="reminder-text">How would you like to be reminded?</p>
+      <div class="notification-settings">
+        <p class="para">
+          Choose your preferred way to receive reminders in the <br />
+          <lightning-formatted-url
+            value="https://bi-patient-eu--pspdev2.sandbox.my.site.com/testsite/s/unassigned"
+            target="_blank"
+            label="notification settings"
+          >
+          </lightning-formatted-url
+          >.
+        </p>
+      </div>
+    </div>
+  </div>
+</template>

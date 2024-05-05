@@ -1,0 +1,39 @@
+<!-- This Card displays information related to the Introduction, aiding in the presentation and understanding of its contents.-->
+<template>
+	<!-- Strings are hard coded in this HTML file to comply with the mobile responsiveness-->
+	<div class={flexCard}>
+		<div class="content">
+			<div>
+				<br />
+				<p class="dlqi">Let's Personalize</p>
+			</div>
+			<div if:true={showAnswerQuestionsText}>
+				<p class={dlqi1}>
+					{answerlabel}
+					<br />{answerlabel1}<br />{answerlabel2}<br />{answerlabel3}<br />{answerlabel4}
+				</p>
+				<p><img src={cardimage} alt="Your Image" class={image} /></p>
+			</div>
+		</div>
+		<div class={bottomBar}>
+			<!-- To display Total Number of Questions and Total Number of Answered Question-->
+			<p class={ans}>
+				<span class="ansq">{answeredQuestions}</span>/{totalquestioncount}
+				<span class="smalltxt"> {answeredlabel}</span>
+			</p>
+
+			<template if:false={isStartLabel}>
+				<!-- To Display Dynamic Button Label-->
+				<button label={buttonLabel} onclick={handleButtonClick} class="button"
+					data-it-button="Let's Personalize: Resume">
+					{buttonLabel}
+				</button>
+			</template>
+			<template if:true={isStartLabel}>
+				<div class="circular-icon" onclick={handleButtonClick} data-it-button="Let's Personalize: Start">
+					<img src={arrowimage} alt="Custom Image" class="circular-image" />
+				</div>
+			</template>
+		</div>
+	</div>
+</template>

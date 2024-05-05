@@ -1,0 +1,36 @@
+.textInput {
+	width: 500px;
+	margin-top: 5px;
+}
+
+.Type {
+	margin-top: 5px;
+	width: 500px;
+}
+
+.Subtype {
+	margin-top: 5px;
+	width: 500px;
+}
+
+.Status {
+	margin-top: 5px;
+	width: 500px;
+}
+
+.description {
+	margin-top: 5px;
+	width: 500px;
+}
+
+.Createbutton {
+	margin-top: 5px;
+}
+
+.Draftbutton {
+	margin-top: 5px;
+}
+
+.createcase{
+	margin-top: 20px;
+}

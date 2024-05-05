@@ -1,0 +1,33 @@
+<!--This components using user  Temperaturesymtom values stroe this component-->
+<template>
+	<div class="itchenesline">Provide your currently measured body temperature.</div>
+	<p class="p">Provide more detail about your temperature.</p>
+	<div class="Temperature-content" data-it-uid={userid}>
+		<br>
+		<div class="temprutre-box">
+			<input type="number" min="93" max="107" value={valoF} name="Temperature" onchange={onchangeOfTempa}
+				step="0.10" placeholder="99.5" inputmode="numeric" pattern="\d*\.?\d*" /> ° F
+			<lightning-formatted-text class="text" value={formatedTextVal}>{formatedTextVal}</lightning-formatted-text>
+		</div>
+		<br>
+		<div class="modal-btn-row">
+			<button class="modal-confirm-btn" type="button" onclick={onchangeAccept} disabled={tempvaluesfill}
+				data-it-button="Temperature: Confirm and Save">Confirm and Save</button>
+		</div>
+
+	</div>
+	<template if:true={showMessage}>
+		<div class="modal-message">
+			<p class="para">
+				<img src={Boxedicon}>
+				Please consider informing your physician about your temperature.<br> Having a temperature above 37.5°C
+				from oral, temporal or tympanic<br> measurement should be counted as fever and referred to a doctor.
+			</p>
+			<p class="para1">
+				<img src={Boxedicon}>
+				Please consider informing your physician about your temperature. Having a temperature above 37.5°C from
+				oral, temporal or tympanic measurement should be counted as fever and referred to a doctor.
+			</p>
+		</div>
+	</template>
+</template>

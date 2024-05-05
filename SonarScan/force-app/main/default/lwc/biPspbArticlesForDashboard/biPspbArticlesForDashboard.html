@@ -1,0 +1,112 @@
+<!--This Lightning Web Component is designed to display both 'Just for Me' articles and recent articles from the CMS -->
+<template>
+	<!-- Strings are hard coded in this HTML file to comply with the mobile responsiveness-->
+	<lightning-layout multiple-rows>
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+			<div class="grid-containerHeadButton">
+				<div>
+					<h2 class="headParaStyle">Articles for you</h2>
+				</div>
+				<div class="align-right">
+					<button onclick={navtoinforcenter} class="buttonStyle">
+						Visit Information Center
+					</button>
+				</div>
+			</div>
+			<hr />
+		</lightning-layout-item>
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12"
+			class="slds-p-top_large">
+			<!--Artice one-->
+			<div if:true={showarticle1} class="grid-containerArticles">
+				<div class="yellowBack">
+					<div class="grid-containerInnerDivs">
+						<div class="backimg1"></div>
+						<div class="grid-containerContent">
+							<div class="display-Inline">
+								<img class="clck" src={ClockIcon} />
+								<p class="paraStyleclock">{dynamicProperty} minutes</p>
+							</div>
+							<div>
+								<h2 class="h2Style">{heading1}</h2>
+							</div>
+							<div>
+								<p class="paraStyle">{description1}</p>
+							</div>
+							<div>
+								<img data-name={heading1} data-it-button={arheading1} onclick={handleButtonClick}
+									src={NextIcon} class="imagecls" width="50px" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Artice two-->
+				<div if:true={showarticle2} class="purpleBack">
+					<div class="grid-containerInnerDivs">
+						<div class="backimg2"></div>
+						<div class="grid-containerContent">
+							<div class="display-Inline">
+								<img class="clck" src={ClockIcon} />
+								<p class="paraStyleclock">{dynamicProperty} minutes</p>
+							</div>
+							<div>
+								<h2 class="h2Style">{heading2}</h2>
+							</div>
+							<div>
+								<p class="paraStyle">{description2}</p>
+							</div>
+							<div>
+								<img data-name={heading2} data-it-button={arheading2} onclick={handleButtonClick}
+									src={NextIcon} width="50px" class="imagecls" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Artice three-->
+				<div if:true={showarticle3} class="purpleBack">
+					<div class="grid-containerInnerDivs">
+						<div class="backimg3"></div>
+						<div class="grid-containerContent">
+							<div class="display-Inline">
+								<img class="clck" src={ClockIcon} />
+								<p class="paraStyleclock">{dynamicProperty} minutes</p>
+							</div>
+							<div>
+								<h2 class="h2Style">{heading3}</h2>
+							</div>
+							<div>
+								<p class="paraStyle">{description3}</p>
+							</div>
+							<div>
+								<img data-name={heading3} data-it-button={arheading3} onclick={handleButtonClick}
+									src={NextIcon} width="50px" class="imagecls" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Artice four-->
+				<div if:true={showarticle4} class="yellowBack">
+					<div class="grid-containerInnerDivs">
+						<div class="backimg4"></div>
+						<div class="grid-containerContent">
+							<div class="display-Inline">
+								<img class="clck" src={ClockIcon} />
+								<p class="paraStyleclock">{dynamicProperty} minutes</p>
+							</div>
+							<div>
+								<h2 class="h2Style">{heading4}</h2>
+							</div>
+							<div>
+								<p class="paraStyle">{description4}</p>
+							</div>
+							<div>
+								<img data-name={heading4} data-it-button={arheading4} onclick={handleButtonClick}
+									src={NextIcon} width="50px" class="imagecls" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</lightning-layout-item>
+	</lightning-layout>
+</template>

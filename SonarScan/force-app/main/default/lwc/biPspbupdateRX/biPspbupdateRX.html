@@ -1,0 +1,156 @@
+<!-- This component facilitates prescription updates for users, enhancing their control over medication management. -->
+<template>
+	<div>
+		<template if:true={showDiv}>
+			<div class="toast">
+				<p class="para">
+					<img class="img4" src={rightimg} />Your latest prescription has been
+					saved. We'll review it shortly.
+				</p>
+				<div class="notify">
+					<button class="buttonclass btncls" onclick={handleclose}
+						data-it-button="medicalinformationenquiry: Record After Save Message">
+						<p class="close">X</p>
+					</button>
+				</div>
+			</div>
+		</template>
+		<template if:true={showDiv1}>
+			<div class="toast">
+				<p class="para">
+					<img class="img4" src={rightimg} />Take your time and come back when
+					you're ready to submit.
+				</p>
+				<div class="notify">
+					<button class="buttonclass btncls" onclick={handleclose}
+						data-it-button="medicalinformationenquiry: Record After Save Message">
+						<p class="close">X</p>
+					</button>
+				</div>
+			</div>
+		</template>
+	</div>
+
+	<div class="Fields">
+		<!-- title of this component  -->
+		<h2 title="Update Rx"></h2>
+		<!-- Heading of this compomet -->
+
+		<p class="titlecolor">Update Prescription</p>
+
+		<!-- if user click prescrition and prescription value is no  this error message  template will show  -->
+		<template if:true={Message}>
+			<div class="slds-text-color_error">
+				Please contact your HCP to receive your updated prescription
+			</div>
+		</template>
+
+		<!-- lable and radio button for physical copy  -->
+		<label for="copy" class="input-label">Do you have a physical copy of your latest prescription?</label>
+		<lightning-radio-group field-name="BI_PSPB_physical_copy__c" options={options1} value={radiovalue}
+			class="input-labelone" type="radio" onchange={handleConditionalfield1}></lightning-radio-group>
+
+		<!-- label and radio button for e prescription  -->
+		<div class="epresdiv">
+			<template if:true={radiovalue1}>
+				<label for="prescrption" class="input-label wid">Do you have an e-prescription?</label>
+				<lightning-radio-group field-name="BI_PSPB_e_prescription__c" options={options2}
+					value={radiovaluesecond} class="input-labelone" type="radio"
+					onchange={handleConditionalfield2}></lightning-radio-group>
+			</template>
+		</div>
+
+		<!-- label and input box for  prescription send to  -->
+		<template if:true={radiovalue3}>
+			<div class="senttodiv">
+				<div class="input-wrapper">
+					<label for="prescription" class="input-label" data-field="prescription">Which Pharmacy was the
+						prescription sent to?*</label>
+					<lightning-input field-name="BI_PSPB_prescription_sent_to__c"
+						label="Which Pharmacy was the prescription sent to?" data-field="prescription" class="textInput"
+						value={pharmacyvalue} variant="label-hidden"
+						onchange={handleConditionalfield3}></lightning-input>
+					<!-- if  input box is empty this custom label error will show  -->
+					<span class="slds-form-element__help" if:true={PrescriptionerrorMessage}>
+						<lightning-icon icon-name="utility:warning" alternative-text="warning" variant="error"
+							size="x-small" title="warning" class="error-icon"></lightning-icon>{label.pharmacylabel}
+					</span>
+				</div>
+			</div>
+		</template>
+
+		<div>
+			<br />
+			<!-- Additional Comments label and input box  -->
+
+			<div if:true={radiovalue9}>
+				<label for="comments" class="input-label">Additional Comments</label>
+				<lightning-input name="input3" value={commentsvalue} variant="label-hidden" class="input3"
+					onchange={handleConditionalfield4}>
+				</lightning-input>
+			</div>
+
+			<!-- file upload lable ,upolod file input box,and eroor message  -->
+
+			<template if:true={handleUploadFinished}>
+				<div class="filefulldiv">
+					<div>
+						<!-- fileupload label -->
+						<label data-field="uploadfile" class={uploadfile}>Upload Files
+							<span if:true={fileuploadstar} class={starname}>*</span></label>
+					</div>
+					<div class={fileupload}>
+						<div class="filenamecss">
+							<label for="upload" if:true={BandU} class="Browselabel">Browse and upload</label>
+							<!-- if user select file the file will showing in input box  -->
+							<template if:true={fileNames} for:each={fileNames} for:item="fileName">
+								<p key={fileName}>{fileName}</p>
+							</template>
+							<div class="imgclassone">
+								<img if:true={img2} class="img1" src={myIconUrl1} onclick={handleUploadFinisheds1} />
+							</div>
+						</div>
+
+						<!-- file upload icons  -->
+						<div class="imgclass">
+							<img if:true={img1} src={myIconUrl} class="imgone" onclick={handleUploadFinisheds1} />
+						</div>
+					</div>
+
+					<div class="hidden-file-upload">
+						<lightning-file-upload name="fileUploader" accept={acceptedFormats} record-id={recordId}
+							class="textInput1" data-field="uploadfile" variant="label-hidden"
+							onuploadfinished={handleUploadFinisheds} onchange={handleFileChange}>
+						</lightning-file-upload>
+					</div>
+					<div>
+						<p class="maxLimit">
+							5 MB <span class="classformax">(Maximum limit)</span>
+						</p>
+					</div>
+
+					<!-- if user not selected the file this error meaasage will show  -->
+
+					<div class="slds-m-top_medium">
+						<template if:true={errorMessage}>
+							<lightning-icon icon-name="utility:warning" alternative-text="warning" variant="error"
+								size="x-small" title="warning" class="error-icon"></lightning-icon><span
+								class="slds-text-color_error">{errorMessage}</span>
+						</template>
+					</div>
+				</div>
+			</template>
+		</div>
+
+		<!-- submit and cancel button  -->
+
+		<div class="submitmargin">
+			<button type="Cancel" title="Cancel" class="cancelpadding" onclick={reset}>
+				Cancel
+			</button>
+			<button type="submit" title="Submit" class="submitPad" onclick={handleSubmit}>
+				Submit
+			</button>
+		</div>
+	</div>
+</template>

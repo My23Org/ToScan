@@ -1,0 +1,1057 @@
+<!--To design the Navigation bar that contains the required menus and submenus for Questionnaires Pages--->
+<template>
+	<template if:false={showForHcpPat}>
+		<!-- Top Header -->
+		<lightning-layout multiple-rows class="topHeader padding">
+			<lightning-layout-item
+				size="12"
+				small-device-size="12"
+				medium-device-size="12"
+				large-device-size="12"
+			>
+				<div class="grid-containerNavPatient">
+					<div class="display-text">
+						<p class="textp">
+							Beyond GPP: The Spevigo® Patient Support Program
+						</p>
+					</div>
+					<div class="custom-box">
+						<template if:true={showNavDetails}>
+							<div class="grid-containerLogout">
+								<div class="disFlex">
+									<a onclick={openCarNotSettings1}>
+										<img
+											src={NIcon}
+											onclick={openCarNotSettings1}
+											width="17px"
+										/>
+									</a>
+								</div>
+								<div class="usernameMenu">
+									<a class="userName"
+										>{userName}
+										<span><img src={downHeadIcon} width="20px" /></span
+									></a>
+									<div class="userName-SubMenu">
+										<div class="grid-containerMenuProfile">
+											<div>
+												<p class="headMenu">Account Manager</p>
+											</div>
+											<template if:true={caregiverDeskMenu}>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openCarMyProfile}
+														data-it-button="Nabver: My Profile"
+														>My Profile</a
+													>
+												</div>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openCarMyCaregiver}
+														data-it-button="Nabver: Patient Information"
+														>Patient Information</a
+													>
+												</div>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openCarSelectAvatar}
+														data-it-button="Nabver: Select Avatar"
+														>Select Avatar</a
+													>
+												</div>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openCarNotSettings}
+														data-it-button="Nabver: Notification Settings"
+														>Notification Settings</a
+													>
+												</div>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openUpdatePrescription}
+														data-it-button="Nabver: Update Prescription"
+														>Update Prescription</a
+													>
+												</div>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openTreatmentRemaindersLink}
+														data-it-button="Nabver: Treatment & Prescription Reminders"
+														>Treatment & Prescription Reminders</a
+													>
+												</div>
+											</template>
+											<template if:true={patientDeskMenu}>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openPatMyProfile}
+														data-it-button="Nabver: My Profile"
+														>My Profile</a
+													>
+												</div>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openPatMyCaregiver}
+														data-it-button="Nabver: My Caregiver"
+														>My Caregiver</a
+													>
+												</div>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openPatSelectAvatar}
+														data-it-button="Nabver: Select Avatar"
+														>Select Avatar</a
+													>
+												</div>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openPatNotSettings}
+														data-it-button="Nabver: Notification Settings"
+														>Notification Settings</a
+													>
+												</div>
+												<div>
+													<a
+														class="MenuProfile"
+														onclick={openUpdatePrescription}
+														data-it-button="Nabver: Update Prescription"
+														>Update Prescription</a
+													>
+												</div>
+											</template>
+										</div>
+										<template if:true={showCareGiverMenus}>
+											<div class="grid-containerMenuProfile">
+												<div>
+													<p class="headMenu">Switch Patients</p>
+												</div>
+												<template
+													for:each={activeData}
+													for:item="active"
+													for:index="index"
+												>
+													<div key={active.Id}>
+														<c-bi-Pspb-Patient-Selection-Switch
+															caregiverid={active.CaregiveID}
+															patientname={active.Name}
+															patientid={active.Id}
+														>
+														</c-bi-Pspb-Patient-Selection-Switch>
+														<!--<c-psp-Br-Patient-Selection
+														caregiverid={active.CaregiveID}
+														patientname={active.Name}
+														patientid={active.Id}
+														>
+													</c-psp-Br-Patient-Selection>-->
+													</div>
+												</template>
+											</div>
+										</template>
+									</div>
+								</div>
+								<div>
+									<a
+										onclick={logoutFunc}
+										class="logoutFunc"
+										data-it-button="Nabver: Logout"
+										>Logout</a
+									>
+								</div>
+							</div>
+						</template>
+					</div>
+				</div>
+			</lightning-layout-item>
+		</lightning-layout>
+		<!-- Naviagtion Bar-->
+		<lightning-layout multiple-rows class="navBar padding">
+			<lightning-layout-item
+				size="12"
+				small-device-size="12"
+				medium-device-size="12"
+				large-device-size="12"
+			>
+				<div class="display-LogoLogin">
+					<div class="grid-containerNav">
+						<div class="logo">
+							<a onclick={openhome}
+								><img src={navlogo} width="132px" height="56px"
+							/></a>
+						</div>
+						<template if:true={showMenu}>
+							<div class="login">
+								<div class="displaylogincontent">
+									<div class="grid-containerMenu">
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Home"
+												onclick={openhome}
+												>Home</a
+											><template if:true={showHomeLine}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Information Center"
+												onclick={openInformationCenter}
+												>Information Center</a
+											><template if:true={showInformationCenter}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Symptom Tracker"
+												onclick={openSymptomTracker}
+												>Symptom Tracker</a
+											><template if:true={showSymptomTracker}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Challenges"
+												onclick={openChallenges}
+												>Challenges</a
+											><template if:true={showChallenge}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: My Questionnaires"
+												onclick={openQuestions}
+												>My Questionnaires</a
+											>
+											<template if:true={showQuestionnaires}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Community"
+												onclick={openCommunity}
+												>Community</a
+											><template if:true={showCommunity}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Support"
+												onclick={openSupport}
+												>Support</a
+											><template if:true={showSupport}>
+												<hr />
+											</template>
+										</div>
+									</div>
+								</div>
+							</div>
+						</template>
+						<template if:true={showToLogin}>
+							<div class="displayFlex">
+								<button
+									class="button-Div"
+									onclick={checkUser}
+									data-it-button="Nabver: Login"
+								>
+									Login
+								</button>
+							</div>
+						</template>
+						<template if:false={showToLogin}>
+							<div class="loginMobile">
+								<div class="grid-containerMenuMobile">
+									<div class="bell">
+										<div>
+											<a onclick={openCarNotSettings1}
+												><img
+													src={NIconCol}
+													width="24px"
+													onclick={openCarNotSettings1}
+											/></a>
+										</div>
+									</div>
+									<div class="menuutop">
+										<div>
+											<a onclick={openMobMenu}
+												><img src={MenuIcon} width="24px"
+											/></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</template>
+					</div>
+				</div>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+	<template if:true={showForHcpPat}>
+		<!-- Naviagtion Bar-->
+		<lightning-layout multiple-rows class="navBar padding">
+			<lightning-layout-item
+				size="12"
+				small-device-size="12"
+				medium-device-size="12"
+				large-device-size="12"
+			>
+				<div class="display-LogoLogin">
+					<div class="grid-containerNav">
+						<div class="logo">
+							<a onclick={openhome}
+								><img src={navlogo} width="132px" height="56px"
+							/></a>
+						</div>
+						<template if:true={showMenu}>
+							<div class="login">
+								<div class="displaylogincontent">
+									<div class="grid-containerMenu">
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Home"
+												onclick={openhome}
+												>Home</a
+											><template if:true={showHomeLine}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Information Center"
+												onclick={openInformationCenter}
+												>Information Center</a
+											>
+											<template if:true={showInformationCenter}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Symptom Tracker"
+												onclick={openSymptomTracker}
+												>Symptom Tracker</a
+											>
+											<template if:true={showSymptomTracker}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Challenges"
+												onclick={openChallenges}
+												>Challenges</a
+											>
+											<template if:true={showChallenge}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: My Questionnaires"
+												onclick={openQuestions}
+												>My Questionnaires</a
+											>
+											<template if:true={showQuestionnaires}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Community"
+												onclick={openCommunity}
+												>Community</a
+											>
+											<template if:true={showCommunity}>
+												<hr />
+											</template>
+										</div>
+										<div class="disBlock">
+											<a
+												class="menu"
+												data-it-button="Nabver: Support"
+												onclick={openSupport}
+												>Support</a
+											>
+											<template if:true={showSupport}>
+												<hr />
+											</template>
+										</div>
+									</div>
+								</div>
+							</div>
+						</template>
+						<template if:true={showToLogin}>
+							<div class="displayFlex">
+								<button
+									class="button-Div"
+									onclick={checkUser}
+									data-it-button="Nabver: Login"
+								>
+									Login
+								</button>
+							</div>
+						</template>
+						<template if:true={showMobileMenuIcons}>
+							<div class="loginMobile">
+								<div class="grid-containerMenuMobile">
+									<div class="bell">
+										<div>
+											<a onclick={openCarNotSettings1}
+												><img src={NIconCol} width="24px"
+											/></a>
+										</div>
+									</div>
+									<div class="menuutop">
+										<div>
+											<a onclick={openMobMenu}
+												><img src={MenuIcon} width="24px"
+											/></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</template>
+					</div>
+				</div>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+	<template if:true={isMenuOpen}>
+		<div class="menu-overlay">
+			<div class="menuMob">
+				<div class="display-MobileLogoLogin padding">
+					<div class="grid-containerNav">
+						<div class="logo">
+							<a onclick={openhome}
+								><img src={navlogo} width="104px" height="44px"
+							/></a>
+						</div>
+						<div class="loginMobile">
+							<div class="grid-containerMenuMobile">
+								<div class="bell">
+									<div class="disFlex">
+										<a onclick={openCarNotSettings1}>
+											<img
+												src={NIcon}
+												onclick={openCarNotSettings1}
+												width="24px"
+										/></a>
+									</div>
+								</div>
+								<div class="menuutop">
+									<div>
+										<a onclick={closeMobMenu}
+											><img src={CrossIcon} width="17px"
+										/></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="menuList padding">
+					<template if:true={showMenu}>
+						<ul>
+							<li>
+								<a
+									class="textStyle"
+									onclick={openhome}
+									data-it-button="Nabver: Home"
+									>Home</a
+								>
+							</li>
+							<li>
+								<div class="grid-containerMobileMenuList">
+									<div>
+										<a
+											class="textStyle"
+											onclick={openInformationCenter2}
+											data-it-button="Nabver: Information center"
+											>Information center</a
+										>
+									</div>
+									<div>
+										<span class="floRight" onclick={openInformationCenter2}
+											>&#10095;</span
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a
+									class="textStyle"
+									onclick={openSymptomTracker}
+									data-it-button="Nabver: Symptom tracker"
+									>Symptom tracker</a
+								>
+							</li>
+							<li>
+								<div class="grid-containerMobileMenuList">
+									<div>
+										<a
+											class="textStyle"
+											onclick={openchalenges2}
+											data-it-button="Nabver: Challenges"
+											>Challenges</a
+										>
+									</div>
+									<div>
+										<span class="floRight" onclick={openchalenges2}
+											>&#10095;</span
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="grid-containerMobileMenuList">
+									<div>
+										<a
+											class="textStyle"
+											onclick={openQuestions2}
+											data-it-button="Nabver: My questionnaries"
+											>My questionnaries</a
+										>
+									</div>
+									<div>
+										<span class="floRight" onclick={openQuestions2}
+											>&#10095;</span
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="grid-containerMobileMenuList">
+									<div>
+										<a
+											class="textStyle"
+											onclick={openCommunities}
+											data-it-button="Nabver: Community"
+											>Community</a
+										>
+									</div>
+									<div>
+										<span class="floRight" onclick={openCommunities}
+											>&#10095;</span
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="grid-containerMobileMenuList">
+									<div>
+										<a
+											class="textStyle"
+											onclick={openSupport2}
+											data-it-button="Nabver: Support"
+											>Support</a
+										>
+									</div>
+									<div>
+										<span class="floRight" onclick={openSupport2}
+											>&#10095;</span
+										>
+									</div>
+								</div>
+							</li>
+							<hr />
+							<li>
+								<div class="grid-containerMobileMenuList">
+									<div>
+										<a class="textStyle" onclick={openUserDetailmenu}
+											>{userName}</a
+										>
+									</div>
+									<div>
+										<a onclick={openUserDetailmenu}
+											><span class="styleFlexTimes">&#10095;</span></a
+										>
+									</div>
+								</div>
+							</li>
+							<hr />
+							<li>
+								<a class="textStyle" onclick={logoutFunc}>Logout</a>
+							</li>
+						</ul>
+					</template>
+					<template if:true={showuserSubmenu}>
+						<ul>
+							<li>
+								<div class="grid-containerMobileMenuListBack">
+									<div>
+										<span class="floLeft" onclick={backtoMainMenu}
+											>&#10094;</span
+										>
+									</div>
+									<div>
+										<a class="textStyleback" onclick={backtoMainMenu}>Back</a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a class="textStyleExtra"><b>{userName}</b></a>
+							</li>
+							<hr />
+							<li>
+								<div class="grid-containerMobileMenuList">
+									<div>
+										<a
+											class="textStyle"
+											onclick={userMenuNavigation}
+											data-it-button="Nabver: Account Manager"
+											>Account Manager</a
+										>
+									</div>
+									<div>
+										<span class="floRight" onclick={userMenuNavigation}
+											>&#10095;</span
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="grid-containerMobileMenuList">
+									<div>
+										<a
+											class="textStyle"
+											onclick={openNotificationCenterMenu}
+											data-it-button="Nabver: Notification Center"
+											>Notification Center</a
+										>
+									</div>
+									<div>
+										<span class="floRight" onclick={openNotificationCenterMenu}
+											>&#10095;</span
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a
+									class="textStyle"
+									onclick={openTreatmentRemaindersLink}
+									data-it-button="Nabver: Treatment & Prescription Reminders"
+									>Treatment & Prescription Reminders</a
+								>
+							</li>
+							<li>
+								<div class="grid-containerMobileMenuList">
+									<div>
+										<a
+											class="textStyle"
+											onclick={openUpdatePrescriptionMenu}
+											data-it-button="Nabver: Update Prescription"
+											>Update Prescription</a
+										>
+									</div>
+									<div>
+										<span class="floRight" onclick={openUpdatePrescriptionMenu}
+											>&#10095;</span
+										>
+									</div>
+								</div>
+							</li>
+							<hr />
+							<li>
+								<template if:true={showCareGiverMenus}>
+									<div class="grid-containerMenuProfileMobile">
+										<div>
+											<p class="textStyleExtra marBottom">Switch Patients</p>
+										</div>
+										<template
+											for:each={activeData}
+											for:item="active"
+											for:index="index"
+										>
+											<div key={active.Id}>
+												<c-bi-Pspb-Patient-Selection-Switch
+													caregiverid={active.CaregiveID}
+													patientname={active.Name}
+													patientid={active.Id}
+												>
+												</c-bi-Pspb-Patient-Selection-Switch>
+											</div>
+										</template>
+									</div>
+								</template>
+							</li>
+						</ul>
+					</template>
+					<template if:true={showPrescriptionmenu}>
+						<ul>
+							<li>
+								<div class="grid-containerMobileMenuListBack">
+									<div>
+										<span class="floLeft" onclick={backtohomeMenu}
+											>&#10094;</span
+										>
+									</div>
+									<div>
+										<a class="textStyleback" onclick={backtohomeMenu}>Back</a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a class="textStyleExtra"><b>Update Prescription</b></a>
+							</li>
+							<hr />
+							<li>
+								<a
+									class="textStyle"
+									onclick={updatePrescriptionLink}
+									data-it-button="Nabver: Update Prescription"
+									>Update Prescription</a
+								>
+							</li>
+							<li>
+								<a
+									class="textStyle"
+									onclick={prescriptionStatusLink}
+									data-it-button="Nabver: Prescription Status"
+									>Prescription Status</a
+								>
+							</li>
+						</ul>
+					</template>
+					<template if:true={showNotificationCentermenu}>
+						<ul>
+							<li>
+								<div class="grid-containerMobileMenuListBack">
+									<div>
+										<span class="floLeft" onclick={backtohomeMenu}
+											>&#10094;</span
+										>
+									</div>
+									<div>
+										<a class="textStyleback" onclick={backtohomeMenu}>Back</a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a class="textStyleExtra"><b>Notification Center</b></a>
+							</li>
+							<hr />
+							<li><a class="textStyle" onclick={openGeneralNC}>General</a></li>
+							<li>
+								<a class="textStyle" onclick={openActionRequiredNC}
+									>Action Required</a
+								>
+							</li>
+							<li>
+								<a class="textStyle" onclick={openHistoryNC}>History</a>
+							</li>
+						</ul>
+					</template>
+					<template if:true={caregiverAMlist}>
+						<div class="menuList">
+							<ul>
+								<li>
+									<a class="textStyle" onclick={backtoMenu}
+										>&#10094;&nbsp;Back</a
+									>
+								</li>
+								<li>
+									<div class="grid-containerMobileMenuList">
+										<div>
+											<a class="textStyleExtra" onclick={openAMlist}
+												>Account Manager</a
+											>
+										</div>
+									</div>
+								</li>
+								<hr />
+								<li>
+									<a class="textStyle" onclick={openCarMyProfile}
+										>My Profile
+									</a>
+								</li>
+								<li>
+									<a class="textStyle" onclick={openCarMyCaregiver}
+										>Patient Information</a
+									>
+								</li>
+								<li>
+									<a class="textStyle" onclick={openCarSelectAvatar}
+										>Select Avatar</a
+									>
+								</li>
+								<li>
+									<a class="textStyle" onclick={openCarNotSettings}
+										>Notification Settings</a
+									>
+								</li>
+								<li>
+									<a class="textStyle">Extra</a>
+								</li>
+							</ul>
+						</div>
+					</template>
+					<template if:true={showSupportmenu}>
+						<ul>
+							<li>
+								<div class="grid-containerMobileMenuListBack">
+									<div>
+										<span class="floLeft" onclick={handlebackSupport}
+											>&#10094;</span
+										>
+									</div>
+									<div>
+										<a class="textStyleback" onclick={handlebackSupport}
+											>Back</a
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a class="textStyleExtra"><b>Support</b></a>
+							</li>
+							<hr />
+							<li>
+								<a class="textStyle" onclick={openSupportCenter}
+									>Support Center</a
+								>
+							</li>
+							<li><a class="textStyle" onclick={openMyCases}>My Cases</a></li>
+						</ul>
+					</template>
+					<template if:true={showInformationCentermenu}>
+						<ul>
+							<li>
+								<div class="grid-containerMobileMenuListBack">
+									<div>
+										<span class="floLeft" onclick={handlebackInformationCenter}
+											>&#10094;</span
+										>
+									</div>
+									<div>
+										<a
+											class="textStyleback"
+											onclick={handlebackInformationCenter}
+											>Back</a
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a class="textStyleExtra"><b>Information Center</b></a>
+							</li>
+							<hr />
+							<li><a class="textStyle" onclick={openArticles}>Articles</a></li>
+							<li>
+								<a class="textStyle" onclick={openPTV}
+									>Patient Treatment Videos</a
+								>
+							</li>
+						</ul>
+					</template>
+					<template if:true={showChallengesmenu}>
+						<ul>
+							<li>
+								<div class="grid-containerMobileMenuListBack">
+									<div>
+										<span class="floLeft" onclick={handlebackChallenges}
+											>&#10094;</span
+										>
+									</div>
+									<div>
+										<a class="textStyleback" onclick={handlebackChallenges}
+											>Back</a
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a class="textStyleExtra"><b>Challenges</b></a>
+							</li>
+							<hr />
+							<li>
+								<a class="textStyle" onclick={openChallenges}>Challenges</a>
+							</li>
+							<li>
+								<a class="textStyle" onclick={openTrophycase}>Trophy Case</a>
+							</li>
+						</ul>
+					</template>
+					<template if:true={showCommunitymenu}>
+						<ul>
+							<li>
+								<div class="grid-containerMobileMenuListBack">
+									<div>
+										<span class="floLeft" onclick={handlebackCommunity}
+											>&#10094;</span
+										>
+									</div>
+									<div>
+										<a class="textStyleback" onclick={handlebackCommunity}
+											>Back</a
+										>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a class="textStyleExtra"><b>Community</b></a>
+							</li>
+							<hr />
+							<li><a class="textStyle" onclick={openAllPosts}>All Posts</a></li>
+							<li><a class="textStyle" onclick={openMyPosts}>My Posts</a></li>
+							<li>
+								<a class="textStyle" onclick={openMyFollowers}>My Followers</a>
+							</li>
+							<li>
+								<a class="textStyle" onclick={openFollowing}>Following</a>
+							</li>
+						</ul>
+					</template>
+					<!--new-->
+					<template if:true={showquestionnairemenu}>
+						<ul>
+							<li>
+								<div class="grid-containerMobileMenuListBack">
+									<div>
+										<span class="floLeft" onclick={handleback}>&#10094;</span>
+									</div>
+									<div>
+										<a class="textStyleback" onclick={handleback}>Back</a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<a class="textStyleExtra"><b>My Questionnaires</b></a>
+							</li>
+							<hr />
+							<li>
+								<a class="textStyle" onclick={openoutstandingquestionnaire}
+									>Outstanding Questionnaires
+								</a>
+							</li>
+							<template if:true={showTabMenu}>
+								<li><a class="textStyle" onclick={opensummary}>Summary</a></li>
+								<li>
+									<a class="textStyle" onclick={openComQuestionnaires}
+										>Completed Questionnaires
+									</a>
+								</li>
+							</template>
+							<template if:false={showTabMenu}>
+								<li><a class="textStyle disabled">Summary</a></li>
+								<li>
+									<a class="textStyle disabled">Completed Questionnaires </a>
+								</li>
+							</template>
+							<li>
+								<a class="textStyle" onclick={openletspersonalize}
+									>Let’s Personalize</a
+								>
+							</li>
+						</ul>
+					</template>
+					<!--new-->
+					<template if:true={patientAMlist}>
+						<div class="menuList">
+							<ul>
+								<li>
+									<a class="textStyleExtra" onclick={backtoMenu}
+										>&#10094;&nbsp;Patient Back</a
+									>
+								</li>
+								<li>
+									<div class="grid-containerMobileMenuList">
+										<div>
+											<a class="textStyleExtra" onclick={openAMlist}
+												>Account Manager</a
+											>
+										</div>
+									</div>
+								</li>
+								<hr />
+								<li>
+									<a class="textStyle" onclick={openPatMyProfile}
+										>My Profile
+									</a>
+								</li>
+								<li>
+									<a class="textStyle" onclick={openPatMyCaregiver}
+										>My Caregiver</a
+									>
+								</li>
+								<li>
+									<a class="textStyle" onclick={openPatSelectAvatar}
+										>Select Avatar</a
+									>
+								</li>
+								<li>
+									<a class="textStyle" onclick={openPatNotSettings}
+										>Notification Settings</a
+									>
+								</li>
+								<li><a class="textStyle">Extra</a></li>
+							</ul>
+						</div>
+					</template>
+					<template if:true={showToLogin}>
+						<ul>
+							<li><a class="textStyle" onclick={checkUser}>Login</a></li>
+						</ul>
+					</template>
+				</div>
+			</div>
+		</div>
+	</template>
+
+	<template if:true={showPopup}>
+		<div class="modal-backdrop"></div>
+		<div class="modal-visible">
+			<div class="modal-close" onclick={handleClose}>
+				<a onclick={doNotLogout}><span class="distimeStyle">&times;</span></a>
+			</div>
+			<div class="modal-content">
+				<p class="modalHead">Logout Warning !</p>
+				<p class="modalPara">Are you sure you want to Logout ?</p>
+				<div class="width100">
+					<div class="grid-containermodals">
+						<button
+							class="buttonLogoutCancel"
+							onclick={doNotLogout}
+							data-it-button="Nabver: Cancel"
+						>
+							Cancel
+						</button>
+						<button
+							class="ButtonLogoutYes"
+							onclick={logoutfromSite}
+							data-it-button="Nabver: Yes"
+						>
+							Yes
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+</template>

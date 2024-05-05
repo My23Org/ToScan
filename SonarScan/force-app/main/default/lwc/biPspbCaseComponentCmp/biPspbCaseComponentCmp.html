@@ -1,0 +1,23 @@
+<!--This LWC is designed for My Cases page on clicking My Cases from the My Support page-->
+<template>
+<lightning-layout multiple-rows class="tabClass">
+	<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" >
+		<div class="tabsDiv pad">
+			<div class="grid-containerTabs">
+				<a onclick={openSupportCenter} class="anchorText">Support Center</a>
+				<a onclick={openMyCases} class="anchorTextActive">My Cases</a>
+			</div>
+		</div>
+	</lightning-layout-item>
+</lightning-layout>
+<hr class="showMobileBorder">
+<lightning-layout multiple-rows class="layoutColor pad">
+	<lightning-layout-item size="12" small-device-size="12" medium-device-size="8" large-device-size="8" class="wholediv slds-p-top_xx-large slds-p-bottom_xx-large">
+		<div class="custom-box2">
+			<div class="custom-box2dup">
+				<c-bi-Pspb-Case-Component></c-bi-Pspb-Case-Component>
+			</div>
+		</div>
+	</lightning-layout-item>
+</lightning-layout>
+</template>

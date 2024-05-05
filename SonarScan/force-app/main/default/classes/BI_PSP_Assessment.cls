@@ -524,7 +524,7 @@ public with sharing class BI_PSP_Assessment {
              delete the previously inserted assessment with status 'In Progress'*/
             if (
                 (ass.AssessmentStatus == completed) &&
-                (assId != null && !String.isBlank(assId))
+                (!String.isBlank(assId))
             ) {
                 List<Assessment> previousAssessments = [
                     SELECT Id
@@ -779,7 +779,7 @@ public with sharing class BI_PSP_Assessment {
              delete the previously inserted assessment with status 'In Progress'.*/
             if (
                 (ass.AssessmentStatus == inprogress) &&
-                (assId != null && !String.isBlank(assId))
+                ( !String.isBlank(assId))
             ) {
                 // USER_MODE is not used because Assessment is an Salesforce Industry object using
                 //Healthcare license.
@@ -833,7 +833,7 @@ public with sharing class BI_PSP_Assessment {
     public static Integer getCategoryStatus(String assessmentId) {
         try {
             // Query to get category from the AssessmentQuestionResponse
-            if (assessmentId != null && !String.isBlank(assessmentId)) {
+            if ( !String.isBlank(assessmentId)) {
                 // USER_MODE is not used because Assessment is an Salesforce Industry object using
                 //Healthcare license.
                 category = [
@@ -1044,7 +1044,7 @@ public with sharing class BI_PSP_Assessment {
             }
             // USER_MODE is not used because Assessment is an Salesforce Industry
             //object using Healthcare license.
-            if (enrolleeId != null && !String.isBlank(enrolleeId)) {
+            if (!String.isBlank(enrolleeId)) {
                 assessments = [
                     SELECT
                         Id,
@@ -1224,7 +1224,7 @@ public with sharing class BI_PSP_Assessment {
             }
             // USER_MODE is not used because Assessment is an Salesforce Industry
             //object using Healthcare license.
-            if (enrolleeId != null && !String.isBlank(enrolleeId)) {
+            if ( !String.isBlank(enrolleeId)) {
                 assessments = [
                     SELECT
                         Id,
@@ -1387,7 +1387,7 @@ public with sharing class BI_PSP_Assessment {
                     );
                 }
             }
-            if (enrolleeId != null && !String.isBlank(enrolleeId)) {
+            if (!String.isBlank(enrolleeId)) {
                 /*USER_MODE is not used because we have populated a lookup field thats related to CareProgramEnrollee
                  * which is a Salesforce Industry object using Healthcare license.*/
                 questionnairesDate = [

@@ -27,8 +27,7 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 *@return   			caregiverAccounts List of Patients.this return in the biPspbCaregiverpostlogin component
 **/
 	@AuraEnabled(cacheable=true)
-	public static List<Map<String, String>> getCaregiverAccounts(
-		)
+	public static List<Map<String, String>> getCaregiverAccounts()
     {
         List<Map<String, String>> caregiverAccounts = new List<Map<String, String>>();
 		try {
@@ -54,8 +53,9 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 					WITH USER_MODE
 			];
 
+            Map<String, String> accountMap = new Map<String, String>();
+            //eclist nullcheck
 			for (BI_PSPB_Enrollee_Caregiver__c ec : ecList) {
-				Map<String, String> accountMap = new Map<String, String>();
 				accountMap.put('Id', ec.BI_PSPB_Patient__r.Id);
 				accountMap.put('Name', ec.BI_PSPB_Patient__r.Name);
 				accountMap.put('Status', ec.BI_PSPB_Status__c);
@@ -75,15 +75,12 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 			for (Account acc : accounts) {
 				if (acc.PersonEmail != currentUserEmail) {
 					// Exclude the user's account
-					Map<String, String> accountMap = new Map<String, String>();
 					accountMap.put('Id', acc.Id);
 					accountMap.put('Name', acc.Name);
 					caregiverAccounts.add(accountMap);
 				}
 			}
-
-			
-            
+     
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(
 				ex,

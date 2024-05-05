@@ -102,7 +102,7 @@ public with sharing class BI_PSPB_InsertCaserecordforUpdateRx {
 		// Retrieve the CareProgramEnrollee related to the patient.
 		if(String.isNotBlank(patientId)){
 			Id cpeID = getCareProgramEnrolleeId(patientId);
-			if (cpeID != null) {
+			if (cpeID != null && cpeID!='') {
 				if (String.isNotBlank(caseStatus)) {
 				/**Retrieve cases for the patient with the specified status and record 
 				type.USER_MODE could not be used because of the HealthCloud 
@@ -176,6 +176,7 @@ public with sharing class BI_PSPB_InsertCaserecordforUpdateRx {
 	}catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(ex,applicationName,
 			BI_PSPB_InsertCaserecordforUpdateRx.class.toString(),null,System.now());
+			throw new AuraHandledException(errorForInsert);
 	}
 	return careProgramEnrolleeId;
 	}

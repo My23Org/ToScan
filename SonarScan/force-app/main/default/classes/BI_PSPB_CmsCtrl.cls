@@ -346,7 +346,6 @@
 	@AuraEnabled(cacheable=true)
 	public static String checkreaction(String articlename) {
 		//Query for the CareProgramEnrollee record
-		//String userIdcurrent = UserInfo.getUserId();
 		try {
 			if (String.isBlank(articlename)) {
 				throw new AuraHandledException(articleParameterError);
@@ -449,7 +448,7 @@
 								errorMessageUpdate,
 								BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 							);
-							throw new DMLException(errorMessageUpdate);
+							throw new AuraHandledException(errorMessageUpdate);
 						}
 					}
 				} else if (reaction == dislikeLabel) {
@@ -476,7 +475,7 @@
 									errorMessageDelete,
 									BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 								);
-								throw new DMLException(errorMessageDelete);
+								throw new AuraHandledException(errorMessageDelete);
 							}
 						}
 					}
@@ -517,7 +516,7 @@
 							errorMessage,
 							BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 						);
-						throw new DMLException(errorMessage);
+						throw new AuraHandledException(errorMessage);
 					}
 				}
 			}

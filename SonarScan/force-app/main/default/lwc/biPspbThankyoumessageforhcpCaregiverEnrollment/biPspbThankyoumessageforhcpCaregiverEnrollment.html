@@ -1,0 +1,110 @@
+<!-- This Lightning web component is a thank you message template for healthcare professionals (HCPs) who have enrolled a patient or caregiver. It includes patient and caregiver information, enrollment summary, and prescription details. -->
+<template>
+	<div class="divclass">
+		<div class="sidebar-container"></div>
+		<img src={BGpp} class="marTB20" alt="Beyond Gpp" />
+		<div class="container">
+			<img class="img" src={mailimg} width="74px" height="80px" /> <br />
+			<br />
+			<h1 class="tophead">Thanks for Enrolling Your Patient!</h1>
+			<p class="ptag">
+				Your Patient would receive an email to start onboarding.
+			</p>
+			<br />
+			<h2 class="enroll">Enrollment Summary</h2>
+			<br />
+			<!--if the candiate has no caregiver -->
+			<template if:false={age}>
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col clk">
+						<span>
+							<p class="shead">Patient Information</p>
+							<br />
+							<template for:each={recordDetails} for:item="lead">
+								<p class="titlee" key={lead.Id}>
+									Name : {lead.FirstName} <br />
+									Date of birth : {lead.HealthCloudGA__BirthDate__c} <br />
+									Email : {lead.Email} <br />
+									Phone no : {lead.Phone} <br />
+								</p>
+							</template>
+						</span>
+					</div>
+					<br />
+					<div class="slds-col cls">
+						<span>
+							<p class="shead">Prescription Information</p>
+							<br />
+							<template for:each={presinfo} for:item="pres">
+								<P key={pres.id}>
+									<!-- Product : {pres.PSP_BR_Drug_c__r.Name}  <br> -->
+									<!-- Product : {pres.BI_PSPB_Drug__r.Name}  <br> -->
+									Product code : {pres.BI_PSPB_Drug_Code__c} <br />
+									Prescribed date : {pres.BI_PSPB_Prescribed_Date__c} <br />
+									Dosage : {pres.BI_PSPB_Dosage__c} <br />
+									Frequency : {pres.BI_PSPB_Frequency__c} <br />
+									Refill : {pres.BI_PSPB_of_Refills__c}<br />
+									Quantity : {pres.BI_PSPB_Quantity__c} <br />
+								</P>
+							</template>
+						</span>
+					</div>
+				</div>
+				<br />
+			</template>
+			<!--if the candiate has caregiver -->
+
+			<template if:true={age}>
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col">
+						<span>
+							<p class="shead">Patient Information</p>
+							<br />
+							<template for:each={caregiver} for:item="lead">
+								<P key={lead.id}>
+									Name : {lead.FirstName}{lead.LastName} <br />
+									Date of birth : {lead.HealthCloudGA__BirthDate__c} <br />
+								</P>
+							</template>
+						</span>
+					</div>
+
+					<div class="slds-col2">
+						<span>
+							<p class="shead">Caregiver Information</p>
+							<br />
+							<template for:each={caregiver} for:item="care">
+								<P key={care.id}>
+									Name : {care.BI_PSPB_First_Name__c}
+									{care.BI_PSPB_Last_Name__c}<br />
+									Relationship: {care.BI_PSPB_Relationship_to_Patient__c} <br />
+									Email :
+									<span class="underline-email">{care.BI_PSPB_E_mail_ID__c}</span><br />
+									Phone : {care.BI_PSPB_Phone_number__c} <br />
+								</P>
+							</template>
+						</span>
+					</div>
+					<br />
+				</div>
+				<br /><br />
+				<div class="check">
+					<p class="shead">Prescription Information</p>
+					<br />
+					<template for:each={presinfo} for:item="pres">
+						<P key={pres.id}>
+							<!-- Product : {pres.PSP_BR_Drug_c__r.Name}  <br> -->
+							<!-- Product : {pres.BI_PSPB_Drug__r.Name}  <br> -->
+							Product code : {pres.BI_PSPB_Drug_Code__c} <br />
+							Prescribed date : {pres.BI_PSPB_Prescribed_Date__c} <br />
+							Dosage : {pres.BI_PSPB_Dosage__c} <br />
+							Frequency : {pres.BI_PSPB_Frequency__c} <br />
+							Refill : {pres.BI_PSPB_of_Refills__c}<br />
+							Quantity : {pres.BI_PSPB_Quantity__c} <br />
+						</P>
+					</template>
+				</div>
+			</template>
+		</div>
+	</div>
+</template>

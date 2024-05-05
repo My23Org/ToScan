@@ -1,0 +1,62 @@
+<!--A Lightning Web Component displaying treatment timeline reminders for patients with dynamic date calculations and navigation features.-->
+<template>
+	<div if:false={isDataAvailable} class="slds-box1">
+		<header class="slds-card__header">
+			<h2 class="head remind">Reminders</h2>
+		</header>
+		<template  if:false={isDataAvailable}>		
+				<div class="sub">
+					<div>
+						<img src={imgalarm} width="100px">
+					</div>
+					<div>
+						<p class="remainder">Add your treatment dates, and we'll make sure to remind you of them.</p>
+					</div>
+				</div>
+				<button class="buttonadd" onclick={handleAddDate} data-it-button="Upcoming Reminder: Add Dates">Add Date</button>		
+		</template>	
+	</div>
+<div if:true={isDataAvailable} class="slds-box2">
+		<header class="slds-card__header">
+			<h2 class="head">Reminders</h2>
+		</header>
+		<template if:true={timelineData}>
+					<div class="slds-grid ">
+						<div class="img1">
+							<img src={imgalarm}>
+						</div>
+						<template for:each={timelineData} for:item="Remainder" for:index="index">
+							<div key={Remainder.Id} class="slds-col  slds-m-around_medium">
+								<h1>{cardTitle}</h1>
+								<div class="remainder">
+									<p>Upcoming Reminder in
+									<span class="wholespan">
+										&nbsp; {Remainder.DaysLeft} <span class="dayscls" ><b>Days</b></span>
+									</span>
+									</p>
+								</div>
+							</div>
+						</template>
+					</div>
+			<div class="timeline" if:true={isDataAvailable}>
+				<template for:each={timelineData} for:item="Remainder" for:index="index">
+					<div key={Remainder.Id} class="container1">
+						<template for:each={Remainder.AdditionalDates} for:item="date">
+							<div key={date.date} class="container">
+								<div class="row">
+									<span class="circle">
+										<button class="circlebutton" data-it-button="Upcoming Reminder: date">{date.date}</button>
+									</span>
+									<span class={date.month}></span>
+								</div>
+								<div class="row1">
+									<span class={date.monthname}></span>
+								</div>
+							</div>
+						</template>
+					</div>
+				</template>
+			</div>
+		</template>
+</div>
+</template>

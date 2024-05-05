@@ -1,0 +1,35 @@
+<!-- The consolidate component is used to show thank you message with patient and hcp information after patient enrollment. -->
+<template>
+	<lightning-layout class="layout" multiple-rows>
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4">
+			<div class="displayHeaders">
+				<div class="home-icon-container">
+					<!-- This component is used for show the home icon in enrollment page -->
+					<c-bi-Pspb-Home-Icon-Cmp></c-bi-Pspb-Home-Icon-Cmp>
+				</div>
+			</div>
+			<div class="custom-box1 pad">
+				<c-bi-Pspb-Thankyoumsg-Avatar></c-bi-Pspb-Thankyoumsg-Avatar>
+			</div>
+		</lightning-layout-item>
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="8" large-device-size="8">
+			<div class="custom-box2 pad">
+				<div class="displayHeader">
+					<div class="home-icon-container">
+						<!-- This component is used for show the home icon in enrollment page -->
+						<c-bi-Pspb-Home-Icon-Cmp></c-bi-Pspb-Home-Icon-Cmp>
+					</div>
+				</div>
+				<div>
+					<c-bi-Pspb-Hcp-Prepulate-Summary></c-bi-Pspb-Hcp-Prepulate-Summary>
+				</div>
+				<div class="footer-containerMobile">
+					<c-bi-Pspb-Footer-Logo></c-bi-Pspb-Footer-Logo>
+				</div>
+				<div class="padR7">
+					<c-bi-Pspb-Footer-Quick-Links></c-bi-Pspb-Footer-Quick-Links>
+				</div>
+			</div>
+		</lightning-layout-item>
+	</lightning-layout>
+</template>

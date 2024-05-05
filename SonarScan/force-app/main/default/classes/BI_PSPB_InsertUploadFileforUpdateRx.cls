@@ -49,7 +49,7 @@ string leadCaseId) {
 			// Check if there are ContentDocumentLink records to be inserted.
 					Database.SaveResult[] saveResults = Database.insert(
 					new List<ContentDocumentLink>{ fileLinks[0] },
-					false
+					false,AccessLevel.USER_MODE
 					); 
 				// Insert the ContentDocumentLink records.
 					for (Database.SaveResult saveResult : saveResults) {

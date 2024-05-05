@@ -1,0 +1,449 @@
+<!-- This LWC is used UserSymptomTracker graph download in pdf - biPspbSymptomTrackerPdf -->
+<template>
+	<div if:true={isLoading} class="spinner-container">
+		<lightning-spinner alternative-text="Loading"></lightning-spinner>
+	</div>
+	<div class="printDoc">
+		<lightning-layout multiple-rows class="navBar padding">
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+				<div class="display-LogoLogin">
+					<div class="grid-containerNav">
+						<div>
+							<a onclick={openhome}><img src={navlogo} class="wiDheight"></a>
+						</div>
+						<div class="grid-containerPatientDetials">
+							<div class="grid-containerPatient">
+								<div>
+									<p class="paraStyle">Patient Name:</p>
+								</div>
+								<div>{userName}</div>
+							</div>
+							<div class="grid-containerPatient">
+								<div>
+									<p class="paraStyle">Period:</p>
+								</div>
+								<div>{monthName}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</lightning-layout-item>
+		</lightning-layout>
+		<lightning-layout multiple-rows class="slds-m-top_xx-large slds-m-bottom_xx-large padding">
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+				<template if:true={showLine}>
+					<div class="chart-container">
+						<div class="chart">
+							<div class="showEnd">&#10094;</div>
+							<template for:each={bars} for:item="bar">
+								<div key={bar.dates} data-item={bar.dates} class="bar" >
+									<img class="lineimg" src={verticaline}>
+									<div class="container-bottom">
+										<div class="label">
+											<div class="pad10"><a data-item={bar.dates}
+													onclick={showHighlighter}>{bar.dates}</a></div>
+										</div>
+										<hr>
+										<div class="image-container">
+											<template for:each={bar.imageUrls} for:item="imageUrl">
+												<div class="pad10" key={imageUrl}>
+													<img src={imageUrl} alt="Allergy Image"
+														class="chart-image" />
+												</div>
+											</template>
+										</div>
+									</div>
+								</div>
+							</template>
+							<div class="showEnd">&#10095;</div>
+						</div>
+					</div>
+					<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center">
+						<div class="grid-containerinline">
+							<div class="height40"><img src={DarkYellowEllipse} ></div>
+							<div>
+								<p class="FlexCircleCenter">Itchiness</p>
+							</div>
+						</div>
+						<div class="grid-containerinline">
+							<div class="height40"><img src={RedEllipse}></div>
+							<div>
+								<p class="FlexCircleCenter">Redness</p>
+							</div>
+						</div>
+						<div class="grid-containerinline">
+							<div class="height40"><img src={VioletEllipse} ></div>
+							<div>
+								<p class="FlexCircleCenter">Pain</p>
+							</div>
+						</div>
+						<div class="grid-containerinline">
+							<div class="height40"><img src={GreenEllipse}></div>
+							<div>
+								<p class="FlexCircleCenter">Pustules</p>
+							</div>
+						</div>
+						<div class="grid-containerinline">
+							<div class="height40"><img src={BlueEllipse} ></div>
+							<div>
+								<p class="FlexCircleCenter">Fatigue</p>
+							</div>
+						</div>
+						<div class="grid-containerinline">
+							<div class="height40"><img src={DarkRedEllipse} ></div>
+							<div>
+								<p class="FlexCircleCenter">Temperature</p>
+							</div>
+						</div>
+						<div class="grid-containerinline">
+							<div class="height40"><img src={YellowEllipse} ></div>
+							<div>
+								<p class="FlexCircleCenter">Mood</p>
+							</div>
+						</div>
+					</div>
+				</template>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+				<template for:each={dateWithAllery} for:item="bar">
+					<div class="centeralign primarysytle" key={bar.symptom}>
+						<c-bi-Pspb-Symptom-Primarypage showeditbtn={showeditbtn}
+							symptomrecord={bar.symptom}></c-bi-Pspb-Symptom-Primarypage>
+					</div>
+				</template>
+				<template if:true={nextSeven}>
+					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+						large-device-size="12">
+						<div class="chart-container">
+							<div class="chart">
+								<div class="showEnd">&#10094;</div>
+								<template for:each={barsone} for:item="bar">
+									<div key={bar.dates} data-item={bar.dates} class="bar">
+										<div class="container-bottom">
+											<div class="label">
+												<div class="pad10"><a data-item={bar.dates}
+														onclick={showHighlighter}>{bar.dates}</a></div>
+											</div>
+											<hr>
+											<div class="image-container">
+												<template for:each={bar.imageUrls} for:item="imageUrl">
+													<div class="pad10" key={imageUrl}>
+														<img src={imageUrl} alt="Allergy Image"
+															class="chart-image" />
+													</div>
+												</template>
+											</div>
+										</div>
+									</div>
+								</template>
+								<div class="showEnd">&#10095;</div>
+							</div>
+						</div>
+						<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center">
+							<div class="grid-containerinline">
+								<div class="height40"><img src={DarkYellowEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Itchiness</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={RedEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Redness</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={VioletEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Pain</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={GreenEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Pustules</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={BlueEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Fatigue</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={DarkRedEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Temperature</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={YellowEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Mood</p>
+								</div>
+							</div>
+						</div>
+					</lightning-layout-item>
+					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+						large-device-size="12">
+					</lightning-layout-item>
+					<template for:each={dateWithAllerytwo} for:item="bar">
+						<div class="slds-align_absolute-center" key={bar.symptom}>
+							<c-bi-Pspb-Symptom-Primarypage showeditbtn={showeditbtn} symptomrecord={bar.symptom}>
+							</c-bi-Pspb-Symptom-Primarypage>
+						</div>
+					</template>
+				</template>
+				<template if:true={nextSeven1}>
+					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+						large-device-size="12">
+						<div class="chart-container">
+							<div class="chart">
+								<div class="showEnd">&#10094;</div>
+								<template for:each={barstwo} for:item="bar">
+									<div key={bar.dates} data-item={bar.dates} class="bar">
+										<div class="container-bottom">
+											<div class="label">
+												<div class="pad10"><a data-item={bar.dates}
+														onclick={showHighlighter}>{bar.dates}</a></div>
+											</div>
+											<hr>
+											<div class="image-container">
+												<template for:each={bar.imageUrls} for:item="imageUrl">
+													<div class="pad10" key={imageUrl}>
+														<img src={imageUrl} alt="Allergy Image"
+															class="chart-image" />
+													</div>
+												</template>
+											</div>
+										</div>
+									</div>
+								</template>
+								<div class="showEnd">&#10095;</div>
+							</div>
+						</div>
+						<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center">
+							<div class="grid-containerinline">
+								<div class="height40"><img src={DarkYellowEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Itchiness</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={RedEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Redness</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={VioletEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Pain</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={GreenEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Pustules</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={BlueEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Fatigue</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={DarkRedEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Temperature</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={YellowEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Mood</p>
+								</div>
+							</div>
+						</div>
+					</lightning-layout-item>
+					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+						large-device-size="12">
+					</lightning-layout-item>
+					<template for:each={dateWithAllerythree} for:item="bar">
+						<div class="slds-align_absolute-center" key={bar.symptom}>
+							<c-bi-Pspb-Symptom-Primarypage showeditbtn={showeditbtn} symptomrecord={bar.symptom}>
+							</c-bi-Pspb-Symptom-Primarypage>
+						</div>
+					</template>
+				</template>
+				<template if:true={nextSeven2}>
+					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+						large-device-size="12">
+						<div class="chart-container">
+							<div class="chart">
+								<div class="showEnd">&#10094;</div>
+								<template for:each={barsthree} for:item="bar">
+									<div key={bar.dates} data-item={bar.dates} class="bar">
+										<div class="container-bottom">
+											<div class="label">
+												<div class="pad10"><a data-item={bar.dates}
+														onclick={showHighlighter}>{bar.dates}</a></div>
+											</div>
+											<hr>
+											<div class="image-container">
+												<template for:each={bar.imageUrls} for:item="imageUrl">
+													<div class="pad10" key={imageUrl}>
+														<img src={imageUrl} alt="Allergy Image"
+															class="chart-image" />
+													</div>
+												</template>
+											</div>
+										</div>
+									</div>
+								</template>
+								<div class="showEnd">&#10095;</div>
+							</div>
+						</div>
+						<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center">
+							<div class="grid-containerinline">
+								<div class="height40"><img src={DarkYellowEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Itchiness</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={RedEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Redness</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={VioletEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Pain</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={GreenEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Pustules</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={BlueEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Fatigue</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={DarkRedEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Temperature</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={YellowEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Mood</p>
+								</div>
+							</div>
+						</div>
+					</lightning-layout-item>
+					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+						large-device-size="12">
+					</lightning-layout-item>
+					<template for:each={dateWithAlleryfour} for:item="bar">
+						<div class="slds-align_absolute-center" key={bar.symptom}>
+							<c-bi-Pspb-Symptom-Primarypage showeditbtn={showeditbtn} symptomrecord={bar.symptom}>
+							</c-bi-Pspb-Symptom-Primarypage>
+						</div>
+					</template>
+				</template>
+				<template if:true={nextSeven3}>
+					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+						large-device-size="12">
+						<div class="chart-container">
+							<div class="chart">
+								<div class="showEnd">&#10094;</div>
+								<template for:each={barsfour} for:item="bar">
+									<div key={bar.dates} data-item={bar.dates} class="bar">
+										<div class="container-bottom">
+											<div class="label">
+												<div class="pad10"><a data-item={bar.dates}
+														onclick={showHighlighter}>{bar.dates}</a></div>
+											</div>
+											<hr>
+											<div class="image-container">
+												<template for:each={bar.imageUrls} for:item="imageUrl">
+													<div class="pad10" key={imageUrl}>
+														<img src={imageUrl} alt="Allergy Image"
+															class="chart-image" />
+													</div>
+												</template>
+											</div>
+										</div>
+									</div>
+								</template>
+								<div class="showEnd">&#10095;</div>
+							</div>
+						</div>
+						<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center">
+							<div class="grid-containerinline">
+								<div class="height40"><img src={DarkYellowEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Itchiness</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={RedEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Redness</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={VioletEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Pain</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={GreenEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Pustules</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={BlueEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Fatigue</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={DarkRedEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Temperature</p>
+								</div>
+							</div>
+							<div class="grid-containerinline">
+								<div class="height40"><img src={YellowEllipse} width="10px"></div>
+								<div>
+									<p class="FlexCircleCenter">Mood</p>
+								</div>
+							</div>
+						</div>
+					</lightning-layout-item>
+					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+						large-device-size="12">
+					</lightning-layout-item>
+					<template for:each={dateWithAlleryfive} for:item="bar">
+						<div class="slds-align_absolute-center" key={bar.symptom}>
+							<c-bi-Pspb-Symptom-Primarypage showeditbtn={showeditbtn} symptomrecord={bar.symptom}>
+							</c-bi-Pspb-Symptom-Primarypage>
+						</div>
+					</template>
+				</template>
+			</lightning-layout-item>
+		</lightning-layout>
+	</div>
+</template>

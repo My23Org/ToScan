@@ -1,0 +1,160 @@
+.tophead {
+	color: #403a60;
+	font-size: 22px;
+	font-weight: bold;
+}
+
+.enroll {
+	color: #403a60;
+	font-size: 18px;
+	font-family: "Bahnschrift Light";
+}
+
+.ptag {
+	font-weight: 400;
+}
+
+.shead {
+	color: #403a60;
+	font-weight: bold;
+	margin-left: 0px;
+	width: 150%;
+}
+
+.sidebar-container {
+	width: 34.5%;
+	background: #413a63;
+}
+
+.sidebar-container::after {
+	content: "";
+	background: linear-gradient(90deg,
+			#744f0d 0%,
+			#8b5f2d 11.35%,
+			#efdba1 42.29%,
+			#744f0d 100%);
+	position: absolute;
+	top: 0;
+	left: 33%;
+	height: 100%;
+	width: 6px;
+}
+
+.container {
+	padding-left: 0%;
+}
+
+.check {
+	position: relative;
+	width: 30%;
+	bottom: 50px;
+}
+
+.slds-grid {
+	display: flex;
+	gap: 0px;
+}
+
+.marTB20 {
+	width: 30%;
+	position: relative;
+	bottom: 80px;
+}
+
+.slds-col2 {
+	position: relative;
+	right: 300px;
+}
+
+@media only screen and (min-width: 400px) and (max-width: 850px) {
+	.marTB20 {
+		display: block;
+	}
+
+	.slds-col2 {
+		position: relative;
+		right: 50px;
+	}
+
+	.container {
+		padding-right: 10%;
+		margin-top: 30px;
+	}
+
+	.marTB20 {
+		width: 60%;
+		position: relative;
+		bottom: 0px;
+	}
+
+	.sidebar-container {
+		width: 100%;
+	}
+
+	.sidebar-container::after {
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	.container {
+		padding-right: 10%;
+		margin-top: 30px;
+	}
+
+	.img {
+		width: 150px;
+	}
+
+	.marTB20 {
+		display: block;
+	}
+
+	.marTB20 {
+		width: 60%;
+		position: relative;
+		bottom: 0px;
+	}
+
+	.sidebar-container {
+		width: 100%;
+	}
+
+	.sidebar-container::after {
+		display: none;
+	}
+
+	.tophead {
+		font-size: 20px;
+		padding-bottom: 7px;
+	}
+
+	.slds-col2 {
+		position: relative;
+		top: 20px;
+		left: 10px;
+		margin-bottom: 27px;
+	}
+
+	.slds-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 0px;
+	}
+
+	p {
+		margin-bottom: -10px;
+		margin-left: 10px;
+	}
+
+	.slds-col1 {
+		position: relative;
+		top: 0px;
+		left: 10px;
+	}
+
+	.slds-col {
+		position: relative;
+		top: 0px;
+	}
+}
