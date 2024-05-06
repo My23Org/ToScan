@@ -512,6 +512,11 @@ public class BI_PSPB_CaseSupportTest {
     @isTest
     static void testGetName() {
         // Create a test user
+        BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
+            Name = 'PSPB',
+            BI_SFCOE_LOG_Application__c = 'Spevigo'
+        );
+        insert settings;
         User testUser = new User();
         testUser.FirstName = 'Test';
         testUser.LastName = 'User';

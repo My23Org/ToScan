@@ -297,6 +297,7 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		return date.toLocaleString(labelus, options);
 	}
 	connectedCallback() {
+		
 		const queryParams = new URLSearchParams(window.location.search);
 		// Get the value of the 'value' parameter
 		this.receivedValue = queryParams.get('value');
@@ -852,72 +853,79 @@ document.body.style.overflow = ''; // Reset to default
 			this.showToast(errormessage, error.message, errorvariant);
 		}
 	}
-	handleFileInputChange(event) {
-		const files = event.target.files;
-		if (files && files.length > 0) {
-			const newImageUrls = [...this.imageUrls];
-			const totalImages = newImageUrls.length + files.length;
-			if (totalImages <= 5) {
-				this.isLimitReached = false;
-				this.uploadedlarge = false;
-				for (let i = 0; i < files.length; i++) {
-					const file = files[i];
-				if (file.type.includes('image')) {
-						// Check file size here
-						if (file.size <= 5 * 1024 * 1024) { // 5MB in bytes
-							const reader = new FileReader();
-							reader.onload = () => {
-								newImageUrls.push(reader.result);
-								this.imageUrls = [...newImageUrls];
-							};
-							reader.readAsDataURL(file);
-						} else {
-							// File size exceeds 5MB, show error message
-							this.uploadedlarge = true;
-							 throw new Error('Only PNG, JPG, and PDF files are allowed.');
-							break; // Stop further processing
-						}
-					} else {
-						// Not an image file, show error message
-						this.uploadedlarge = false;
-						break; // Stop further processing
+	  @track totalSize = [];
+handleFileInputChange(event) {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+        const newImageUrls = [...this.imageUrls];
+		 const newtotalsizeimg = [...this.totalSize];
+        const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+      
+        const maxImagesAllowed = 5;
+
+        if (newImageUrls.length + files.length > maxImagesAllowed) {
+            // Trying to upload more than 5 images, show error message
+            this.isLimitReached = true;
+            throw new Error('You can upload a maximum of 5 images.');
+            
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.type.includes('image')) {
+				//   this.totalSize += file.size;
+
+				  console.log( this.totalSize,' this.totalSize',maxFileSize)
+                if (file.size <= maxFileSize) {
+                  newtotalsizeimg.push(file.size);
+	             this.totalSize =[...newtotalsizeimg];
+				 let sum = 0;
+				 for(let j=0; j < this.totalSize.length; j++){
+                    sum += this.totalSize[j];
+					if(sum > maxFileSize){
+						     this.uploadedlarge = true;
+							 this.totalSize.splice(j, 1);
+                    throw new Error('Image file size exceeds 5MB.');
 					}
-				}
-			} else {
-				// Trying to upload more than 5 images, show error message
-				this.isLimitReached = true;
-			}
-		} else {
-			// No files selected or none of them are images
-			this.imageUrls = [];
-			this.isLimitReached = false;
-		}
-	}
-	openFileUpload(event) {
-		const fileList = event.target.files;
-		for (let i = 0; i < fileList.length; i++) {
-			const file = fileList[i];
-			// Check file size here before reading
-			if (file.size <= 5 * 1024 * 1024) { // 5MB in bytes
-				const reader = new FileReader();
-				reader.onload = () => {
-					const base64 = reader.result.split(',')[1];
-					this.files.push({
-						'filename': file.name,
-						'base64': base64,
-						'recordId': this.resultId
-					});
-				};
-				reader.readAsDataURL(file);
-			} else {
-				// File size exceeds 5MB, show error message
-				this.uploadedlarge = false;
-			}
-		}
-	}
+					else{
+					    this.uploadedlarge = false;
+					}
+
+				 }
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        newImageUrls.push(reader.result);
+                        this.imageUrls = [...newImageUrls];
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Individual file size exceeds 5MB, show error message
+                    this.uploadedlarge = true;
+					this.totalSize.pop()
+                    throw new Error('Image file size exceeds 5MB.');
+                 
+                }
+            } else {
+                // Not an image file, show error message
+                this.uploadedlarge = false;
+                throw new Error('Only PNG, JPG, and PDF files are allowed.');
+              
+            }
+        }
+    } else {
+        // No files selected or none of them are images
+        // this.imageUrls = [];
+        this.isLimitReached = false;
+    }
+}
+
+
 	@track fileTitle  = UploadedFile
 	@track filePath   = UploadedFilepng
 	handleClickpdf() {
+		
+		console.log(this.imageUrls,'this.imageUrlsthis.imageUrls')
+		
 		this.filemessage = true;
 		this.isDropdownOpen1 = false;
 		this.isDropdownOpen2 = false;
@@ -935,6 +943,7 @@ document.body.style.overflow = ''; // Reset to default
 				saveFiles({ fileContents, parentId: this.resultId ,fileTitle:this.fileTitle,filePath:this.filePath })
 				// Null data is checked and AuraHandledException is thrown from the Apex
 					.then(attachmentIds => {
+						console.log(attachmentIds,'id')
 						this.attachmentIdsvalues = attachmentIds;
 						// Check the value of this.resultId
 						try {
@@ -954,9 +963,10 @@ document.body.style.overflow = ''; // Reset to default
 		}
 		if (this.resultId !== '') {
 			try {
-				saveFiles({ fileContents, parentId: this.lastsymptomid })
+				saveFiles({ fileContents, parentId: this.lastsymptomid,fileTitle:this.fileTitle,filePath:this.filePath })
 				// Null data is checked and AuraHandledException is thrown from the Apex
 					.then(attachmentIds => {
+						console.log(attachmentIds,'id')
 						this.attachmentIdsvalues = attachmentIds;
 						// Check the value of this.resultId
 						try {
@@ -985,6 +995,22 @@ document.body.style.overflow = ''; // Reset to default
 		}
 		const index = event.target.dataset.index;
 		this.imageUrls.splice(index, 1);
+		this.totalSize.splice(index, 1);
+		let sum = 0;
+		 const maxFileSize = 5 * 1024 * 1024;
+		 for(let j=0; j < this.totalSize.length; j++){
+		
+
+                    sum += this.totalSize[j];
+						console.log('jjjj',this.totalSize[j]);
+					if(sum > maxFileSize){
+						     this.uploadedlarge = true;
+                    throw new Error('Image file size exceeds 5MB.');
+					}
+					else{
+					    this.uploadedlarge = false;
+					}
+				 }
 		if (this.imageUrls.length > 4) {
 			this.isLimitReached = true;
 		} else {
@@ -1222,6 +1248,7 @@ document.body.style.overflow = ''; // Reset to default
 		if (data && data !== null){
 			try {
 				this.caseImageURL = data;
+				console.log(this.caseImageURL,'mmmmmmmmmmmmmmmmmmmmm')
 				this.filemessage = true;
 				this.filechnagecolour = 'card-header-accord';
 

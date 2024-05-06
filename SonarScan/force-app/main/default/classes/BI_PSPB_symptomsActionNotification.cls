@@ -35,9 +35,7 @@ public with sharing class BI_PSPB_symptomsActionNotification implements Schedula
 			List<CareProgramEnrollee> cpdRec = [
 				SELECT Id, AccountId
 				FROM CareProgramEnrollee
-				Where BI_PSPB_Send_Notification__c =: BI_PSPB_constantsClass.ACTION_RESPONSE_YES
-				AND CareProgram.Name =: spevigo
-				Limit 100
+				Where CareProgram.Name =: spevigo
 			];
 			if (cpdRec.isEmpty()) {
 				BI_SFCOE_LOG_Util.logMessage(
@@ -126,14 +124,6 @@ public with sharing class BI_PSPB_symptomsActionNotification implements Schedula
 							);
 						}
 					}
-					// Now update the status of CareProgramEnrollee records
-				List<CareProgramEnrollee> enrolleesToUpdate = [SELECT Id, BI_PSPB_Send_Notification__c 
-																FROM CareProgramEnrollee 
-																WHERE Id IN :enrolleeRecIds];
-				for(CareProgramEnrollee cpeToUpdate : enrolleesToUpdate) {
-					cpeToUpdate.BI_PSPB_Send_Notification__c = BI_PSPB_constantsClass.ACTION_RESPONSE_NO;
-				}
-				update enrolleesToUpdate;
 					if (!enrolleeRecIds.isEmpty()) {
 						BI_PSPB_smsAndEmailHandler.handleTrigger(
 							enrolleeRecIds,

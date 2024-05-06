@@ -47,8 +47,7 @@ public without sharing class BI_PSPB_symptomTrackerTasksCtrl {
 				}
 				Database.SaveResult[] saveResults = Database.update(
 					tasksToUpdate,
-					false,
-					AccessLevel.USER_MODE
+					false
 				);
 				for (Database.SaveResult saveResult : saveResults) {
 					if (!saveResult.isSuccess()) {

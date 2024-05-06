@@ -27,64 +27,72 @@ public with sharing class BI_PSPB_ReminderCalendar {
 	@AuraEnabled(cacheable=true)
 	public static String generateGoogleCalendarURL(Date eventDate) {
 		try {
-			BI_PSPB_Notification__mdt notificationMetadata = BI_PSPB_Notification__mdt.getInstance(
-				BI_PSPB_ConstantsClass.Day_of_treatment
-			);
-			BI_PSPB_Notification__mdt metadata = notificationMetadata;
-			String title = metadata.BI_PSPB_CalenderTitle__c;
-			DateTime startDateTime = DateTime.newInstanceGmt(
-				eventDate.year(),
-				eventDate.month(),
-				eventDate.day(),
-				0,
-				0,
-				0
-			);
-			DateTime endDateTime = DateTime.newInstanceGmt(
-				eventDate.year(),
-				eventDate.month(),
-				eventDate.day(),
-				23,
-				59,
-				59
-			);
-			String startDateTimeStr = startDateTime.formatGmt(
-				BI_PSPB_ConstantsClass.Time_Format
-			);
-			String endDateTimeStr = endDateTime.formatGmt(
-				BI_PSPB_ConstantsClass.Time_Format
-			);
-			String details = metadata.BI_PSPB_CalenderDescription__c;
-			if (
-				(startDateTimeStr != null ||
-				String.isEmpty(startDateTimeStr) &&
-				(endDateTimeStr != null || String.isEmpty(startDateTimeStr)) &&
-				(details != null || String.isEmpty(details)))
-			) {
-				String googleCalendarURL =
-					GoogleCalendar +
-					'&text=' +
-					EncodingUtil.urlEncode(title, 'UTF-8') +
-					'&dates=' +
-					startDateTimeStr +
-					'/' +
-					endDateTimeStr +
-					'&details=' +
-					EncodingUtil.urlEncode(details, 'UTF-8') +
-					'&trp=true';
-
-				if (googleCalendarURL != null) {
-					return googleCalendarURL;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_ReminderCalendar.class.toString(),
-						BI_PSPB_constantsClass.googleUrlError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
-						throw new AuraHandledException(BI_PSPB_ConstantsClass.googleUrlError);
-				}
-			} else {
-				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_ReminderCalendar.class.toString(),
-					BI_PSPB_ConstantsClass.stringError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
-					throw new AuraHandledException(BI_PSPB_ConstantsClass.stringError);
-			}
+            if(eventDate!=null)
+            {
+                BI_PSPB_Notification__mdt notificationMetadata = BI_PSPB_Notification__mdt.getInstance(
+                    BI_PSPB_ConstantsClass.Day_of_treatment
+                );
+                String title = notificationMetadata.BI_PSPB_CalenderTitle__c;
+                DateTime startDateTime = DateTime.newInstanceGmt(
+                    eventDate.year(),
+                    eventDate.month(),
+                    eventDate.day(),
+                    0,
+                    0,
+                    0
+                );
+                DateTime endDateTime = DateTime.newInstanceGmt(
+                    eventDate.year(),
+                    eventDate.month(),
+                    eventDate.day(),
+                    23,
+                    59,
+                    59
+                );
+                String startDateTimeStr = startDateTime.formatGmt(
+                    BI_PSPB_ConstantsClass.Time_Format
+                );
+                String endDateTimeStr = endDateTime.formatGmt(
+                    BI_PSPB_ConstantsClass.Time_Format
+                );
+                String details = notificationMetadata.BI_PSPB_CalenderDescription__c;
+                if (
+                    String.isNotBlank(startDateTimeStr) &&
+                    String.isNotBlank(startDateTimeStr) &&
+                    String.isNotBlank(details) &&
+                    String.isNotBlank(title)
+                )
+                 {
+                    String googleCalendarURL =
+                        GoogleCalendar +
+                        '&text=' +
+                        EncodingUtil.urlEncode(title, 'UTF-8') +
+                        '&dates=' +
+                        startDateTimeStr +
+                        '/' +
+                        endDateTimeStr +
+                        '&details=' +
+                        EncodingUtil.urlEncode(details, 'UTF-8') +
+                        '&trp=true';
+    
+                    if ( String.isNotBlank(googleCalendarURL)){
+                        return googleCalendarURL;
+                    } else {
+                        BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_ReminderCalendar.class.toString(),
+                            BI_PSPB_constantsClass.googleUrlError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+                            throw new AuraHandledException(BI_PSPB_ConstantsClass.googleUrlError);
+                    }
+                } else {
+                    BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_ReminderCalendar.class.toString(),
+                        BI_PSPB_ConstantsClass.stringError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+                        throw new AuraHandledException(BI_PSPB_ConstantsClass.stringError);
+                }
+            }else{
+                BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_ReminderCalendar.class.toString(),
+            		BI_PSPB_constantsClass.parameterError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+          		throw new AuraHandledException(BI_PSPB_constantsClass.parameterError);
+                
+            }
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(
                 ex,
@@ -110,62 +118,68 @@ public with sharing class BI_PSPB_ReminderCalendar {
 	@AuraEnabled(cacheable=true)
 	public static String generateOutlookCalendarURL(Date eventDate) {
 		try {
-			BI_PSPB_Notification__mdt notificationMetadata = BI_PSPB_Notification__mdt.getInstance(
-				BI_PSPB_ConstantsClass.Day_of_treatment
-			);
-			BI_PSPB_Notification__mdt metadata = notificationMetadata;
-			String title = metadata.BI_PSPB_CalenderTitle__c;
-			DateTime startDateTime = DateTime.newInstanceGmt(
-				eventDate.year(),
-				eventDate.month(),
-				eventDate.day(),
-				0,
-				0,
-				0
-			);
-			DateTime endDateTime = DateTime.newInstanceGmt(
-				eventDate.year(),
-				eventDate.month(),
-				eventDate.day(),
-				23,
-				59,
-				59
-			);
-			String startDateTimeStr = startDateTime.formatGmt(
-				BI_PSPB_ConstantsClass.Time_Format
-			);
-			String endDateTimeStr = endDateTime.formatGmt(
-				BI_PSPB_ConstantsClass.Time_Format
-			);
-			String details = metadata.BI_PSPB_CalenderDescription__c;
-			if (
-				(startDateTimeStr != null ||
-				String.isEmpty(startDateTimeStr) &&
-				(endDateTimeStr != null || String.isEmpty(startDateTimeStr)) &&
-				(details != null || String.isEmpty(details)))
-			) {
-				String outlookCalendarURL =
-					OutlookCalendar +
-					EncodingUtil.urlEncode(details, 'UTF-8') +
-					'&subject=' +
-					EncodingUtil.urlEncode(title, 'UTF-8') +
-					'&startdt=' +
-					startDateTimeStr +
-					'&enddt=' +
-					endDateTimeStr;
+            if(eventDate!=null)
+            {
+				BI_PSPB_Notification__mdt notificationMetadata = BI_PSPB_Notification__mdt.getInstance(
+					BI_PSPB_ConstantsClass.Day_of_treatment
+				);
+				String title = notificationMetadata.BI_PSPB_CalenderTitle__c;
+				DateTime startDateTime = DateTime.newInstanceGmt(
+					eventDate.year(),
+					eventDate.month(),
+					eventDate.day(),
+					0,
+					0,
+					0
+				);
+				DateTime endDateTime = DateTime.newInstanceGmt(
+					eventDate.year(),
+					eventDate.month(),
+					eventDate.day(),
+					23,
+					59,
+					59
+				);
+				String startDateTimeStr = startDateTime.formatGmt(
+					BI_PSPB_ConstantsClass.Time_Format
+				);
+				String endDateTimeStr = endDateTime.formatGmt(
+					BI_PSPB_ConstantsClass.Time_Format
+				);
+				String details = notificationMetadata.BI_PSPB_CalenderDescription__c;
+				if (
+					String.isNotBlank(startDateTimeStr) &&
+					String.isNotBlank(startDateTimeStr) &&
+					String.isNotBlank(details) &&
+					String.isNotBlank(title)
+				) {
+					String outlookCalendarURL =
+						OutlookCalendar +
+						EncodingUtil.urlEncode(details, 'UTF-8') +
+						'&subject=' +
+						EncodingUtil.urlEncode(title, 'UTF-8') +
+						'&startdt=' +
+						startDateTimeStr +
+						'&enddt=' +
+						endDateTimeStr;
 
-				if (outlookCalendarURL != null) {
-					return outlookCalendarURL;
+					if ( String.isNotBlank(outlookCalendarURL)) {
+						return outlookCalendarURL;
+					} else {
+						BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_ReminderCalendar.class.toString(),
+							BI_PSPB_ConstantsClass.outLookUrlError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+						throw new AuraHandledException(BI_PSPB_ConstantsClass.outLookUrlError);
+					}
 				} else {
 					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_ReminderCalendar.class.toString(),
-						BI_PSPB_ConstantsClass.outLookUrlError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
-					throw new AuraHandledException(BI_PSPB_ConstantsClass.outLookUrlError);
+						BI_PSPB_ConstantsClass.stringError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+					throw new AuraHandledException(BI_PSPB_ConstantsClass.stringError);
 				}
-			} else {
-				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_ReminderCalendar.class.toString(),
-					BI_PSPB_ConstantsClass.stringError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
-				throw new AuraHandledException(BI_PSPB_ConstantsClass.stringError);
-			}
+            }else{
+                BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_ReminderCalendar.class.toString(),
+            		BI_PSPB_constantsClass.parameterError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+          		throw new AuraHandledException(BI_PSPB_constantsClass.parameterError);
+            }
 		} 
         catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(

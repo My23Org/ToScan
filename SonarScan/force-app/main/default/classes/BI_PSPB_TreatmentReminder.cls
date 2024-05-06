@@ -53,9 +53,8 @@
   
 		  if (cpe != null) {
 			List<BI_PSPB_Treatment_Reminder__c> remaindersToInsert = new List<BI_PSPB_Treatment_Reminder__c>();
-			//if (!remaindersToInsert.isEmpty()) {
 			  //We have used the values in maps for getting subject and reminder days,
-			  //so we are not able to change logic for this to avoid risk of functionality getting affected.
+			  //so we are not able to change getAll logic for this to avoid risk of functionality getting affected.
 			  List<BI_PSPB_Notification__mdt> allRemindersMetadata = BI_PSPB_Notification__mdt.getAll()
 				.values();
 			  List<BI_PSPB_Notification__mdt> remindersMetadata = new List<BI_PSPB_Notification__mdt>();

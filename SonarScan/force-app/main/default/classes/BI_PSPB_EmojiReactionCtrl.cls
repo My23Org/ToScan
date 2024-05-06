@@ -30,6 +30,8 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 		System.Label.BI_PSPB_Eroor_For_React_Post;
 	private static String errorWhileGettingAccountId =
 		System.Label.BI_PSPB_Error_For_Account;
+	private static String errorWhileGettingUser =
+		System.Label.BI_PSPB_Error_For_User;
 	private static String errorWhileGettingReactions =
 		System.Label.BI_PSPB_Error_for_Display_Reaction;
 	private static String errorWhileUnreacting =
@@ -168,7 +170,7 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 					reactions = [SELECT	Id, BI_PSP_ReactionResult__c, BI_PSP_AccountE__c
 					FROM BI_PSP_EmojiReactionController__c WHERE 
 					BI_PSP_FeedItem__c = : feedItemId AND BI_PSP_AccountE__c = : accountId
-					AND BI_PSP_AccountE__c != null WITH USER_MODE LIMIT 1];
+					WITH USER_MODE LIMIT 1];
 				} else {
 					// Throw an exception if account ID retrieval fails.
 					throw new AuraHandledException(errorWhileGettingAccountId);
@@ -176,7 +178,7 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 			}
 			else {
 				// Throw a generic exception if feedItemId or userId is blank.
-				throw new AuraHandledException(error);
+				throw new AuraHandledException(errorWhileGettingUser);
 			}
 			// Check if any reactions were found.
 			if (!reactions.isEmpty()) {
@@ -263,9 +265,10 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 			throw new AuraHandledException(error);
 		}
 	}
+	// We separately Query the Each Reactions for Lwc Notification Functionality.	
 	/**
 	@description 	To count the total number of thumbs-up 
-					reactions for a given feed item.
+					reactions for a given feed item.  
 	@param 			feedItemId - The Id of the feed item for
 					which thumbs-up reactions are counted.
 	@return 		List<BI_PSP_EmojiReactionController__c> - A list of 
@@ -278,7 +281,7 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 		list < BI_PSP_EmojiReactionController__c > totalThumbsup;
 		try {
 			//check if the feedItemId is not null.
-			if (feedItemId != null) {
+			if (String.isNotBlank(feedItemId)) {
 				// Query to count total thumbs-up reactions for a post.
 				totalThumbsup = [SELECT Id, BI_PSP_ReactionResult__c, CreatedById,
 					BI_PSP_AccountE__c, BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c,
@@ -319,7 +322,7 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 		String feedItemId) {
 		list < BI_PSP_EmojiReactionController__c > totalSmile;
 		try {
-			if (feedItemId != null) {
+			if (String.isNotBlank(feedItemId)) {
 				// Fetching all smile emojis for a post.
 				totalSmile = [SELECT id, BI_PSP_ReactionResult__c, CreatedById,
 					BI_PSP_AccountE__c, BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c,
@@ -361,7 +364,7 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 		list < BI_PSP_EmojiReactionController__c > totalFoldedhands;
 		try {
 			// Query to count total folded hands emoji reactions for a post.
-			if (feedItemId != null) {
+			if (String.isNotBlank(feedItemId)) {
 				totalFoldedhands = [SELECT id, BI_PSP_ReactionResult__c,
 					CreatedById, BI_PSP_AccountE__c,
 					BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c,
@@ -404,7 +407,7 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 		list < BI_PSP_EmojiReactionController__c > totalHeart;
 		try {
 			// Query to count total heart reactions for a post.
-			if (feedItemId != null) {
+			if (String.isNotBlank(feedItemId)) {
 				totalHeart = [SELECT id, BI_PSP_ReactionResult__c,
 					CreatedById, BI_PSP_AccountE__c,
 					BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c,
@@ -445,7 +448,7 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 		String feedItemId) {
 		List < BI_PSP_EmojiReactionController__c > totalThinkingfaceList;
 		try {
-			if (feedItemId != null) {
+			if (String.isNotBlank(feedItemId)) {
 				// Query to count total thinking face reactions for a post.
 				totalThinkingfaceList = [SELECT Id, BI_PSP_ReactionResult__c, CreatedById,
 					BI_PSP_AccountE__c, BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c,

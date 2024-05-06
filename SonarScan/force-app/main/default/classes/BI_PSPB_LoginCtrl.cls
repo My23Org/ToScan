@@ -130,7 +130,7 @@ public static list<Task> getUnreadCases(string userId) {
 			FROM Task
 			WHERE OwnerId = :userId AND Status = :BI_PSP_Status_Unread
 			];
-			if (assignedCase.Size() > 0) {
+			if (assignedCase.Size() > 0 && !assignedCase.isEmpty()) {
 			return assignedCase;
 			}else{
 				throw new AuraHandledException(BI_PSP_UserId_ErrorMessage);
@@ -160,7 +160,7 @@ public static list<Task> getUnreadCases(string userId) {
 				AND BI_PSPB_Contact_Id__c = :conCare.ID
 				AND BI_PSPB_Status__c =: BI_PSP_Status_Active
 			];
-			if (ecList.size() > 0 && ecList[0].BI_PSPB_Care_Program_Enrollee__c != null) {
+			if (!ecList.isEmpty() && ecList.Size() > 0 && ecList[0].BI_PSPB_Care_Program_Enrollee__c != null) {
 				CareProgramEnrollee patientEnrolle = [
 				SELECT Id, AccountID, BI_PSP_Total_Reward_Points__c, BI_PSP_Challenge_Rank__c
 				FROM CareProgramEnrollee
@@ -174,18 +174,18 @@ public static list<Task> getUnreadCases(string userId) {
 					WHERE id = :patientEnrolle.AccountID AND ispersonaccount = TRUE
 				];
 				if (acc != null) {
-					user userids = [
+					user singleUserId = [
 					SELECT id
 					FROM user
 					WHERE email = :acc.PersonEmail AND name = :acc.name
 					];
-					if (userids != null) {
+					if (singleUserId != null) {
 					list<Task> assignedCase = [
 						SELECT id, OwnerId, Status
 						FROM Task
-						WHERE OwnerId = :userids.Id AND Status =: BI_PSP_TaskStatus_Unread
+						WHERE OwnerId = :singleUserId.Id AND Status =: BI_PSP_TaskStatus_Unread
 					];
-					if (assignedCase.Size() > 0) {
+					if (assignedCase.Size() > 0 && !assignedCase.isEmpty()) {
 						return assignedCase;
 						}else{
 							throw new AuraHandledException(BI_PSP_UserId_ErrorMessage);

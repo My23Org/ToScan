@@ -19,8 +19,7 @@ import getCheckboxValuestwo from '@salesforce/apex/BI_PSPB_caseCtrl.checkboxAcco
 import getEnrolle from '@salesforce/apex/BI_PSP_ChallengeCtrl.getEnrolle';
 import getaAccId from '@salesforce/apex/BI_PSPB_GetAccId.getAccDetails';
 import updatePatientDetails from '@salesforce/apex/BI_PSPB_exuserGetAccid.updatePatientorCargiverInfo';
-import getgendervalue from '@salesforce/apex/BI_PSPB_PatientFormCtrl.getGenderValue';
-import getprefferlanguage from '@salesforce/apex/BI_PSPB_createLeadRecord.getCommunicationOptions';
+
 // To import Custom Labels
 import firstname from '@salesforce/label/c.BI_PSPB_ERROR_Message_For_Patient_First_Name';
 import lastname from '@salesforce/label/c.BI_PSPB_ERROR_Message_For_Patient_Last_Name';
@@ -41,6 +40,13 @@ import pincode from '@salesforce/label/c.BI_PSPB_ERROR_Message_For_Patient_Pinco
 import validPincode from '@salesforce/label/c.BI_PSPB_ERROR_Message_For_Caregiver_Pincode';
 import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
+import smsstring from '@salesforce/label/c.BI_PSP_NotificationSMS';
+import phonestring from '@salesforce/label/c.BI_PSPB_Phone';
+import emailstring from '@salesforce/label/c.BI_PSP_NotificationEmail';
+import Male from '@salesforce/label/c.BI_PSP_male';
+import Female from '@salesforce/label/c.BI_PSP_female';
+import Prefernot from '@salesforce/label/c.BI_PSP_prefernot_tosay';
+import Others from '@salesforce/label/c.BI_PSP_Others';
 //To import Account fields
 import COUNTRY_FIELD from '@salesforce/schema/Account.PersonMailingCountryCode';
 import STATE_FIELD from '@salesforce/schema/Account.PersonMailingStateCode';
@@ -55,7 +61,7 @@ export default class biPspbPatientProfile extends LightningElement {
 	@track patientFirstName = '';
 	@track showDiv = false;
 	@track showDiv1 = false;
-	@track isDOBDisabled = true;
+	@track isDOBDisabled ;
 	@track isEmailDisabled = true;
 	@track isMobilePhoneDisabled = true;
 	@track isGenderDisabled = true;
@@ -119,7 +125,11 @@ export default class biPspbPatientProfile extends LightningElement {
 	@track colorchanage = 'outlined-button' //css class
 	@track Boxedicon = Boxedicon;
 	@track phoneNumberMandatory = false;
-	@track leadPmc = [];
+	@track leadPmc = [{ label: Male, value: Male },
+		{ label: Female, value: Female },
+		{ label: Prefernot, value: Prefernot },
+		{ label: Others, value: Others }
+		];
 	@track firstNameerrorMessag = false;
 	@track updatePopup = false;
 	@track touch = false;
@@ -127,9 +137,13 @@ export default class biPspbPatientProfile extends LightningElement {
 	@track up = false;
 	@track checkbox1Value;
 	@track checkbox2Value;
+	@track preffer = [
+		{ label: smsstring, value: smsstring },
+		{ label: phonestring, value: phonestring },
+		{ label: emailstring, value: emailstring }
+	];
 	// Declaration of Global variables
 	enrolleeids;
-	preffer = [];
 	countryCode = [];
 	StateCode = [];
 	userId = Id;
@@ -139,41 +153,6 @@ export default class biPspbPatientProfile extends LightningElement {
 
 	label = { firstname, lastname, dob, minor, futuredate, abovedate, email, gender, phone, mobile, preferredcontactmethod, country, state, city, street, pincode, validPincode };
 	Warningicon = warning;
-	// Call an Apex method to retrieve lead gender options
-	@wire(getgendervalue)
-	wiredLeadGenderOptions({ data, error }) {
-		try {
-			//custom labels are returned which cannot be null
-			if (data) {
-				// Map the Apex response to the format expected by lightning-combobox
-				this.leadPmc = data.map(option => ({ label: option, value: option }));
-
-			} else if (error) {
-				this.showToast(errormessage, error.body.message, errorvariant);//Catching Potential Error from Apex
-			}
-		} catch (err) {
-			this.showToast(errormessage, err.message, errorvariant); //Catching Potential Error from LWC
-		}
-
-	}
-	//Call an Apex method to retrieve lead gender options
-
-	@wire(getprefferlanguage)
-	wiredaccountpreff({ data, error }) {
-		try {
-			//custom labels are returned which cannot be null
-			if (data) {
-				// Map the Apex response to the format expected by lightning-combobox
-				this.preffer = data.map(option => ({ label: option, value: option }));
-			} else if (error) {
-				this.showToast(errormessage, error.body.message, errorvariant);//Catching Potential Error from Apex
-			}
-		} catch (err) {
-			// Handle error
-			this.showToast(errormessage, err.message, errorvariant); //Catching Potential Error from LWC
-		}
-
-	}
 
 	//to prepopulate patient information
 	@wire(getaAccId)
@@ -393,82 +372,66 @@ export default class biPspbPatientProfile extends LightningElement {
 
 	// Validate that the date is not in the future
 	agecalculationEvent(event) {
-		this.patientDOB = event.target.value;
-		this.validateDate();
-		this.doberrorMessage = false;
+    this.patientDOB = event.target.value;
+    this.validateDate();
+}
+
+validateDate() {
+    const currentDate = new Date();
+    const selectedDate = new Date(this.patientDOB);
+    const minAge = 18;
+
+    // Reset error messages and input styles
+    this.resetErrors();
+
+    // Check if the date is in the future
+    if (selectedDate > currentDate) {
+        this.minorerror3 = true;
+        this.setFieldError('Birthdate');
+        return;
+    }
+
+    // Check if the user is a minor
+    const ageInYears = currentDate.getFullYear() - selectedDate.getFullYear();
+    if (ageInYears < minAge) {
+        this.minorerror = true;
+        this.setFieldError('Birthdate');
+        return;
+    }
+
+    // Check if the date is before 1900
+    if (selectedDate < new Date('1900-01-01')) {
+        this.minorerror2 = true;
+        this.setFieldError('Birthdate');
+        return;
+    }
+
+    // If all validations pass, clear the error message
+    this.doberrorMessage = '';
+}
+
+resetErrors() {
+    this.minorerror = false;
+    this.minorerror2 = false;
+    this.minorerror3 = false;
+    this.clearFieldError('Birthdate');
+}
+
+setFieldError(fieldName) {
+    const inputField = this.template.querySelector(`lightning-input[data-field="${fieldName}"]`);
+    inputField.className = 'textInput-err';
+    const labelField = this.template.querySelector(`label[data-field="${fieldName}"]`);
+    labelField.className = 'input-error-label';
+}
+
+clearFieldError(fieldName) {
+    const inputField = this.template.querySelector(`lightning-input[data-field="${fieldName}"]`);
+    inputField.className = 'textInput';
+    const labelField = this.template.querySelector(`label[data-field="${fieldName}"]`);
+    labelField.className = 'input-label';
+}
 
 
-
-	}
-	// Validate that the date is not in the future
-	validateDate() {
-
-		// Validate that the date is not in the future
-		const currentDate = new Date();
-		const selectedDate = new Date(this.patientDOB);
-
-		if (selectedDate > currentDate) {
-			this.minorerror3 = true;
-			this.minorerror2 = false;
-			this.doberrorMessage = false;
-			this.minorerror = false;
-			this.template.querySelector('lightning-combobox[data-field="Birthdate"]').className = 'textInput-err';
-			this.template.querySelector('label[data-field="Birthdate"]').className = 'input-error-label';
-		}
-		else {
-			this.minorerror3 = false;
-			this.template.querySelector('lightning-combobox[data-field="Birthdate"]').className = 'textInput';
-			this.template.querySelector('label[data-field="Birthdate"]').className = 'input-label';
-		}
-
-
-		// Validate that the user is not a minor (you can set a minimum age)
-		const minAge = 18;
-		const userBirthYear = selectedDate.getFullYear();
-		const currentYear = currentDate.getFullYear();
-
-		if (currentYear - userBirthYear < minAge) {
-
-			this.doberrorMessage = false;
-			this.minorerror = true;
-			this.minorerror3 = false;
-			this.minorerror2 = false;
-			this.doberrorMessage = false;
-			this.template.querySelector('lightning-combobox[data-field="Birthdate"]').className = 'textInput-err';
-			this.template.querySelector('label[data-field="Birthdate"]').className = 'input-error-label';
-		}
-		else {
-			this.doberrorMessage = false;
-			this.minorerror = false;
-			this.minorerror2 = false;
-			this.minorerror3 = false;
-			this.template.querySelector('lightning-comboboxt[data-field="Birthdate"]').className = 'textInput-err';
-			this.template.querySelector('label[data-field="Birthdate"]').className = 'input-error-label';
-		}
-		//get full year
-		if (selectedDate < new Date('1900-01-01')) {
-			this.minorerror2 = true;
-			this.minorerror3 = false;
-			this.doberrorMessage = false;
-			this.minorerror = false;
-			this.template.querySelector('lightning-combobox[data-field="Birthdate"]').className = 'textInput-err';
-			this.template.querySelector('label[data-field="Birthdate"]').className = 'input-error-label';
-		}
-		else {
-			this.minorerror2 = false;
-			this.minorerror3 = false;
-			this.doberrorMessage = false;
-			this.minorerror = false;
-			this.template.querySelector('lightning-combobox[data-field="Birthdate"]').className = 'textInput';
-			this.template.querySelector('label[data-field="Birthdate"]').className = 'input-label';
-		}
-
-
-		// If both validations pass, clear the error message
-
-		this.doberrorMessage = '';
-
-	}
 	//to validate phone field
 	handleFielphone(event) {
 		this.patientMobilePhone = event.target.value;
@@ -553,20 +516,13 @@ export default class biPspbPatientProfile extends LightningElement {
 			event.preventDefault(); // Prevent the character from being entered
 		}
 	}
-	//firstname and lastname regex
-	handleKeyDown1(event) {
-		// Allow only letters, backspace, and delete
-		if (!((event.keyCode >= 65 && event.keyCode <= 90) || // A-Z
-			(event.keyCode >= 97 && event.keyCode <= 122) ||  // a-z
-			event.keyCode === 8 ||  // Backspace
-			event.keyCode === 46 ||  // Delete
-			(event.keyCode >= 37 && event.keyCode <= 40) ||
-			event.keyCode === 9 ||  // Tab
-			(event.shiftKey && event.keyCode === 9)
-		)) {
-			event.preventDefault();
-		}
-	}
+	
+		handleKeyDown1(event) {
+    const allowedCharacters = /^[A-Za-z]+$/;
+    if (!allowedCharacters.test(event.key)) {
+        event.preventDefault();
+    }
+}
 
 	//checks whether all fields have values and updates patient information
 	handle_Success() {

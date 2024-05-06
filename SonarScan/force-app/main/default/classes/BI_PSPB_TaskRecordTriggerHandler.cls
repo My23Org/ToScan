@@ -96,7 +96,7 @@ public with sharing class BI_PSPB_TaskRecordTriggerHandler {
 					NotificationType ==
 					BI_PSPB_constantsClass.ACTION_TYPE_GENERAL
 				) {
-					BI_PSPB_SMSandEmailHandler.handleTrigger(
+					BI_PSPB_smsAndEmailHandlerdemoTest.handleTrigger(
 						recordId,
 						BI_PSPB_constantsClass.generalChallenges,
 						''
@@ -108,7 +108,7 @@ public with sharing class BI_PSPB_TaskRecordTriggerHandler {
 					NotificationType ==
 					BI_PSPB_constantsClass.ACTION_TYPE_GENERAL
 				) {
-					BI_PSPB_SMSandEmailHandler.handleTrigger(
+					BI_PSPB_smsAndEmailHandlerdemoTest.handleTrigger(
 						recordId,
 						BI_PSPB_constantsClass.generalSymptomTracker,
 						''

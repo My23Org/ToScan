@@ -8,7 +8,8 @@
  * 1.1        Divya Bharathi S     08-Apr-2024       Updated        Add null check
  * 1.2        Divya Bharathi S     17-Apr-2024       Updated        Add log
  */
-public with sharing class BI_PSPB_caregiverOnboarding {
+public with sharing class BI_PSPB_caregiverOnboarding 
+{
     private static String BI_PSPB_Caregiver = System.Label.BI_PSPB_CaregiveRecordType;
     private static String BI_PSPB_Profile = System.Label.BI_PSPB_CaregiverProfile;
     private static BI_SFCOE_LOG_App_Settings__c settings = BI_SFCOE_LOG_App_Settings__c.getValues(
@@ -31,10 +32,12 @@ public with sharing class BI_PSPB_caregiverOnboarding {
      * @param lstCaregiverAccId The list of account IDs for which caregiver users need to be created.
      */
     @InvocableMethod
-    public static void createUser(List<Id> lstCaregiverAccId) {
+    public static void createUser(List<Id> lstCaregiverAccId) 
+    {
         /*On invoking the if condition inside try / catch, it impacted
          the functionality. Hence, it's called outside and checked for null.*/
-        if (lstCaregiverAccId.isEmpty()) {
+        if (lstCaregiverAccId.isEmpty()) 
+        {
             BI_SFCOE_LOG_Util.logMessage(
                 applicationName,
                 BI_PSPB_caregiverOnboarding.class.toString(),
@@ -43,13 +46,17 @@ public with sharing class BI_PSPB_caregiverOnboarding {
                 nullMesaage,
                 BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
             );
-        } else {
-            try {
+        } 
+        else 
+        {
+            try 
+            {
                 // Get the RecordTypeId for the Caregiver record type
                 Id recordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName()
                     .get(BI_PSPB_Caregiver)
                     .getRecordTypeId();
-                if (String.isNotBlank(recordTypeId)) {
+                if (String.isNotBlank(recordTypeId)) 
+                {
                     // Query caregiver accounts
                     List<Account> lstCaregiverAccounts = [
                         SELECT
@@ -65,7 +72,8 @@ public with sharing class BI_PSPB_caregiverOnboarding {
                             AND RecordTypeId = :recordTypeId
                         WITH USER_MODE
                     ];
-                    if (lstCaregiverAccounts.isEmpty()) {
+                    if (lstCaregiverAccounts.isEmpty()) 
+                    {
                         BI_SFCOE_LOG_Util.logMessage(
                             applicationName,
                             BI_PSPB_caregiverOnboarding.class.toString(),
@@ -74,7 +82,9 @@ public with sharing class BI_PSPB_caregiverOnboarding {
                             recordError,
                             BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                         );
-                    } else {
+                    } 
+                    else 
+                    {
                         // Get the Portal Profile
                         Profile portalProfile = [
                             SELECT Id
@@ -83,7 +93,8 @@ public with sharing class BI_PSPB_caregiverOnboarding {
                             WITH USER_MODE
                             LIMIT 1
                         ];
-                        if (portalProfile == null) {
+                        if (portalProfile == null) 
+                        {
                             BI_SFCOE_LOG_Util.logMessage(
                                 applicationName,
                                 BI_PSPB_caregiverOnboarding.class.toString(),
@@ -92,9 +103,12 @@ public with sharing class BI_PSPB_caregiverOnboarding {
                                 profileError,
                                 BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                             );
-                        } else {
+                        } 
+                        else 
+                        {
                             List<User> newUsers = new List<User>();
-                            for (Account caregiverAcc : lstCaregiverAccounts) {
+                            for (Account caregiverAcc : lstCaregiverAccounts) 
+                            {
                                 User newUser = new User(
                                     UserName = caregiverAcc.PersonEmail,
                                     FirstName = caregiverAcc.FirstName,
@@ -114,18 +128,20 @@ public with sharing class BI_PSPB_caregiverOnboarding {
                                 );
                                 newUsers.add(newUser);
                             }
-
+                            
+                            if (!newUsers.isEmpty()) {
                             // Insert the users
                             List<Database.SaveResult> results = Database.insert(
                                 newUsers,
                                 false,
                                 AccessLevel.USER_MODE
                             );
-                            for (Database.SaveResult result : results) {
-                                if (!result.isSuccess()) {
-                                    for (
-                                        Database.Error error : result.getErrors()
-                                    ) {
+                            for (Database.SaveResult result : results) 
+                            {
+                                if (!result.isSuccess()) 
+                                {
+                                    for (Database.Error error : result.getErrors()) 
+                                    {
                                         errorMsg +=
                                             'Error ' +
                                             error.getFields() +
@@ -135,7 +151,8 @@ public with sharing class BI_PSPB_caregiverOnboarding {
                                     }
                                 }
                             }
-                            if (String.isNotBlank(errorMsg)) {
+                            if (String.isNotBlank(errorMsg)) 
+                            {
                                 BI_SFCOE_LOG_Util.handleDatabaseSaveResults(
                                     results,
                                     BI_PSPB_caregiverOnboarding.class
@@ -145,7 +162,10 @@ public with sharing class BI_PSPB_caregiverOnboarding {
                             }
                         } //End if(portalProfile)
                     } //End if (lstCaregiverAccounts)
-                } else {
+                } 
+                }
+                else 
+                {
                     BI_SFCOE_LOG_Util.logMessage(
                         applicationName,
                         BI_PSPB_caregiverOnboarding.class.toString(),
@@ -155,7 +175,9 @@ public with sharing class BI_PSPB_caregiverOnboarding {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 } // End if (recordtypeId)
-            } catch (Exception ex) {
+            } 
+            catch (Exception ex) 
+            {
                 BI_SFCOE_LOG_Util.handleException(
                     ex,
                     applicationName,

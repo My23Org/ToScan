@@ -8,40 +8,44 @@
  * 1.1        Divya Bharathi S     08-Apr-2024       Updated        Add null check
  * 1.2        Divya Bharathi S     17-Apr-2024       Updated        Add log
  */
-public with sharing class BI_PSPB_patientOnboarding {
-// Define the label for the profile
-private static String BI_PSPB_PatientProfile = System.Label.BI_PSP_PatientProfile;
-private static String  errorMsg='';
-private static BI_SFCOE_LOG_App_Settings__c settings = 
-BI_SFCOE_LOG_App_Settings__c.getValues('PSPB');
-private static string applicationName = settings != null
-        ? settings.BI_SFCOE_LOG_Application__c: '';
-private static List<Account> listAcc = new List<Account>();
-private static string BI_PSPB_EmailEncode = System.Label.BI_PSPB_EmailEncodingKey;
-private static string BI_PSPB_Locales = System.Label.BI_PSPB_LocaleSidKey;
-private static string BI_PSPB_Timezone = System.Label.BI_PSPB_TimeZoneSidKey;
-private static string nullMesaage = System.label.BI_PSPB_PatientNullError;
-private static string insertError = System.label.BI_PSP_record_insert_error_message;
-/*
-Description: Creates a user record and updates onboarding.
-@param lstAccId: List of Account Ids for which users need to be created
-*/
-@InvocableMethod(label='Create User' description='Creates a user record')
-public static void createUser(List<Id> lstAccId) {
+public with sharing class BI_PSPB_patientOnboarding 
+{
+	// Define the label for the profile
+	private static String BI_PSPB_PatientProfile = System.Label.BI_PSP_PatientProfile;
+	private static String  errorMsg='';
+	private static BI_SFCOE_LOG_App_Settings__c settings = 
+	BI_SFCOE_LOG_App_Settings__c.getValues('PSPB');
+	private static string applicationName = settings != null
+			? settings.BI_SFCOE_LOG_Application__c: '';
+	private static List<Account> listAcc = new List<Account>();
+	private static string BI_PSPB_EmailEncode = System.Label.BI_PSPB_EmailEncodingKey;
+	private static string BI_PSPB_Locales = System.Label.BI_PSPB_LocaleSidKey;
+	private static string BI_PSPB_Timezone = System.Label.BI_PSPB_TimeZoneSidKey;
+	private static string nullMesaage = System.label.BI_PSPB_PatientNullError;
+	private static string insertError = System.label.BI_PSP_record_insert_error_message;
+	/*
+	Description: Creates a user record and updates onboarding.
+	@param lstAccId: List of Account Ids for which users need to be created
+	*/
+	@InvocableMethod(label='Create User' description='Creates a user record')
+	public static void createUser(List<Id> lstAccId) 
+	{
 	/*On invoking the if condition inside try / catch, it impacted 
 	the functionality. Hence, it's called outside and checked for null.*/
-	if (lstAccId.isEmpty()) {
-	BI_SFCOE_LOG_Util.logMessage(
+	if (lstAccId.isEmpty()) 
+	{
+		BI_SFCOE_LOG_Util.logMessage(
 		applicationName,
 		BI_PSPB_patientOnboarding.class.toString(),
 		'',
 		System.now(),
 		nullMesaage,
-		BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-	);
+		BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 	} 
-	else {
-		try {
+	else 
+	{
+		try 
+		{
 			List<Account> listAcc = [
 			SELECT Id, PersonEmail, FirstName, LastName, PersonContactId
 			FROM Account
@@ -57,60 +61,79 @@ public static void createUser(List<Id> lstAccId) {
 			LIMIT 1
 			];
 			List<User> lstUsers = new List<User>();
-			if (portalProfile != null && !listAcc.isEmpty()) {
-			for (Account acc : listAcc) {
-				User newUser = new User();
-				newUser.UserName = acc.PersonEmail;
-				newUser.FirstName = acc.FirstName;
-				newUser.LastName = acc.LastName;
-				newUser.Alias = acc.FirstName;
-				newUser.Email = acc.PersonEmail;
-				newUser.ContactId = acc.PersonContactId;
-				newUser.ProfileId = portalProfile.Id;
-				newUser.EmailEncodingKey = BI_PSPB_EmailEncode;
-				// Concatenate first name and last name for CommunityNickname
-				newUser.CommunityNickname = acc.FirstName + ' ' + acc.LastName;
-				newUser.TimeZoneSidKey = BI_PSPB_Timezone;
-				newUser.LocaleSidKey = BI_PSPB_Locales;
-				newUser.LanguageLocaleKey = BI_PSPB_Locales;
-				lstUsers.add(newUser);
-			}
-			} else {
-			BI_SFCOE_LOG_Util.logMessage(
+			if (portalProfile != null && !listAcc.isEmpty()) 
+			{
+				for (Account acc : listAcc) 
+				{
+					User newUser = new User();
+					newUser.UserName = acc.PersonEmail;
+					newUser.FirstName = acc.FirstName;
+					newUser.LastName = acc.LastName;
+					newUser.Alias = acc.FirstName;
+					newUser.Email = acc.PersonEmail;
+					newUser.ContactId = acc.PersonContactId;
+					newUser.ProfileId = portalProfile.Id;
+					newUser.EmailEncodingKey = BI_PSPB_EmailEncode;
+					// Concatenate first name and last name for CommunityNickname
+					newUser.CommunityNickname = acc.FirstName + ' ' + acc.LastName;
+					newUser.TimeZoneSidKey = BI_PSPB_Timezone;
+					newUser.LocaleSidKey = BI_PSPB_Locales;
+					newUser.LanguageLocaleKey = BI_PSPB_Locales;
+					lstUsers.add(newUser);
+				}
+			} 
+			else 
+			{
+				BI_SFCOE_LOG_Util.logMessage(
 				applicationName,
 				BI_PSPB_patientOnboarding.class.toString(),
 				'',
 				System.now(),
 				insertError,
-				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-			);
+				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}//End if(portalProfile != null && !listAcc.isEmpty()) 
-
+            if (!lstUsers.isEmpty()) {
 			List<Database.SaveResult> saveResults = Database.insert(
 			lstUsers,
 			false,
 			AccessLevel.USER_MODE
 			);
-			for (Database.SaveResult result : saveResults) {
-			if (!result.isSuccess()) {
-				for (Database.Error error : result.getErrors()) {
-				errorMsg +=
-					'Error ' +
-					error.getFields() +
-					'--' +
-					error.getMessage() +
-					'\n';
+			for (Database.SaveResult result : saveResults) 
+			{
+				if (!result.isSuccess()) 
+				{
+					for (Database.Error error : result.getErrors()) 
+					{
+						errorMsg +=
+						'Error ' +
+						error.getFields() +
+						'--' +
+						error.getMessage() +
+						'\n';
+					}
 				}
 			}
-			}
-			if (String.isNotBlank(errorMsg)) {
-			BI_SFCOE_LOG_Util.handleDatabaseSaveResults(
+			if (String.isNotBlank(errorMsg)) 
+			{
+				BI_SFCOE_LOG_Util.handleDatabaseSaveResults(
 				saveResults,
 				BI_PSPB_patientOnboarding.class.toString(),
-				System.now()
-			);
+				System.now());
 			}
-		} catch (Exception ex) {
+		} 
+        else 
+			{
+				BI_SFCOE_LOG_Util.logMessage(
+				applicationName,
+				BI_PSPB_patientOnboarding.class.toString(),
+				'',
+				System.now(),
+				insertError,
+				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+			}
+        }
+		catch (Exception ex) 
+		{
 			BI_SFCOE_LOG_Util.handleException(
 			ex,
 			applicationName,

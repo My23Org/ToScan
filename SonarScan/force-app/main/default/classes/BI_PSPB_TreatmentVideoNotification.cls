@@ -25,10 +25,7 @@ public with sharing class BI_PSPB_TreatmentVideoNotification {
 				SELECT Id, AccountId
 				FROM CareProgramEnrollee
 				WHERE 
-                //BI_PSPB_Send_Notification__c =: BI_PSPB_constantsClass.ACTION_RESPONSE_YES
-				//AND 
                 CareProgram.Name =: spevigo
-                //Limit 100
 			];
 			if (getEnrolleeRecord.isEmpty()) {
 				BI_SFCOE_LOG_Util.logMessage(
@@ -75,37 +72,9 @@ public with sharing class BI_PSPB_TreatmentVideoNotification {
 							);
 						}
 					}
-                // Now update the status of CareProgramEnrollee records
-				// List<CareProgramEnrollee> enrolleesToUpdate = [SELECT Id, BI_PSPB_Send_Notification__c FROM CareProgramEnrollee 
-                //                                                WHERE Id IN :enrolleeIds];
-				// for(CareProgramEnrollee cpeToUpdate : enrolleesToUpdate) {
-    			// 	cpeToUpdate.BI_PSPB_Send_Notification__c = BI_PSPB_constantsClass.ACTION_RESPONSE_NO; // Update the status as needed
-				// }
-                // if (!newTaskList.isEmpty()) {
-				// 		Database.SaveResult[] saveResults = Database.update(
-				// 			enrolleesToUpdate,
-				// 			false,
-				// 			AccessLevel.USER_MODE
-				// 		);
-				// 		for (Database.SaveResult saveResult : saveResults) {
-				// 			if (!saveResult.isSuccess()) {
-				// 				for (
-				// 					Database.Error error : saveResult.getErrors()
-				// 				) {
-				// 					errorMsg +='Error '+error.getFields()+'--'+error.getMessage()+'\n';
-				// 				}
-				// 			}
-				// 		}
-				// 		if (!String.isBlank(errorMsg)) {
-				// 			BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_DlqiQuestionariesAN.class.toString(),'',
-				// 				System.now(),errorMsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				// 			);
-				// 		}
-				// 	}
 				if (!enrolleeIds.isEmpty()) { BI_PSPB_smsAndEmailHandlerdemoTest.handleTrigger(
 						enrolleeIds, BI_PSPB_constantsClass.video, ''
 					);
-					System.debug('reeeeeee '+ enrolleeIds);
 				}
 			}
 		} catch (Exception ex) {

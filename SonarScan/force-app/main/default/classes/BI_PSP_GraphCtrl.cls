@@ -56,7 +56,8 @@ public static List<SymptomTracker> getSymptomTrackerDetails(
 	} 
 	if (!recordSymptom.isEmpty()) {
 		Set<Id> symptomIds = new Set<Id>();
-		for (BI_PSP_Symptom_Tracker__c symp : recordSymptom) {
+		for (BI_PSP_Symptom_Tracker__c symp : recordSymptom) 
+		{
 		if (symp.BI_PSP_EditEntrydates__c != null) {
 			symptomIds.add(symp.Id);
 		}
@@ -131,19 +132,21 @@ public static Map<String, List<AssessmentQuestionResponse>> getQuestionnaireDeta
 	}
 
 	// Return null if no assessments, returning null is required because we have a functionality tat requires null value to be returned
-	if (recordAssessment == null || recordAssessment.isEmpty()) {
+	if (recordAssessment.isEmpty()) {
 		return null;
 	}
 
 	// Collect Assessment Ids for selected months, returning null is required because we have a functionality tat requires null value to be returned
+	if(!String.isBlank(selectedMonths)){
 	for (Assessment assess : recordAssessment) {
 		if (selectedMonths.contains(assess.BI_PSP_DateForCQ__c)) {
 		assessmentIds.add(assess.Id);
 		}
 	}
+}
 
 	// Return null if no assessment ids found, returning null is required because we have a functionality tat requires null value to be returned
-	if (assessmentIds == null || assessmentIds.isEmpty()) {
+	if (assessmentIds.isEmpty()) {
 		return null;
 	}
 
@@ -165,6 +168,7 @@ public static Map<String, List<AssessmentQuestionResponse>> getQuestionnaireDeta
 	];
 
 	// Populate returnQuestionResponse map
+	if(!assQuesResponse.isEmpty()){
 	for (AssessmentQuestionResponse assres : assQuesResponse) {
 		String dateKey = String.valueOf(assres.Assessment.BI_PSP_DateForCQ__c);
 		if (!returnQuestionResponse.containsKey(dateKey)) {
@@ -172,6 +176,7 @@ public static Map<String, List<AssessmentQuestionResponse>> getQuestionnaireDeta
 		}
 		returnQuestionResponse.get(dateKey).add(assres);
 	}
+}
 	} catch (Exception ex) {
 	BI_SFCOE_LOG_Util.handleException(
 		ex,
@@ -214,7 +219,7 @@ public static List<Assessment> getQuestionnaireLast(String erolleId, String sele
 		];
 	} 
 	// Return null if no assessments found, returning null is required because we have a functionality that requires null value to be returned
-	if (recordAssessment == null || recordAssessment.isEmpty()) {
+	if (recordAssessment.isEmpty()) {
 		return null;
 	}
 
@@ -225,7 +230,7 @@ public static List<Assessment> getQuestionnaireLast(String erolleId, String sele
 		}
 	}
 	// Return null if no assessment ids found, returning null is required because we have a functionality that requires null value to be returned
-	if (assessments == null || assessments.isEmpty()) {
+	if (assessments.isEmpty()) {
 		return null;
 	} else {
 		return assessments;

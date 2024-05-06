@@ -126,45 +126,51 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     @AuraEnabled
     public static Id caregiverCreate(DataWrapper caregiverdata, String LeadID) {
         try {
-            if (caregiverdata != null && LeadID!=null) {
-                BI_PSPB_Lead_Caregiver__c care = new BI_PSPB_Lead_Caregiver__c();
-                care.BI_PSPB_First_Name__c = caregiverdata.firstName;
-                care.BI_PSPB_Last_Name__c = caregiverdata.lastName;
-                care.BI_PSPB_E_mail_ID__c = caregiverdata.email;
-                care.BI_PSPB_Date_of_Birth__c = Date.valueOf(caregiverdata.dob);
-                care.BI_PSPB_Phone_number__c = caregiverdata.phone;
-                care.BI_PSPB_Relationship_to_Patient__c = caregiverdata.relation;
-                care.BI_PSPB_Lead__c = LeadID;
-                // Insert the record
-                Database.SaveResult[] saveResult = Database.insert(
-                    new List<BI_PSPB_Lead_Caregiver__c>{ care },
-                    false
-                );
-                // Iterate over each save result
-                
-                for (Database.SaveResult saveResults : saveResult) {
-                    if (!saveResults.isSuccess()) {
-                        for (Database.Error error : saveResults.getErrors()) {
-                            errorMsg += 'Error ' + error.getFields() +
-                                '--' + error.getMessage() + '\n';
+            if(caregiverdata != null){
+                if (!string.isblank(caregiverdata.firstName)&&!string.isblank(caregiverdata.lastName)&&!string.isblank(caregiverdata.email)
+                    &&!string.isblank(caregiverdata.dob)&&!string.isblank(caregiverdata.relation)&&!string.isblank(LeadID) ) {
+                    BI_PSPB_Lead_Caregiver__c care = new BI_PSPB_Lead_Caregiver__c();
+                    care.BI_PSPB_First_Name__c = caregiverdata.firstName;
+                    care.BI_PSPB_Last_Name__c = caregiverdata.lastName;
+                    care.BI_PSPB_E_mail_ID__c = caregiverdata.email;
+                    care.BI_PSPB_Date_of_Birth__c = Date.valueOf(caregiverdata.dob);
+                    care.BI_PSPB_Phone_number__c = caregiverdata.phone;
+                    care.BI_PSPB_Relationship_to_Patient__c = caregiverdata.relation;
+                    care.BI_PSPB_Lead__c = LeadID;
+                    // Insert the record
+                    Database.SaveResult[] saveResult = Database.insert(
+                        new List<BI_PSPB_Lead_Caregiver__c>{ care },
+                        false
+                    );
+                    // Iterate over each save result
+                    
+                    for (Database.SaveResult saveResults : saveResult) {
+                        if (!saveResults.isSuccess()) {
+                            for (Database.Error error : saveResults.getErrors()) {
+                                errorMsg += 'Error ' + error.getFields() +
+                                    '--' + error.getMessage() + '\n';
+                            }
                         }
                     }
+                    if (String.isNotBlank(errorMsg)) {
+                        BI_SFCOE_LOG_Util.handleDatabaseSaveResults(
+                            saveResult, BI_PSPB_leadCreationCtrl.class.toString(),
+                            System.now()
+                        );
+                        throw new AuraHandledException(recordInsertionFailed);
+                    }
+                    if(care!=null)
+                    {
+                        return care.Id;
+                    }else{
+                        throw new AuraHandledException( recordCannotFound );    
+                    }
+                    
+                } else {
+                    // Handle the case where caregiverdata is null
+                    throw new AuraHandledException( recordCannotFound );
                 }
-                if (String.isNotBlank(errorMsg)) {
-                    BI_SFCOE_LOG_Util.handleDatabaseSaveResults(
-                        saveResult, BI_PSPB_leadCreationCtrl.class.toString(),
-                        System.now()
-                    );
-                    throw new AuraHandledException(recordInsertionFailed);
-                }
-                if(care!=null)
-                {
-                    return care.Id;
-                }else{
-                    throw new AuraHandledException( recordCannotFound );    
-                }
-                
-            } else {
+            }else {
                 // Handle the case where caregiverdata is null
                 throw new AuraHandledException( recordCannotFound );
             }
@@ -227,7 +233,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
                     );
                     throw new AuraHandledException(recordInsertionFailed);
                 }
-                if (con.Id != null) {
+                if (con != null) {
                     return con.Id;
                 } else {
                     throw new AuraHandledException( recordCannotFound  );
@@ -335,6 +341,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     @AuraEnabled
     public static Id consentCreate(String LeadID) {
         try {
+            if(!string.isBlank(LeadID)){
             BI_PSP_Lead_Consent__c consent = new BI_PSP_Lead_Consent__c();
             consent.BI_PSP_I_agree__c = true;
             consent.BI_PSPB_Consent_Category__c = HealthcareProvider;
@@ -361,11 +368,14 @@ public without sharing class BI_PSPB_leadCreationCtrl {
                 throw new AuraHandledException(recordInsertionFailed);
             }
             
-            if (consent.Id != null) {
+            if (consent != null) {
                 return consent.Id;
             } else {
                 throw new AuraHandledException( recordCannotFound );
             }
+        }else {
+            throw new AuraHandledException( recordCannotFound );
+        }
         } catch (Exception ex) {
             BI_SFCOE_LOG_Util.handleException(
                 ex, applicationName,
@@ -383,7 +393,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     @AuraEnabled(cacheable=true)
     public static List<Account> getExistingAccounts(string email) {
         try {
-            if(email ==null ||email =='' ){
+            if(!string.isBlank(email)){
               // If there is no account, we return null, ensuring the absence of an error when proceeding with the creation process.
                 return null;
             }
@@ -429,7 +439,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     @AuraEnabled(cacheable=true)
     public static list<lead> getLead(Id createLeadId) {
         try {
-            if(createLeadId != null){
+            if(createLeadId != null || createLeadId !=''){
             // Since the guest user has limited access, the data is returned to them, so user mode is not used.
             list<lead> ld = [
                 SELECT
@@ -476,7 +486,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
         String CaregivercreateId
     ) {
         try {
-            if(CaregivercreateId != null){
+            if(!String.isBlank(CaregivercreateId)){
             // Since the guest user has limited access, the data is returned to them, so user mode is not used.
             list<BI_PSPB_Lead_Caregiver__c> cg = [
                 SELECT
@@ -652,7 +662,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
             } else {
                 throw new AuraHandledException( recordCannotFound );
             }
-            if (contactToInsert.Id != null) {
+            if (contactToInsert != null) {
                 return contactToInsert.Id;
             } else {
                 throw new AuraHandledException( recordCannotFound );
@@ -690,7 +700,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
         string email
     ) {
         try {
-            if(patientId != null && firstName != null && email !=null){
+            if(!string.isBlank(patientId) &&string.isBlank(firstName)&& !string.isBlank(email)){
             //Since this object is invoked from a Guest User Profile which has limited access, User Mode cannot be used here
             BI_PSPB_Enrollee_Caregiver__c caregiverToInsert = new BI_PSPB_Enrollee_Caregiver__c();
             CareProgramEnrollee enrollee = [
@@ -738,7 +748,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
                     throw new AuraHandledException(recordInsertionFailed);
                 }
             }
-            if (caregiverToInsert.Id != null) {
+            if (caregiverToInsert != null) {
                 return caregiverToInsert.Id;
             } else {
                 throw new AuraHandledException( recordCannotFound  );
@@ -768,7 +778,7 @@ return in lwc biPspbHcpEnrollement
     @AuraEnabled(cacheable=true)
     public static Boolean getcothanks(String CaregivercreateId) {
         try {
-            if(CaregivercreateId !=null){
+            if(!string.isBlank(CaregivercreateId)){
             // Since the guest user has limited access, the data is returned to them, so user mode is not used.
             list<BI_PSPB_Lead_Caregiver__c> cg = [
                 SELECT
@@ -783,21 +793,25 @@ return in lwc biPspbHcpEnrollement
                 WHERE BI_PSPB_Lead__c = :CaregivercreateId
             ];
             // Since the guest user has limited access, the data is returned to them, so user mode is not used.
-            list<Contact> con = [
-                SELECT Id, Name
-                FROM Contact
-                WHERE
-                FirstName = :cg[0].BI_PSPB_First_Name__c
-                AND LastName = :cg[0].BI_PSPB_Last_Name__c
-                AND Email = :cg[0].BI_PSPB_E_mail_ID__c
-                LIMIT 1
-            ];
-            if (con.size() == 1) {
-                return true;
-            } else {
-                return false;
-            }
-            }else {
+            if(!cg.IsEmpty()){
+                list<Contact> con = [
+                    SELECT Id, Name
+                    FROM Contact
+                    WHERE
+                    FirstName = :cg[0].BI_PSPB_First_Name__c
+                    AND LastName = :cg[0].BI_PSPB_Last_Name__c
+                    AND Email = :cg[0].BI_PSPB_E_mail_ID__c
+                    LIMIT 1
+                ];
+                if (con.size() == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+                }else {
+                    throw new AuraHandledException( recordCannotFound );
+                }
+             }else {
                 throw new AuraHandledException( recordCannotFound );
             }
         } catch (Exception ex) {

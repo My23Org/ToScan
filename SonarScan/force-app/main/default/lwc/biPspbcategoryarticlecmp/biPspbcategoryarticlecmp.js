@@ -61,6 +61,35 @@ import articletwentysix from '@salesforce/label/c.BI_PSPB_articleTwentySix';
 import articletwentyseven from '@salesforce/label/c.BI_PSPB_articleTwentySeven';
 import articletwentyeight from '@salesforce/label/c.BI_PSPB_articleTwentyEight';
 import articletwentynine from '@salesforce/label/c.BI_PSPB_articleTwentyNine';
+import BI_PSPB_ArticleOneRT from '@salesforce/label/c.BI_PSPB_ArticleOneRT';
+import BI_PSPB_ArticleTwoRT from '@salesforce/label/c.BI_PSPB_ArticleTwoRT';
+import BI_PSPB_ArticleThreeRT from '@salesforce/label/c.BI_PSPB_ArticleThreeRT';
+import BI_PSPB_ArticleFourRT from '@salesforce/label/c.BI_PSPB_ArticleFourRT';
+import BI_PSPB_ArticleFiveRT from '@salesforce/label/c.BI_PSPB_ArticleFiveRT';
+import BI_PSPB_ArticleSixRT from '@salesforce/label/c.BI_PSPB_ArticleSixRT';
+import BI_PSPB_ArticleSevenRT from '@salesforce/label/c.BI_PSPB_ArticleSevenRT';
+import BI_PSPB_ArticleEightRT from '@salesforce/label/c.BI_PSPB_ArticleEightRT';
+import BI_PSPB_ArticleNineRT from '@salesforce/label/c.BI_PSPB_ArticleNineRT';
+import BI_PSPB_ArticleTenRT from '@salesforce/label/c.BI_PSPB_ArticleTenRT';
+import BI_PSPB_ArticleElevenRT from '@salesforce/label/c.BI_PSPB_ArticleElevenRT';
+import BI_PSPB_ArticleTwelveRT from '@salesforce/label/c.BI_PSPB_ArticleTwelveRT';
+import BI_PSPB_ArticleThirteenRT from '@salesforce/label/c.BI_PSPB_ArticleThirteenRT';
+import BI_PSPB_ArticleFourteenRT from '@salesforce/label/c.BI_PSPB_ArticleFourteenRT';
+import BI_PSPB_ArticleFifteenRT from '@salesforce/label/c.BI_PSPB_ArticleFifteenRT';
+import BI_PSPB_ArticleSixteenRT from '@salesforce/label/c.BI_PSPB_ArticleSixteenRT';
+import BI_PSPB_ArticleSeventeenRT from '@salesforce/label/c.BI_PSPB_ArticleSeventeenRT';
+import BI_PSPB_ArticleEighteenRT from '@salesforce/label/c.BI_PSPB_ArticleEighteenRT';
+import BI_PSPB_ArticleNineteenRT from '@salesforce/label/c.BI_PSPB_ArticleNineteenRT';
+import BI_PSPB_ArticleTwentyRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyRT';
+import BI_PSPB_ArticleTwentyOneRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyOneRT';
+import BI_PSPB_ArticleTwentyTwoRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyTwoRT';
+import BI_PSPB_ArticleTwentyThreeRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyThreeRT';
+import BI_PSPB_ArticleTwentyFourRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyFourRT';
+import BI_PSPB_ArticleTwentyFiveRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyFiveRT';
+import BI_PSPB_ArticleTwentySixRT from '@salesforce/label/c.BI_PSPB_ArticleTwentySixRT';
+import BI_PSPB_ArticleTwentySevenRT from '@salesforce/label/c.BI_PSPB_ArticleTwentySevenRT';
+import BI_PSPB_ArticleTwentyEightRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyEightRT';
+import BI_PSPB_ArticleTwentyNineRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyNineRT';
 import articlestring from '@salesforce/label/c.BI_PSPB_ArticleString';
 import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
@@ -123,39 +152,37 @@ export default class BiPspcategoryarticlecmp extends LightningElement {
 	threeDifferentNumbers;
 	channelName = testsitename;
 	siteurlq;
-
-	standarItems = [
-		{ id: 1, title: articlecategoryone },
-		{ id: 2, title: articlecategorytwo },
-		{ id: 3, title: articlecategorythree },
-		{ id: 4, title: articlecategoryfour },
-		{ id: 5, title: articlecategoryfive }
-	];
-	topics = [
-		articlethree,
-		articletwo,
-		articleone,
-		articlesix,
-		articlefour,
-		articletwentytwo,
-		articletwentythree,
-		articlefive,
-		articleeight,
-		articleseven,
-		articletwelve,
-		articletwenty,
-		articlefourteen,
-		articlefifteen,
-		articletwentyone,
-		articlenineteen,
-		articleeleven,
-		articlethirteen,
-		articleseventeen,
-		articletwentyfour,
-		articleten,
-		articlenine,
-		articlesixteen
-	];
+	topics = {
+    [articleone]: [BI_PSPB_ArticleOneRT],
+    [articletwo]: [BI_PSPB_ArticleTwoRT],
+    [articlethree]: [BI_PSPB_ArticleThreeRT],
+    [articlefour]: [BI_PSPB_ArticleFourRT],
+    [articlefive]: [BI_PSPB_ArticleFiveRT],
+    [articlesix]: [BI_PSPB_ArticleSixRT],
+    [articleseven]: [BI_PSPB_ArticleSevenRT],
+    [articleeight]: [BI_PSPB_ArticleEightRT],
+    [articlenine]: [BI_PSPB_ArticleNineRT],
+    [articleten]: [BI_PSPB_ArticleTenRT],
+    [articleeleven]: [BI_PSPB_ArticleElevenRT],
+    [articletwelve]: [BI_PSPB_ArticleTwelveRT],
+    [articlethirteen]: [BI_PSPB_ArticleThirteenRT],
+    [articlefourteen]: [BI_PSPB_ArticleFourteenRT],
+    [articlefifteen]: [BI_PSPB_ArticleFifteenRT],
+    [articlesixteen]: [BI_PSPB_ArticleSixteenRT],
+    [articleseventeen]: [BI_PSPB_ArticleSeventeenRT],
+    [articleeighteen]: [BI_PSPB_ArticleEighteenRT],
+    [articlenineteen]: [BI_PSPB_ArticleNineteenRT],
+    [articletwenty]: [BI_PSPB_ArticleTwentyRT],
+    [articletwentyone]: [BI_PSPB_ArticleTwentyOneRT],
+    [articletwentytwo]: [BI_PSPB_ArticleTwentyTwoRT],
+    [articletwentythree]: [BI_PSPB_ArticleTwentyThreeRT],
+    [articletwentyfour]: [BI_PSPB_ArticleTwentyFourRT],
+    [articletwentyfive]: [BI_PSPB_ArticleTwentyFiveRT],
+    [articletwentysix]: [BI_PSPB_ArticleTwentySixRT],
+    [articletwentyseven]: [BI_PSPB_ArticleTwentySevenRT],
+    [articletwentyeight]: [BI_PSPB_ArticleTwentyEightRT],
+    [articletwentynine]: [BI_PSPB_ArticleTwentyNineRT]
+}
 	searchTerm = '';
 	relatedItems = [];
 
@@ -384,12 +411,6 @@ export default class BiPspcategoryarticlecmp extends LightningElement {
 		return refreshApex(this.wiredstatusofpatient);
 	}
 
-	// Generate a random number between 2 and 4 (inclusive)
-	get dynamicProperty() {
-		const newRandomNumber = Math.floor(Math.random() * 3) + 2;
-		return newRandomNumber;
-	}
-
 	// Clear search input
 	clearinput() {
 		const inputElement = this.template.querySelector('.search-bar');
@@ -484,6 +505,7 @@ export default class BiPspcategoryarticlecmp extends LightningElement {
 			if (titleFound) {
 				result.count = count % 2 !== 0;
 				count += 1;
+				result.readtime=this.topics[result.text];
 				filteredResults.push(result);
 			}
 		}

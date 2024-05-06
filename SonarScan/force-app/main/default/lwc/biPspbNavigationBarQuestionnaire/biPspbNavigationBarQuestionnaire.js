@@ -11,7 +11,7 @@ import getUnreadCases from '@salesforce/apex/BI_PSPB_LoginCtrl.getUnreadCases';
 import checkCommunityUsername from '@salesforce/apex/BI_PSPB_CommunityUsername.checkCommunityUsername';
 import Patientstatus from "@salesforce/apex/BI_PSPB_treatmentvideocmd.patientStatus";
 import countAssessment from '@salesforce/apex/BI_PSP_Assessment.getAssessmentCountsByCurrentUserName';
-import getaAccId from '@salesforce/apex/BI_PSP_exusergetaccid.getaAccId';
+//import getaAccId from '@salesforce/apex/BI_PSP_exusergetaccid.getaAccId';
 import getEnrolle from '@salesforce/apex/BI_PSP_ChallengeCtrl.getEnrolle';
 // To import Static Resource
 import sitelogo from '@salesforce/resourceUrl/BI_PSPB_SiteLogo';
@@ -246,18 +246,7 @@ export default class BiPspbNavigationBarQuestionnaire extends LightningElement {
 			this.showHomeLine = true;
 		}
 		if (Id != null || Id !== undefined) {
-			this.taskInfo(Id);
-			this.fetchAssessmentCount();
-			getaAccId({ userid: this.userId })
-				.then(result => {
-					this.accname = result;
-					if (this.accname != null) {
-						this.taskcounter(this.accname);
-					}
-				})
-				.catch(error => {
-					this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error from Apex
-				});
+			
 			userDetails({ userId: Id })
 				.then(user => {
 					this.currentUserIfo = user;

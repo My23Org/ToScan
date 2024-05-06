@@ -597,6 +597,12 @@ public without sharing class BI_PSPB_getLead {
 					BI_PSPB_constantsClass.errorMsgInsert
 				);
 			}
+			if(String.isBlank(createdContactId))
+			{
+				throw new AuraHandledException(
+				BI_PSPB_constantsClass.recordcannotfound
+			);
+			}
 			return createdContactId;
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(

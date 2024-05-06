@@ -60,11 +60,11 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 */
 	public static void convertlead(list<ID> lstLeadID) {
 		//This method is using create the lead
-
+          
 		try {
 			// Prepare a list to hold LeadConvert objects
 			List<Database.LeadConvert> leadConverts = new List<Database.LeadConvert>();
-
+              if(!lstLeadID.isEmpty()){
 			for (Id leadId : lstLeadID) {
 				Database.LeadConvert lc = new Database.LeadConvert();
 				lc.setLeadId(leadID);
@@ -497,13 +497,13 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				Lead lead = leadMap.get(acc.Id);
 				if (lead != null) {
 					lstLeadPrescription = getleadPrescription(lead.Id);
-					if (
-						lstLeadPrescription != null &&
-						!lstLeadPrescription.isEmpty()
-					) {
-						List<Contact> lstphysician = getContact(
+					List<Contact> lstphysician = getContact(
 							lead.BI_PSPB_Physician_Name_c__c
 						);
+					if (
+						!lstLeadPrescription.isEmpty() && !lstPhysician.isEmpty()
+					) {
+						
 						CareProgramProvider cpp = new CareProgramProvider(
 							BI_PSPB_Care_Program_Enrollee__c = mpPatientEnrollee.get(
 								acc.Id
@@ -577,7 +577,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 
 			// Gather all unique careProgramId values
 			Set<String> careProgrmIds = new Set<String>();
-			if (careprogramMap != null) {
+			if (!careprogramMap.isEmpty()) {
 				for (String careProgramId : careprogramMap.values()) {
 					careProgrmIds.add(careProgramId);
 				}
@@ -832,7 +832,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				List<HealthCloudGA__CareProgramPlanTemplate__c> relevantTemplates = templatesByCareProgramId.get(
 					patientEnrollee.CareProgramId
 				);
-				if (relevantTemplates == null || relevantTemplates.isEmpty()) {
+				if (relevantTemplates.isEmpty()) {
 					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),
 						'',System.now(),careProgramPlanError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
@@ -879,6 +879,16 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
 					System.now(),awardInsertError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
+		}else {
+			BI_SFCOE_LOG_Util.logMessage(
+				applicationName,
+				BI_PSPB_LeadConvertMultiple.class.toString(),
+				'',
+				System.now(),
+				leadNullError,
+				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+			);
+		}
 		} catch (Exception ex) {
 			// Handle exception
 			BI_SFCOE_LOG_Util.handleException(ex,applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),
@@ -888,11 +898,13 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 	//@description This method is useful for fetching prescription records associated with a lead
 	//@param leadId - converted leadId
 	//@return lstLeadPrescription list containing the queried prescription records.
-	public static List<BI_PSPB_Lead_Prescription__c> getleadPrescription(
+	private static List<BI_PSPB_Lead_Prescription__c> getleadPrescription(
 		Id leadId
 	) {
+
         List<BI_PSPB_Lead_Prescription__c> lstLeadPrescription;
 	try {
+		if(leadId != null || leadId !=''){
 		// There is no need to use user mode because this class operates as a system administrator.
 		lstLeadPrescription = [
 			SELECT
@@ -917,20 +929,25 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 	System.now(),medError + leadId,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 		} 
 	}
-	catch (Exception ex) {
-		BI_SFCOE_LOG_Util.handleException(ex,applicationName,BI_PSPB_LeadConvertMultiple.class.getName(),
-			null,System.now());
-			
+	else{
+		BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
+		System.now(),medError + leadId,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 	}
+	}catch (Exception ex) {
+			BI_SFCOE_LOG_Util.handleException(ex,applicationName,BI_PSPB_LeadConvertMultiple.class.getName(),
+				null,System.now());
+				
+		}
        return lstLeadPrescription;
 	}
 
 	//@description This method is useful for fetching Contact records associated with a lead
 	//@param physicianname - converted leadId's physician name
 	//@return lstphysician list containing the queried Contact records.
-	public static List<Contact> getContact(Id physicianId) {
+	private static List<Contact> getContact(Id physicianId) {
         List<Contact> lstPhysician;
 		try{
+			if(physicianId != null || physicianId != ''){
 		// There is no need to use user mode because this class operates as a system administrator.
 		lstPhysician = [
 			SELECT Id, Name, BI_PSPB_Practice_Name__c
@@ -945,6 +962,11 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				System.now(),contact+ physicianId,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			
 		} 
+	
+    }else{
+		BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
+				System.now(),contact+ physicianId,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+	}
 	}
 	catch (Exception ex) {
 		BI_SFCOE_LOG_Util.handleException(ex,applicationName,BI_PSPB_LeadConvertMultiple.class.getName(),

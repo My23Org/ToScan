@@ -50,6 +50,7 @@ export default class biPspNotificationGeneralForm extends NavigationMixin(Lightn
 	@track Alltask;
 	@track trackbutton;
 	@track viewbutton;
+	@track general=true;
 	@track accname;
 	@track generalValue = [];
 	@track displayCount = 3;
@@ -77,6 +78,7 @@ export default class biPspNotificationGeneralForm extends NavigationMixin(Lightn
 						if (result[0].patientEnrolle != null) 
 						{
 							this.accname = result[0].patientEnrolle.Id;
+							
 						} 
 						else if (result[0].error != null) 
 						{
@@ -134,7 +136,7 @@ export default class biPspNotificationGeneralForm extends NavigationMixin(Lightn
 	}
 
  //To fetch the All general notification
-	@wire(generaltask, { accountId: '$accname', notificatonType: BI_PSP_General_Notification })
+	@wire(generaltask, { enroleeId: '$accname', notificatonType: BI_PSP_General_Notification })
 	generaltask({ data, error })
 	{
 		if (data)
@@ -158,6 +160,7 @@ export default class biPspNotificationGeneralForm extends NavigationMixin(Lightn
 				{
 					this.norecords = true;
 				}
+				
 				this.generalValue = data.map(obj => ({
 					...obj,
 					trackbutton: obj.BI_PSP_Category__c === symptom,
@@ -220,7 +223,7 @@ export default class biPspNotificationGeneralForm extends NavigationMixin(Lightn
 	{
 		try 
 		{
-			generaltask({ accountId: this.accname, notificatonType: typevalue })
+			generaltask({ enroleeId: this.accname, notificatonType: typevalue })
 				.then(result =>
 				{
 					if (result && result.length > 3) 

@@ -9,7 +9,6 @@ import Id from '@salesforce/user/Id';
 import alarm from '@salesforce/resourceUrl/BI_PSPB_AlarmImg';
 // To import Apex Classes
 import getTasksWithDateOfTreatment from '@salesforce/apex/BI_PSPB_TreatmentReminder.getTasksWithDateOfTreatment';
-import accid from '@salesforce/apex/BI_PSP_exusergetaccid.getaAccId';
 import getEnrolle from '@salesforce/apex/BI_PSP_ChallengeCtrl.getEnrolle';
 // To import Custom Labels
 import Jan from '@salesforce/label/c.BI_PSPB_Jan';
@@ -74,27 +73,6 @@ export default class biPspbReminderWidget extends NavigationMixin(LightningEleme
 			return !treatmentDate || treatmentDate < currentDate;
 		}
 		return false;
-	}
-	// Wire method to retrieve account ID
-	@wire(accid, { userid: '$userId' })
-	wiredAccId({ data, error }) 
-	{
-	// Null data is checked and AuraHandledException is thrown from the Apex
-		if (data) 
-		{
-			try 
-			{
-				this.accname = data;
-			} 
-			catch (err) 
-			{
-				this.showToast(errormessage, err.message, errorvariant);
-			}
-		} 
-		else if (error) 
-		{
-			this.showToast(errormessage, error.body.message, errorvariant);
-		}
 	}
 	// To get the date of treatment of the careprogram enrolle and calculates the day difference
 	@wire(getTasksWithDateOfTreatment, { accountId: '$cpeId' })

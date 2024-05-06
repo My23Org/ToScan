@@ -83,31 +83,5 @@ public with sharing class BI_PSPB_PatientFormCtrl {
 		}
 		return null;
 	}
-	/**
-	 * @description  Retrieves a list of gender values.return in lwc biPspbCgPatientinfo,biPspbPatientProfiledetails.
-	 * @return       A list of gender options including 'Male', 'Female', 'Prefer not to say', and 'Other'.
-	 */
-	@AuraEnabled(cacheable=true)
-	public static List<String> getGenderValue() {
-		try {
-			String maleLabel = Label.BI_PSP_male;
-			String femaleLabel = Label.BI_PSP_female;
-			String preferNotToSayLabel = Label.BI_PSP_prefernot_tosay;
-			String otherLabel = Label.BI_PSP_Others;
-			// You can replace this with logic to fetch account gender options from a custom setting,
-			//  metadata, or any other source
-			return new List<String>{
-				maleLabel,
-				femaleLabel,
-				preferNotToSayLabel,
-				otherLabel
-			};
-		} catch (Exception ex) {
-			BI_SFCOE_LOG_Util.handleException(
-				ex,applicationName,BI_PSPB_PatientFormCtrl.class.toString(),
-				null,System.now()
-			);
-			throw new AuraHandledException(recordcannotfound);
-		}
-	}
+
 }

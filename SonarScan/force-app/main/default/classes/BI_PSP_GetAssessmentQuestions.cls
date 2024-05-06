@@ -13,6 +13,8 @@
 */
 
 public with sharing class BI_PSP_GetAssessmentQuestions {
+    //This label states that the logged in user is not in the system.
+	private static String undefinedUser = System.Label.BI_PSP_UndefinedUser;
     //this list varibale holds the CareProgramEnrollee  record details
     private static List<CareProgramEnrollee> cpelist;
     //This variable holds a label that shows error when there is no care program enrollee record.
@@ -66,16 +68,16 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
     //variable that holds the Assessment Questions of deifferent Categories.
     private static List<AssessmentQuestion> assessmentQuestions;
     //variable that holds the care giver account details
-    private static list<Account> caregiverAccount;
+    private static Account caregiverAccount;
     //variable that holds the care givers selected patient account details.
-    private static List<Account> caregiversPatient;
+    private static Account caregiversPatient;
     /*variable that holds the information of care program enrollee record related to the selected patient.
      Account details*/
-    private static List<CareProgramEnrollee> selectedPatientEnrollee;
+    private static CareProgramEnrollee selectedPatientEnrollee;
     //variable that holds the account information of the patient.
-    private static List<Account> patientAccount;
+    private static Account patientAccount;
     //holds the enrolled patient record details.
-    private static List<CareProgramEnrollee> enrolledPatient;
+    private static CareProgramEnrollee enrolledPatient;
     //holds a list of AssessmentQuestionResponse  records.
     private static List<AssessmentQuestionResponse> liAssessRespon;
     /**
@@ -187,6 +189,8 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
             ];
 
             String currentUserEmail = UserInfo.getUserEmail();
+             if(currentUser !=null)
+            {
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 caregiverAccount = [
                     SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
@@ -198,28 +202,28 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-                if (!caregiverAccount.isEmpty()) {
+                if (caregiverAccount !=null) {
                     caregiversPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiverAccount[0]
+                            Id = :caregiverAccount
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
 
-                    if (!caregiversPatient.isEmpty()) {
+                    if (caregiversPatient !=null) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedPatientEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :caregiversPatient[0].Id
+                            WHERE AccountID = :caregiversPatient.Id
                         ];
 
-                        if (!selectedPatientEnrollee.isEmpty()) {
-                            enrolleeId = selectedPatientEnrollee[0].Id;
+                        if (selectedPatientEnrollee !=null) {
+                            enrolleeId = selectedPatientEnrollee.Id;
                         }
                     }
                 } else {
@@ -241,17 +245,17 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (!patientAccount.isEmpty()) {
+                if (patientAccount !=null) {
                     /* USER_MODE is not used because AssessmentQuestion is an Salesforce Industry object
                      using Healthcare license*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patientAccount[0].Id
+                        WHERE AccountID = :patientAccount.Id
                     ];
 
-                    if (!enrolledPatient.isEmpty()) {
-                        enrolleeId = enrolledPatient[0].Id;
+                    if (enrolledPatient !=null) {
+                        enrolleeId = enrolledPatient.Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -264,6 +268,17 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                     );
                 }
             }
+            }
+             else {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSP_GetAssessmentQuestions.class.toString(),
+						'',
+						System.now(),
+						undefinedUser,
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+				}
             //care give access code
             /* USER_MODE is not used because AssessmentQuestion is an Salesforce Industry object
              using Healthcare license*/
@@ -477,7 +492,8 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
             ];
 
             String currentUserEmail = UserInfo.getUserEmail();
-
+			 if(currentUser !=null)
+            {
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 caregiverAccount = [
                     SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
@@ -489,28 +505,28 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-                if (!caregiverAccount.isEmpty()) {
+                if (caregiverAccount !=null) {
                     caregiversPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiverAccount[0]
+                            Id = :caregiverAccount
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
 
-                    if (!caregiversPatient.isEmpty()) {
+                    if (caregiversPatient !=null) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedPatientEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :caregiversPatient[0].Id
+                            WHERE AccountID = :caregiversPatient.Id
                         ];
 
-                        if (!selectedPatientEnrollee.isEmpty()) {
-                            enrolleeId = selectedPatientEnrollee[0].Id;
+                        if (selectedPatientEnrollee !=null) {
+                            enrolleeId = selectedPatientEnrollee.Id;
                         }
                     }
                 } else {
@@ -535,11 +551,11 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
 
                 /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                  using Healthcare license*/
-                if (!patientAccount.isEmpty()) {
+                if (patientAccount !=null) {
                     enrolledPatient = [
                         SELECT id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patientAccount[0].id
+                        WHERE AccountID = :patientAccount.id
                     ];
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -551,8 +567,8 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-                if (!enrolledPatient.isEmpty()) {
-                    enrolleeId = enrolledPatient[0].id;
+                if (enrolledPatient !=null) {
+                    enrolleeId = enrolledPatient.id;
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
                         applicationName,
@@ -564,6 +580,17 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                     );
                 }
             }
+            }
+             else {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSP_GetAssessmentQuestions.class.toString(),
+						'',
+						System.now(),
+						undefinedUser,
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+				}
             /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
              using Healthcare license*/
             if (enrolleeId != null && !String.isBlank(enrolleeId)) {

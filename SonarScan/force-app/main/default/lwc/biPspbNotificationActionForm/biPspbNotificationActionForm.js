@@ -173,7 +173,7 @@ getbrandedaction(acc)
 {
 	try 
 	{
-		actiontask({ accountId: acc, notificatonType: BI_PSPB_Action_required })
+		actiontask({ enroleeId: acc, notificatonType: BI_PSPB_Action_required })
 			.then(result => 
 			{
 				// Null data is checked and AuraHandledException is thrown from the Apex
@@ -231,7 +231,7 @@ getUnassignedaction(acc)
 {
 	try 
 	{
-		actiontaskUA({ accountId: acc, notificatonType: BI_PSPB_Action_required })
+		actiontaskUA({ enroleeId: acc, notificatonType: BI_PSPB_Action_required })
 		// Null data is checked and AuraHandledException is thrown from the Apex
 			.then(result => 
 			{
@@ -551,7 +551,7 @@ actionfunc(cate)
 {
 	try 
 	{
-		actiontask({ accountId: this.accname, category: cate })
+		actiontask({ enroleeId: this.accname, category: cate })
 			.then(result => 
 			{
 				if (result && result.length > 3) 

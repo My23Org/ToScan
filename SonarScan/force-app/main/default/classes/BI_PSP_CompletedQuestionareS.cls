@@ -12,6 +12,8 @@
 */
 
 public with sharing class BI_PSP_CompletedQuestionareS {
+    //This label states that the logged in user is not in the system.
+	private static String undefinedUser = System.Label.BI_PSP_UndefinedUser;
     //this variable holds a list of assessment response records.
     private static List<AssessmentQuestionResponse> listOFres;
     //This variable holds a label that shows error when there is no care program enrollee record.
@@ -47,16 +49,16 @@ public with sharing class BI_PSP_CompletedQuestionareS {
     // Holds the category label for pageTwo.
     private static String pageTwo = System.Label.BI_PSP_PageTwo;
     //This Variable holds the account details of the patient.
-    private static List<Account> patinetAccount;
+    private static Account patinetAccount;
     //This Variable holds the CareProgramEnrollee record details of the patient.
-    private static List<CareProgramEnrollee> enrolledPatient;
+    private static CareProgramEnrollee enrolledPatient;
     /*this variable holds the information that the current user is a care giver operating on behalf
      of a patient*/
-    private static list<Account> caregiversPatient;
+    private static Account caregiversPatient;
     //holds the account information of a patient who is selected by a caregiver.
-    private static List<Account> selectedPatient;
+    private static Account selectedPatient;
     //holds the CareProgramEnrollee record information of a patient who is selected by a caregiver.
-    private static List<CareProgramEnrollee> selectedEnrollee;
+    private static CareProgramEnrollee selectedEnrollee;
     //holds the responses of an assessment which got completed or expired.
     private static List<AssessmentQuestionResponse> assessmentResponses;
     // custom label that displays an error message when there is no AssessmnetQuestionResponse Record.
@@ -87,7 +89,8 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                 WITH USER_MODE
                 LIMIT 1
             ];
-
+			 if(currentUser !=null)
+            {
             if (currentUser.BI_PSPB_Caregiver__c == false) {
                 patinetAccount = [
                     SELECT id, Name, PersonEmail
@@ -97,17 +100,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (!patinetAccount.isEmpty()) {
+                if (patinetAccount !=null) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patinetAccount[0].Id
+                        WHERE AccountID = :patinetAccount.Id
                     ];
 
-                    if (!enrolledPatient.isEmpty()) {
-                        enrolleeId = enrolledPatient[0].Id;
+                    if (enrolledPatient !=null) {
+                        enrolleeId = enrolledPatient.Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -131,28 +134,28 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     WITH USER_MODE
                 ];
 
-                if (!caregiversPatient.isEmpty()) {
+                if (caregiversPatient !=null) {
                     selectedPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiversPatient[0]
+                            Id = :caregiversPatient
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
 
-                    if (!selectedPatient.isEmpty()) {
+                    if (selectedPatient !=null) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatient[0].Id
+                            WHERE AccountID = :selectedPatient.Id
                         ];
 
-                        if (!selectedEnrollee.isEmpty()) {
-                            enrolleeId = selectedEnrollee[0].Id;
+                        if (selectedEnrollee !=null) {
+                            enrolleeId = selectedEnrollee.Id;
                         }
                     }
                 } else {
@@ -166,6 +169,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     );
                 }
             }
+            }
+             else {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSP_LetsPersonlise.class.toString(),
+						'',
+						System.now(),
+						undefinedUser,
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+				}
             //list assessments responses
             /* USER_MODE is not used because AssessmentQuestionResponse is an Salesforce Industry object
              using Healthcare license*/
@@ -254,7 +268,8 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                 WITH USER_MODE
                 LIMIT 1
             ];
-
+			 if(currentUser !=null)
+            {
             if (currentUser.BI_PSPB_Caregiver__c == false) {
                 patinetAccount = [
                     SELECT id, Name, PersonEmail
@@ -264,17 +279,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (!patinetAccount.isEmpty()) {
+                if (patinetAccount !=null) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
-                    List<CareProgramEnrollee> enrolledPatient = [
+                    enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patinetAccount[0].Id
+                        WHERE AccountID = :patinetAccount.Id
                     ];
 
-                    if (!enrolledPatient.isEmpty()) {
-                        enrolleeId = enrolledPatient[0].Id;
+                    if (enrolledPatient !=null) {
+                        enrolleeId = enrolledPatient.Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -298,28 +313,28 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     WITH USER_MODE
                 ];
 
-                if (!caregiversPatient.isEmpty()) {
+                if (caregiversPatient !=null) {
                     selectedPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiversPatient[0]
+                            Id = :caregiversPatient
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
 
-                    if (!selectedPatient.isEmpty()) {
+                    if (selectedPatient !=null) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatient[0].Id
+                            WHERE AccountID = :selectedPatient.Id
                         ];
 
-                        if (!selectedEnrollee.isEmpty()) {
-                            enrolleeId = selectedEnrollee[0].Id;
+                        if (selectedEnrollee !=null) {
+                            enrolleeId = selectedEnrollee.Id;
                         }
                     }
                 } else {
@@ -333,6 +348,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     );
                 }
             }
+            }
+             else {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSP_LetsPersonlise.class.toString(),
+						'',
+						System.now(),
+						undefinedUser,
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+				}
             //list assessments responses
             /* USER_MODE is not used because Assessment is an Salesforce Industry object
              using Healthcare license*/
@@ -406,7 +432,8 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                 WITH USER_MODE
                 LIMIT 1
             ];
-
+             if(currentUser !=null)
+            {
             if (currentUser.BI_PSPB_Caregiver__c == false) {
                 patinetAccount = [
                     SELECT id, Name, PersonEmail
@@ -416,17 +443,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (!patinetAccount.isEmpty()) {
+                if (patinetAccount !=null) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patinetAccount[0].Id
+                        WHERE AccountID = :patinetAccount.Id
                     ];
 
-                    if (!enrolledPatient.isEmpty()) {
-                        enrolleeId = enrolledPatient[0].Id;
+                    if (enrolledPatient !=null) {
+                        enrolleeId = enrolledPatient.Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -450,28 +477,28 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     WITH USER_MODE
                 ];
 
-                if (!caregiversPatient.isEmpty()) {
+                if (caregiversPatient !=null) {
                     selectedPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiversPatient[0]
+                            Id = :caregiversPatient
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
 
-                    if (!selectedPatient.isEmpty()) {
+                    if (selectedPatient !=null) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatient[0].Id
+                            WHERE AccountID = :selectedPatient.Id
                         ];
 
-                        if (!selectedEnrollee.isEmpty()) {
-                            enrolleeId = selectedEnrollee[0].Id;
+                        if (selectedEnrollee !=null) {
+                            enrolleeId = selectedEnrollee.Id;
                         }
                     }
                 } else {
@@ -485,6 +512,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     );
                 }
             }
+            }
+             else {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSP_LetsPersonlise.class.toString(),
+						'',
+						System.now(),
+						undefinedUser,
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+				}
             //list assessments responses
             if (
                 (targetDate != null && !String.isBlank(targetDate)) &&
@@ -574,7 +612,8 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                 WITH USER_MODE
                 LIMIT 1
             ];
-
+			 if(currentUser !=null)
+            {
             if (currentUser.BI_PSPB_Caregiver__c == false) {
                 patinetAccount = [
                     SELECT id, Name, PersonEmail
@@ -584,17 +623,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (!patinetAccount.isEmpty()) {
+                if (patinetAccount !=null) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patinetAccount[0].Id
+                        WHERE AccountID = :patinetAccount.Id
                     ];
 
-                    if (!enrolledPatient.isEmpty()) {
-                        enrolleeId = enrolledPatient[0].Id;
+                    if (enrolledPatient !=null) {
+                        enrolleeId = enrolledPatient.Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -618,28 +657,28 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     WITH USER_MODE
                 ];
 
-                if (!caregiversPatient.isEmpty()) {
+                if (caregiversPatient !=null) {
                     selectedPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiversPatient[0]
+                            Id = :caregiversPatient
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
 
-                    if (!selectedPatient.isEmpty()) {
+                    if (selectedPatient !=null) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatient[0].Id
+                            WHERE AccountID = :selectedPatient.Id
                         ];
 
-                        if (!selectedEnrollee.isEmpty()) {
-                            enrolleeId = selectedEnrollee[0].Id;
+                        if (selectedEnrollee !=null) {
+                            enrolleeId = selectedEnrollee.Id;
                         }
                     }
                 } else {
@@ -653,6 +692,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     );
                 }
             }
+            }
+             else {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSP_LetsPersonlise.class.toString(),
+						'',
+						System.now(),
+						undefinedUser,
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+				}
             // Query AssessmentQuestionResponses records
             /* USER_MODE is not used because AssessmentQuestionResponse is an Salesforce Industry object
              using Healthcare license*/
@@ -751,7 +801,8 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                 WITH USER_MODE
                 LIMIT 1
             ];
-
+			 if(currentUser !=null)
+            {
             if (currentUser.BI_PSPB_Caregiver__c == false) {
                 patinetAccount = [
                     SELECT id, Name, PersonEmail
@@ -761,17 +812,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (!patinetAccount.isEmpty()) {
+                if (patinetAccount !=null) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patinetAccount[0].Id
+                        WHERE AccountID = :patinetAccount.Id
                     ];
 
-                    if (!enrolledPatient.isEmpty()) {
-                        enrolleeId = enrolledPatient[0].Id;
+                    if (enrolledPatient !=null) {
+                        enrolleeId = enrolledPatient.Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -795,28 +846,28 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     WITH USER_MODE
                 ];
 
-                if (!caregiversPatient.isEmpty()) {
+                if (caregiversPatient !=null) {
                     selectedPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiversPatient[0]
+                            Id = :caregiversPatient
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
 
-                    if (!selectedPatient.isEmpty()) {
+                    if (selectedPatient !=null) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatient[0].Id
+                            WHERE AccountID = :selectedPatient.Id
                         ];
 
-                        if (!selectedEnrollee.isEmpty()) {
-                            enrolleeId = selectedEnrollee[0].Id;
+                        if (selectedEnrollee !=null) {
+                            enrolleeId = selectedEnrollee.Id;
                         }
                     }
                 } else {
@@ -830,6 +881,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     );
                 }
             }
+            }
+             else {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSP_LetsPersonlise.class.toString(),
+						'',
+						System.now(),
+						undefinedUser,
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+				}
             /* USER_MODE is not used because AssessmentQuestionResponse is an Salesforce Industry object
              using Healthcare license*/
             if (
@@ -917,7 +979,8 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                 WITH USER_MODE
                 LIMIT 1
             ];
-
+			 if(currentUser !=null)
+            {
             if (currentUser.BI_PSPB_Caregiver__c == false) {
                 patinetAccount = [
                     SELECT id, Name, PersonEmail
@@ -927,17 +990,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (!patinetAccount.isEmpty()) {
+                if (patinetAccount !=null) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patinetAccount[0].Id
+                        WHERE AccountID = :patinetAccount.Id
                     ];
 
-                    if (!enrolledPatient.isEmpty()) {
-                        enrolleeId = enrolledPatient[0].Id;
+                    if (enrolledPatient !=null) {
+                        enrolleeId = enrolledPatient.Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -961,28 +1024,28 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     WITH USER_MODE
                 ];
 
-                if (!caregiversPatient.isEmpty()) {
+                if (caregiversPatient !=null) {
                     selectedPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiversPatient[0]
+                            Id = :caregiversPatient
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
 
-                    if (!selectedPatient.isEmpty()) {
+                    if (selectedPatient !=null) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatient[0].Id
+                            WHERE AccountID = :selectedPatient.Id
                         ];
 
-                        if (!selectedEnrollee.isEmpty()) {
-                            enrolleeId = selectedEnrollee[0].Id;
+                        if (selectedEnrollee !=null) {
+                            enrolleeId = selectedEnrollee.Id;
                         }
                     }
                 } else {
@@ -996,7 +1059,17 @@ public with sharing class BI_PSP_CompletedQuestionareS {
                     );
                 }
             }
-
+            }
+             else {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSP_LetsPersonlise.class.toString(),
+						'',
+						System.now(),
+						undefinedUser,
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+				}
             /* USER_MODE is not used because AssessmentQuestionResponse is an Salesforce Industry object
              using Healthcare license*/
 

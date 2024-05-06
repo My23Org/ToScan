@@ -93,6 +93,7 @@ export default class symptomPrimarypage extends NavigationMixin(LightningElement
 				}));
 				for (let record of data) {
 					this.moodreaction = record.BI_PSP_Mood__c;
+					console.log(this.moodreaction,'this.moodreaction',record)
 				}
 			} catch (err) {
 				this.showToast(errormessage, err.message, errorvariant);

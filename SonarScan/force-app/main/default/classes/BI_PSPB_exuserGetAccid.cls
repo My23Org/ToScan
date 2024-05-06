@@ -106,7 +106,8 @@ public without sharing class BI_PSPB_exuserGetAccid {
 	}
 
 	/**
-	 * @description Updates caregiver details in the Salesforce database.return in lwc biPspbCaregiverProfile
+	 * @description Updates caregiver details in the Salesforce database.return in lwc biPspbCaregiverProfile 
+	 * all the wrapper class parameters null check in lwc 
 	 * @param accountId The ID of the account to update.
 	 * @param firstName The updated first name of the caregiver.
 	 * @param lastName The updated last name of the caregiver.
@@ -420,7 +421,7 @@ public without sharing class BI_PSPB_exuserGetAccid {
 
 	/**
 * @description :This method retrieves the contact record associated with the caregiverId and updates the specified fields
-				return in lwc biPspbaddcaregiver.
+				return in lwc biPspbaddcaregiver,all the wrapper class parameters null check in lwc 
 * @param       :caregiverId The ID of the caregiver contact record to update.
 * @param       :firstName The new first name of the caregiver.
 * @param       :lastName The new last name of the caregiver.
@@ -505,7 +506,7 @@ public without sharing class BI_PSPB_exuserGetAccid {
 	/**
 
 * @description This method updates various fields of the patient account identified by the accountId parameter
-			   return in lwc biPspbCgPatientinfo
+			   return in lwc biPspbCgPatientinfo all the wrapper class parameters null check in lwc 
 * @param accountId The ID of the patient account to update.
 * @param firstname The new first name of the patient.
 * @param lastname The new last name of the patient.
@@ -609,7 +610,7 @@ public without sharing class BI_PSPB_exuserGetAccid {
 
 	/**
 *  @description This method updates various fields of the patient or caregiver account identified by the accountId parameter
-return in lwcbiPspbPatientProfiledetails 
+                return in lwcbiPspbPatientProfiledetails all the wrapper class parameters null check in lwc 
 * @param accountId The ID of the patient or caregiver account to update.
 * @param firstname The new first name of the patient or caregiver.
 * @param lastname The new last name of the patient or caregiver.

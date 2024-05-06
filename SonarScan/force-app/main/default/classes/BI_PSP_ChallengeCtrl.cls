@@ -215,7 +215,7 @@ public static List<HealthCloudGA__CarePlanTemplate__c> getIndividualChallenges(
 			AND Name != NULL
 			AND RecordTypeId = :carePlanTemplateRecordTypeId
 		];
-		if(carePlanTemplateRecords.size() > 0){
+		if(carePlanTemplateRecords.size() > 0 && !carePlanTemplateRecords.isEmpty()){
 			return carePlanTemplateRecords;
 		}else{
 			throw new AurahandledException(BI_PSP_Challenges_ErrorMessage);
@@ -262,7 +262,7 @@ if(!String.isBlank(personAccountId)){
 	];
 
 	// Check if any care program enrollee records were found
-	if (patientEnrolle.size() > 0) {
+	if (patientEnrolle.size() > 0 && !patientEnrolle.isEmpty()) {
 		// Return the list of care program enrollees with their ranks
 		return patientEnrolle;
 	} else {
@@ -488,7 +488,7 @@ public static list<ChallengeWrapper> updateChallenges(String challenge, string a
 			carePlan[0].HealthCloudGA__Description__c == System.Label.BI_PSP_QuestionnaireLevel1 &&
 			carePlan[0].BI_PSP_Challenge_Level__c == BI_PSP_Challenge_Level1
 		) {
-			if (assesList.size() > 0) {
+			if (assesList.size() > 0 && !assesList.isEmpty()) {
 			for (Assessment asseloop : assesList) {
 				if (
 				asseloop.Name.contains(BI_PSP_Assessment_WPAI) &&
@@ -520,7 +520,7 @@ public static list<ChallengeWrapper> updateChallenges(String challenge, string a
 			carePlan[0].HealthCloudGA__Description__c == System.Label.BI_PSP_QuestionnaireLevel2 &&
 			carePlan[0].BI_PSP_Challenge_Level__c == BI_PSP_Challenge_Level2
 		) {
-			if (assesList.size() > 0) {
+			if (assesList.size() > 0 && !assesList.isEmpty()) {
 			for (Assessment asseloop : assesList) {
 				if (
 				asseloop.Name.contains(BI_PSP_Assessment_PSS) &&
@@ -552,7 +552,7 @@ public static list<ChallengeWrapper> updateChallenges(String challenge, string a
 			carePlan[0].HealthCloudGA__Description__c == System.Label.BI_PSP_QuestionnaireLevel3 &&
 			carePlan[0].BI_PSP_Challenge_Level__c == BI_PSP_Challenge_Level3
 		) {
-			if (assesList.size() > 0) {
+			if (assesList.size() > 0 && !assesList.isEmpty()) {
 			for (Assessment asseloop : assesList) {
 				if (
 				asseloop.Name.contains(BI_PSP_Assessment_DLQI) &&
@@ -616,7 +616,12 @@ public static list<ChallengeWrapper> updateChallenges(String challenge, string a
 	}
 
 	List<ChallengeWrapper> successList = new List<ChallengeWrapper>{ successMessage };
+	if(!successList.isEmpty()){
 	return successList;
+	}
+	else{
+		throw new AurahandledException(BI_PSP_Challenges_ErrorMessage);
+	}
 	} catch (Exception ex) {
 	ChallengeWrapper errorMessage = new ChallengeWrapper();
 	errorMessage.error = ex.getMessage();
@@ -628,7 +633,11 @@ public static list<ChallengeWrapper> updateChallenges(String challenge, string a
 		null,
 		System.now()
 	);
+	if(!errorList.isEmpty()){
 	return errorList; // In LWC we are doing the null check for this error message list and there are some functionality that is dependent on this errorlist
+	}else{
+		throw new AurahandledException(BI_PSP_Challenges_ErrorMessage);
+	}
 	}
 }
 
@@ -657,7 +666,7 @@ public static HealthCloudGA__CarePlanTemplate__c getLastActiveChallenges(String 
 		LIMIT 1
 		];
 		// If a last active award is found
-		if (lastActive.size() > 0 && lastActive.isEmpty()) {
+		if (lastActive.size() > 0 && !lastActive.isEmpty()) {
 		// Retrieve the associated care program plan template
 		HealthCloudGA__CareProgramPlanTemplate__c careProgramm = [
 			SELECT Id, HealthCloudGA__CareProgram__c, HealthCloudGA__CarePlanTemplate__r.Id

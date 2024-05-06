@@ -217,7 +217,7 @@ public with sharing class BI_PSPB_FeedItemCtrl {
 					List is returned to biPspbAllPost LWC.
 	*/
 	@AuraEnabled(cacheable=true)
-	public static List<BI_PSP_FeedItem__c> getAllPost(Id userId) {
+	public static List<BI_PSP_FeedItem__c> getAllPost(String userId) {
 		List<BI_PSP_FeedItem__c> filteredResults;
 		try {
 			if (String.isNotBlank(userId)) {
@@ -544,8 +544,7 @@ public with sharing class BI_PSPB_FeedItemCtrl {
 				//	Checking whether logged	in	user list is not empty.
 				if (!loggedInUser.isEmpty()) {
 					User user = loggedInUser[0];
-					if (
-						user.Name != null && user.Email != null && 
+					if (user.Name != null && user.Email != null && 
 						user.BI_PSPB_Caregiver__c == false) {
 						//	Query	for	an	account	based	on	user's	Name and Email.
 						Account accountOfUser = [

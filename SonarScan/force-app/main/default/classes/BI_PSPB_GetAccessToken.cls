@@ -27,73 +27,66 @@ public with sharing class BI_PSPB_GetAccessToken {
 
 	public static String getAccessToken() {
 		try {			
-				BI_PSPB_Omnichannel_API_Setting__mdt filteredSettings = BI_PSPB_Omnichannel_API_Setting__mdt.getInstance(
-					GetAccessToken
-				);
-				String endpoint = null;
-				String clientId = null;
-				String clientSecret = null;
-				if (filteredSettings!=null) {					
-						BI_PSPB_Omnichannel_API_Setting__mdt setting = filteredSettings;		
-						endpoint = setting.BI_PSPB_EndPoint__c;
-						clientId = setting.BI_PSPB_ClientId__c;
-						clientSecret = setting.BI_PSPB_ClientSecret__c;					
+			BI_PSPB_Omnichannel_API_Setting__mdt filteredSettings = BI_PSPB_Omnichannel_API_Setting__mdt.getInstance(
+				GetAccessToken
+			);
+       		String endpoint = filteredSettings.BI_PSPB_EndPoint__c;
+			String clientId = filteredSettings.BI_PSPB_ClientId__c;
+			String clientSecret = filteredSettings.BI_PSPB_ClientSecret__c;					
+			// Check if the endpoint is found before proceeding
+			if (
+                String.isNotBlank(endpoint) &&
+				String.isNotBlank(clientId) &&
+				String.isNotBlank(clientSecret)
+			) {
+				HttpRequest req = new HttpRequest();
+				req.setEndpoint(endpoint);
+				req.setMethod('POST');
+				req.setHeader(
+					'Content-Type',
+					'application/x-www-form-urlencoded'
+				); // Set the content type to form-encoded
 
-					// Check if the endpoint is found before proceeding
-					if (
-						endpoint != null &&
-						clientId != null &&
-						clientSecret != null
-					) {
-						HttpRequest req = new HttpRequest();
-						req.setEndpoint(endpoint);
-						req.setMethod('POST');
-						req.setHeader(
-							'Content-Type',
-							'application/x-www-form-urlencoded'
-						); // Set the content type to form-encoded
-
-						String formEncodedData =
-							'grant_type=client_credentials&client_id=' +
-							clientId +
-							'&client_secret=' +
-							clientSecret;
-						req.setBody(formEncodedData);
-
-						Http http = new Http();
-						HttpResponse res = http.send(req);
-
-						if (res.getStatusCode() == 200) {
-							// Successfully received a response
-					Map<String, Object> jsonResponse = (Map<String, Object>) JSON.deserializeUntyped(res.getBody()
-							);
-							String accesstoken = (String) jsonResponse.get('access_token'
-							);
-
-							return accesstoken;
-						} else {
-							BI_SFCOE_LOG_Util.logMessage(
-								applicationName,
-								BI_PSPB_GetMethodEmail.class.toString(),
-								BI_PSPB_constantsClass.httpResponseError,System.now(),'',
-								BI_SFCOE_LOG_Util.LOG_SEVERITY_INFO
-							);
-						}
-					} else {
-						BI_SFCOE_LOG_Util.logMessage(applicationName,
-							BI_PSPB_GetAccessToken.class.toString(),
-							BI_PSPB_constantsClass.accessTokenError,System.now(),'',
-							BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-						);
-					}
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,
+				String formEncodedData =
+					'grant_type=client_credentials&client_id=' +
+					clientId +
+					'&client_secret=' +
+					clientSecret;
+				req.setBody(formEncodedData);
+                       
+				Http http = new Http();
+				HttpResponse res = http.send(req);
+				if (res.getStatusCode() == 200) {
+					// Successfully received a response
+					Map<String, Object> jsonResponse = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+					String accesstoken = (String) jsonResponse.get('access_token');
+                    if(String.isNotBlank(accesstoken))
+                    {
+                    	return accesstoken;
+                    }else{
+                    	BI_SFCOE_LOG_Util.logMessage(applicationName,
 						BI_PSPB_GetAccessToken.class.toString(),
 						BI_PSPB_constantsClass.accessTokenError,System.now(),'',
 						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+						);     
+                    }
+							
+				} else {
+					BI_SFCOE_LOG_Util.logMessage(
+					applicationName,
+					BI_PSPB_GetAccessToken.class.toString(),
+					BI_PSPB_constantsClass.httpResponseError,System.now(),'',
+					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
-					
-				}return null;
+				}
+			} else {
+				BI_SFCOE_LOG_Util.logMessage(applicationName,
+				BI_PSPB_GetAccessToken.class.toString(),
+				BI_PSPB_constantsClass.accessTokenError,System.now(),'',
+				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+				);  
+			}	
+            return null; 
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(
 				ex,
@@ -102,7 +95,8 @@ public with sharing class BI_PSPB_GetAccessToken {
 				null,
 				System.now()
 			);
-			return null;
+            return null;
+			
 		}
 	}
 }

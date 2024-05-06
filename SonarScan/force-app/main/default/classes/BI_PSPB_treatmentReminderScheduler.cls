@@ -54,9 +54,6 @@ public with sharing class BI_PSPB_treatmentReminderScheduler implements Schedula
 				WHERE
 					BI_PSPB_Reminder_Date__c = :today
 					AND BI_PSPB_Status__c = :BI_PSPB_constantsClass.ACTION_TYPE_Active
-					AND BI_PSPB_Care_Program_Enrollee__r.BI_PSPB_Send_Notification__c 
-					=: BI_PSPB_constantsClass.ACTION_RESPONSE_YES
-					Limit 100
 			];
 			if (reminders.isEmpty()) {
 				BI_SFCOE_LOG_Util.logMessage(
@@ -196,34 +193,6 @@ public with sharing class BI_PSPB_treatmentReminderScheduler implements Schedula
 						);
 					}
 				}
-				// Now update the status of CareProgramEnrollee records
-				List<CareProgramEnrollee> enrolleesToUpdate = [SELECT Id, BI_PSPB_Send_Notification__c 
-																FROM CareProgramEnrollee 
-																WHERE Id IN :enrolleeRecIds];
-				for(CareProgramEnrollee cpeToUpdate : enrolleesToUpdate) {
-					cpeToUpdate.BI_PSPB_Send_Notification__c = BI_PSPB_constantsClass.ACTION_RESPONSE_NO;
-				}
-                if (!newTaskList.isEmpty()) {
-						Database.SaveResult[] saveResults = Database.update(
-							enrolleesToUpdate,
-							false,
-							AccessLevel.USER_MODE
-						);
-						for (Database.SaveResult saveResult : saveResults) {
-							if (!saveResult.isSuccess()) {
-								for (
-									Database.Error error : saveResult.getErrors()
-								) {
-									errorMsg +='Error '+error.getFields()+'--'+error.getMessage()+'\n';
-								}
-							}
-						}
-						if (!String.isBlank(errorMsg)) {
-							BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_DlqiQuestionariesAN.class.toString(),'',
-								System.now(),errorMsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-							);
-						}
-					}
 				if (
 					!enrolleeRecIds.isEmpty() &&
 					checkBefore1DayTreatment == BI_PSPB_constantsClass.tr1

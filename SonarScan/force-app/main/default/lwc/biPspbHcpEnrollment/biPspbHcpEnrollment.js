@@ -2193,13 +2193,13 @@ this page.`;
 			this.addNewHCPSectionClass = 'addNewHcpSection';
 		}
 
-		this.searchResults2 = this.picklistOrdered2.filter(element => (
-			element?.label !== null && element?.label !== undefined
-		)).filter((picklistOption2) => (
-			picklistOption2?.label.toString().includes(input)
+		// this.searchResults2 = this.picklistOrdered2.filter(element => (
+		// 	element?.label !== null && element?.label !== undefined
+		// )).filter((picklistOption2) => (
+		// 	picklistOption2?.label.toString().includes(input)
 
-		))
-
+		// ))
+console.log('data',this.picklistOrdered2)
 		const searchedResult2 = this.picklistOrdered2.filter(element => (
 			element?.label !== null && element?.label !== undefined
 		)).filter((picklistOption2) => (

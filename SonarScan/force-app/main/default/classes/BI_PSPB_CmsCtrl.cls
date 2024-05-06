@@ -335,13 +335,13 @@
 		}
 	}
 
-/*
-@description     Retrieves the user's reaction to a specific article for the current user within the 
-				 Lightning Web Component.
-				 return in lwc biPspbarticlelikebtn
-@param           String articlename - The name of the article for which the user's reaction is to be retrieved.
-@return          String - The user's reaction to the article (either like or dislike).
-*/
+	/*
+	@description     Retrieves the user's reaction to a specific article for the current user within the 
+					Lightning Web Component.
+					return in lwc biPspbarticlelikebtn
+	@param           String articlename - The name of the article for which the user's reaction is to be retrieved.
+	@return          String - The user's reaction to the article (either like or dislike).
+	*/
 
 	@AuraEnabled(cacheable=true)
 	public static String checkreaction(String articlename) {
@@ -383,16 +383,16 @@
 		}
 	}
 
-/*
-@description     Retrieves and updates the user's reaction to a specific article within the 
-				 Lightning Web Component biPspbarticlelikebtn.
-@param           String articlename - The name of the article for which the user's reaction is to
-									  be retrieved or updated.
-				 String reaction - The user's reaction to the article (either "Like" or "Dislike").
-@void			 If the reaction is "Like", updates the existing record or creates a new one if it doesn't exist.
-    			 If the reaction is "Dislike", deletes the existing record if it exists.
-*/
-
+	/*
+	@description     Retrieves and updates the user's reaction to a specific article within the 
+					Lightning Web Component biPspbarticlelikebtn.
+	@param           String articlename - The name of the article for which the user's reaction is to
+										be retrieved or updated.
+					String reaction - The user's reaction to the article (either "Like" or "Dislike").
+	@void			 If the reaction is "Like", updates the existing record or creates a new one if it doesn't exist.
+					If the reaction is "Dislike", deletes the existing record if it exists.
+	*/
+	
 	@AuraEnabled(cacheable=false)
 	public static void updatereaction(String articlename, String reaction) {
 		try {
@@ -424,32 +424,32 @@
 						Id = likereaction[0].Id
 					);
 
-					Database.SaveResult updateResultss = Database.update(
-						likereactobj,
+					Database.SaveResult[] updateResults = Database.update(
+						new List<BI_PSPB_Article_like__c>{ likereactobj },
 						false
 					);
-					if (!updateResultss.isSuccess()) {
-						for (
-							Database.Error error : updateResultss.getErrors()
-						) {
-							errorMessageUpdate +=
-								'Error ' +
-								error.getFields() +
-								'--' +
-								error.getMessage() +
-								'\n';
+					for (Database.SaveResult updateResult : updateResults) {
+						if (!updateResult.isSuccess()) {
+							for (
+								Database.Error error : updateResult.getErrors()
+							) {
+								errorMessageUpdate +=
+									'Error ' +
+									error.getFields() +
+									'--' +
+									error.getMessage() +
+									'\n';
+							}
 						}
-						if (!String.isBlank(errorMessageUpdate)) {
-							BI_SFCOE_LOG_Util.logMessage(
-								applicationName,
-								BI_PSPB_CmsCtrl.class.toString(),
-								'',
-								System.now(),
-								errorMessageUpdate,
-								BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-							);
-							throw new AuraHandledException(errorMessageUpdate);
-						}
+					}
+					if (!String.isBlank(errorMessageUpdate)) {
+						BI_SFCOE_LOG_Util.handleDatabaseSaveResults(
+							updateResults,
+							BI_PSPB_CmsCtrl.class.toString(),
+							System.now()
+						);
+
+						throw new AuraHandledException(errorMessageUpdate);
 					}
 				} else if (reaction == dislikeLabel) {
 					Database.DeleteResult[] deleteResults = Database.delete(
@@ -475,7 +475,9 @@
 									errorMessageDelete,
 									BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 								);
-								throw new AuraHandledException(errorMessageDelete);
+								throw new AuraHandledException(
+									errorMessageDelete
+								);
 							}
 						}
 					}
@@ -508,13 +510,10 @@
 						}
 					}
 					if (!String.isBlank(errorMessage)) {
-						BI_SFCOE_LOG_Util.logMessage(
-							applicationName,
+						BI_SFCOE_LOG_Util.handleDatabaseSaveResults(
+							insertResults,
 							BI_PSPB_CmsCtrl.class.toString(),
-							'',
-							System.now(),
-							errorMessage,
-							BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+							System.now()
 						);
 						throw new AuraHandledException(errorMessage);
 					}

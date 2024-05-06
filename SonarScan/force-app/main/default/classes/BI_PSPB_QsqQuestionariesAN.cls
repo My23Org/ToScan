@@ -30,9 +30,7 @@ public with sharing class BI_PSPB_QsqQuestionariesAN implements Schedulable {
 			List<CareProgramEnrollee> getEnrolleeRecords = [
 				SELECT Id, AccountId, CreatedDate
 				FROM CareProgramEnrollee
-				Where BI_PSPB_Send_Notification__c =: BI_PSPB_constantsClass.ACTION_RESPONSE_YES
-				AND CareProgram.Name =: spevigo
-				Limit 100
+				Where CareProgram.Name =: spevigo
 			];
 			if (getEnrolleeRecords.isEmpty()) {
 				BI_SFCOE_LOG_Util.logMessage(
@@ -93,34 +91,6 @@ public with sharing class BI_PSPB_QsqQuestionariesAN implements Schedulable {
 						);
 					}
 				}
-				// Now update the status of CareProgramEnrollee records
-				List<CareProgramEnrollee> enrolleesToUpdate = [SELECT Id, BI_PSPB_Send_Notification__c 
-																FROM CareProgramEnrollee 
-																WHERE Id IN :enrolleeRecIds];
-				for(CareProgramEnrollee cpeToUpdate : enrolleesToUpdate) {
-					cpeToUpdate.BI_PSPB_Send_Notification__c = BI_PSPB_constantsClass.ACTION_RESPONSE_NO;
-				}
-                if (!newTaskList.isEmpty()) {
-						Database.SaveResult[] saveResults = Database.update(
-							enrolleesToUpdate,
-							false,
-							AccessLevel.USER_MODE
-						);
-						for (Database.SaveResult saveResult : saveResults) {
-							if (!saveResult.isSuccess()) {
-								for (
-									Database.Error error : saveResult.getErrors()
-								) {
-									errorMsg +='Error '+error.getFields()+'--'+error.getMessage()+'\n';
-								}
-							}
-						}
-						if (!String.isBlank(errorMsg)) {
-							BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_DlqiQuestionariesAN.class.toString(),'',
-								System.now(),errorMsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-							);
-						}
-					}
 				if (!enrolleeRecIds.isEmpty()) {
 					BI_PSPB_smsAndEmailHandler.handleTrigger(
 						enrolleeRecIds,
