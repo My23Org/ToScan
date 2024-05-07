@@ -32,7 +32,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 	// User mode is not applicable here as the sharing rule in task objects.
 	@AuraEnabled(cacheable=true)
 	public static List<Task> getTaskRecordAction(
-		String careProgramId,
+		String enroleeId,
 		String notificatonType,
 		String category
 	) {
@@ -40,8 +40,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 		try {
 			// Retrieving tasks based on notification type and category
 			if (
-				String.isNotBlank(careProgramId) &&
-				String.isNotBlank(category) &&
+				String.isNotBlank(enroleeId) &&
 				String.isNotBlank(notificatonType)
 			) {
 				if (
@@ -65,7 +64,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 							BI_PSP_Notification_Type__c
 						FROM Task
 						WHERE
-							WhatId = :careProgramId
+							WhatId = :enroleeId
 							AND BI_PSP_Notification_Type__c = :BI_PSPB_constantsClass.ACTION_TYPE_Action
 							AND Status = :BI_PSPB_constantsClass.ACTION_TYPE_NotificatonTypeAction
 							AND (BI_PSP_Category__c = :BI_PSPB_constantsClass.ACTION_TYPE_SymptomTracker
@@ -94,7 +93,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 							BI_PSP_Category__c
 						FROM Task
 						WHERE
-							WhatId = :careProgramId
+							WhatId = :enroleeId
 							AND BI_PSP_Notification_Type__c = :BI_PSPB_constantsClass.ACTION_TYPE_Action
 							AND BI_PSP_Category__c = :BI_PSPB_constantsClass.ACTION_TYPE_SymptomTracker
 							AND Status = :BI_PSPB_constantsClass.ACTION_TYPE_NotificatonTypeAction
@@ -121,7 +120,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 							BI_PSP_Category__c
 						FROM Task
 						WHERE
-							WhatId = :careProgramId
+							WhatId = :enroleeId
 							AND BI_PSP_Notification_Type__c = :BI_PSPB_constantsClass.ACTION_TYPE_Action
 							AND BI_PSP_Category__c = :BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires
 							AND Status = :BI_PSPB_constantsClass.ACTION_TYPE_NotificatonTypeAction
@@ -154,18 +153,18 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 	// User mode is not applicable here as the sharing rule in task objects.
 	@AuraEnabled(cacheable=true)
 	public static List<Task> getTaskHistory(
-		String careProgramId,
+		String enroleeId,
 		String notificatonType
 	) {
 		List<Task> relatedTasks = new List<Task>();
 		try {
 			String account;
-			if (String.isNotBlank(careProgramId)) {
+			if (String.isNotBlank(enroleeId)) {
 				List<CareProgramEnrollee> accid = new List<CareProgramEnrollee>();
 				accid = [
 					SELECT Id, AccountId
 					FROM CareProgramEnrollee
-					WHERE Id = :careProgramId
+					WHERE Id = :enroleeId
 					LIMIT 1
 				];
 				if (!accid.isEmpty()) {
@@ -195,7 +194,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 							BI_PSP_Notification_Type__c
 						FROM Task
 						WHERE
-							WhatId = :careProgramId
+							WhatId = :enroleeId
 							AND (BI_PSP_Notification_Type__c = :BI_PSPB_constantsClass.ACTION_TYPE_GENERAL
 							OR BI_PSP_Notification_Type__c = :BI_PSPB_constantsClass.ACTION_TYPE_Action)
 							AND (Status = :BI_PSPB_constantsClass.ACTION_TYPE_NotificatonTypeCompleted
@@ -255,7 +254,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 							BI_PSP_Notification_Type__c
 						FROM Task
 						WHERE
-							WhatId = :careProgramId
+							WhatId = :enroleeId
 							AND BI_PSP_Notification_Type__c = :BI_PSPB_constantsClass.ACTION_TYPE_GENERAL
 							AND (Status = :BI_PSPB_constantsClass.ACTION_TYPE_Read
 							OR Status = :BI_PSPB_constantsClass.ACTION_TYPE_NotificationTypeExpired)
@@ -309,7 +308,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 							BI_PSP_Notification_Type__c
 						FROM Task
 						WHERE
-							WhatId = :careProgramId
+							WhatId = :enroleeId
 							AND BI_PSP_Notification_Type__c = :BI_PSPB_constantsClass.ACTION_TYPE_Action
 							AND (Status = :BI_PSPB_constantsClass.ACTION_TYPE_NotificatonTypeCompleted
 							OR Status = :BI_PSPB_constantsClass.ACTION_TYPE_NotificatonTypeIncompleted)

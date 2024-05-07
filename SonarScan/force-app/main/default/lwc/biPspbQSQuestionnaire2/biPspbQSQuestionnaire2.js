@@ -380,9 +380,9 @@ export default class BiPspQSQuestionnaire2 extends LightningElement {
 	}
 
 	addSliderEventListener() {
-		var slidersec = this.template.querySelector('.slidersec');
-		var slider = this.template.querySelector('.slider');
-		var sliderthree = this.template.querySelector('.sliderthree');
+		const slidersec = this.template.querySelector('.slidersec');
+		const slider = this.template.querySelector('.slider');
+		const sliderthree = this.template.querySelector('.sliderthree');
 
 		const updateThumbPosition1 = () => {
 			this.updateThumbLabelPosition(slider.value);

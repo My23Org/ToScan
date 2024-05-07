@@ -51,7 +51,7 @@ import labelus from '@salesforce/label/c.BI_PSPB_EN_US';
 import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
 
-export default class biPspbReminderWidget extends NavigationMixin(LightningElement) 
+export default class biPspbReminderWidget extends NavigationMixin(LightningElement)
 {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
 	//@track variable declaration
@@ -64,10 +64,8 @@ export default class biPspbReminderWidget extends NavigationMixin(LightningEleme
 	//Variable declaration
 	imgalarm = alarm;
 	//It determines if there's any treatment data available and if the first treatment date has already passed.
-	get isAvailable() 
-	{
-		if (this.timelineData.length > 0) 
-		{
+	get isAvailable() {
+		if (this.timelineData.length > 0) {
 			const treatmentDate = new Date(this.timelineData[0]?.BI_PSPB_Date_of_Treatment__c);
 			const currentDate = new Date();
 			return !treatmentDate || treatmentDate < currentDate;
@@ -76,57 +74,47 @@ export default class biPspbReminderWidget extends NavigationMixin(LightningEleme
 	}
 	// To get the date of treatment of the careprogram enrolle and calculates the day difference
 	@wire(getTasksWithDateOfTreatment, { accountId: '$cpeId' })
-	wiredTasks({ data, error }) 
-	{
+	wiredTasks({ data, error }) {
 		// Null data is checked and AuraHandledException is thrown from the Apex
-		if (data) 
-		{
-			try 
-			{
+		if (data) {
+			try {
 				const treatmentDate = new Date(data[0].BI_PSPB_Date_of_Treatment__c);
 				const currentDate = new Date();
 				const timeDiff = treatmentDate.getTime() - currentDate.getTime();
 				const daysDifference = Math.ceil(timeDiff / (1000 * 3600 * 24));
 				// Calculate the card title and reminder dates based on days difference
-				if (daysDifference > 14) 
-				{
+				if (daysDifference > 14) {
 					this.cardTitle = PrescriptionReminder1;
 					this.reminderDates.push(this.getReminderDate(treatmentDate, 14));
 					this.isDataAvailable = true;
-				} 
-				else if (daysDifference > 10) 
-				{
+				}
+				else if (daysDifference > 10) {
 					this.cardTitle = PrescriptionReminder2;
 					this.reminderDates.push(this.getReminderDate(treatmentDate, 10));
 					this.isDataAvailable = true;
-				} 
-				else if (daysDifference > 7) 
-				{
+				}
+				else if (daysDifference > 7) {
 					this.cardTitle = PrescriptionReminder3;
 					this.reminderDates.push(this.getReminderDate(treatmentDate, 7));
 					this.isDataAvailable = true;
-				} 
-				else if (daysDifference > 3) 
-				{
+				}
+				else if (daysDifference > 3) {
 					this.cardTitle = TreatmentReminder1;
 					this.reminderDates.push(this.getReminderDate(treatmentDate, 3));
 					this.isDataAvailable = true;
-				} 
-				else if (daysDifference > 1) 
-				{
+				}
+				else if (daysDifference > 1) {
 					this.cardTitle = TreatmentReminder2;
 					this.reminderDates.push(this.getReminderDate(treatmentDate, 1));
 					this.isDataAvailable = true;
-				} 
-				else 
-				{
+				}
+				else {
 					this.cardTitle = NoUpcomingRemainders;
 					this.reminderDates.push(this.getReminderDate(treatmentDate));
 					this.isDataAvailable = false;
 				}
 				// Map retrieved data to timelineData
-				this.timelineData = data.map(Remainder => 
-				{
+				this.timelineData = data.map(Remainder => {
 					const daysLeft = this.calculateDaysLeft(Remainder.BI_PSPB_Reminder_Date__c);
 					const additionalDates = this.calculateAdditionalDates(Remainder.BI_PSPB_Date_of_Treatment__c);
 					return {
@@ -138,114 +126,94 @@ export default class biPspbReminderWidget extends NavigationMixin(LightningEleme
 						AdditionalDates: additionalDates,
 					};
 				});
-			} 
-			catch (err) 
-			{
+			}
+			catch (err) {
 				this.showToast(errormessage, err.message, errorvariant);
 			}
-		} 
-		else if (error) 
-		{
+		}
+		else if (error) {
 			this.error = error;
-			//this.showToast(errormessage, error.body.message, errorvariant);
-		}		
+			this.showToast(errormessage, error.body.message, errorvariant);
+		}
 	}
 	// Connected callback to retrieve additional data when the component is connected to the DOM
-	connectedCallback() 
-	{
+	connectedCallback() {
 		// Retrieve the enrollment information of the patient
-		try 
-		{
+		try {
 			getEnrolle({ userId: this.userId })
-			// Null data is checked and AuraHandledException is thrown from the Apex
-				.then(result => 
-				{
-					if (result != null) 
-					{
-						if (result[0].patientEnrolle != null) 
-						{
+				// Null data is checked and AuraHandledException is thrown from the Apex
+				.then(result => {
+					if (result != null) {
+						if (result[0].patientEnrolle != null) {
 							this.cpeId = result[0].patientEnrolle.Id;
-						} 
-						else if (result[0].error != null) 
-						{
+						}
+						else if (result[0].error != null) {
 							this.showError = true;
 							this.errorMessage = result[0].error;
 						}
 					}
 				})
-				.catch(error => 
-				{
+				.catch(error => {
 					this.showToast(errormessage, error.message, errorvariant);
 				});
-		} 
-		catch (err) 
-		{
+		}
+		catch (err) {
 			this.showToast(errormessage, err.message, errorvariant);
 		}
 	}
 	// Rendered callback to perform DOM manipulations after the component is rendered
-	renderedCallback() 
-	{
+	renderedCallback() {
 		// Iterate over each class name to add CSS classes or manipulate elements
-		[Dec, Nov, Oct, Sep, Aug, July, June, May, April, March, Feb, Jan].forEach(className => 
-			{
+		[Dec, Nov, Oct, Sep, Aug, July, June, May, April, March, Feb, Jan].forEach(className => {
 			// Find all elements with the current class name
 			const elements = this.template.querySelectorAll('.' + className);
 			// Get the last element
 			const lastElement = elements[elements.length - 1];
 			// Change its background color to red
-			if (lastElement) 
-			{
+			if (lastElement) {
 				lastElement.classList.add('red-background');
 			}
-			});
+		});
 		[Dec1, Nov1, Oct1, Sep1, Aug1, Jul1, Jun1, May1, Apr1, Mar1, Feb1, Jan1].forEach(className => {
 			// Find all elements with the current class name
 			const elements = this.template.querySelectorAll('.' + className);
 			// Get the last element
 			const middleElement = elements[0];
 			// Change its background color to red
-			if (middleElement) 
-			{
+			if (middleElement) {
 				middleElement.textContent = className.substring(0, 3);
 			}
 		});
-		['circlebutton'].forEach(className => 
-			{
+		['circlebutton'].forEach(className => {
 			// Find all elements with the current class name
 			const elements = this.template.querySelectorAll('.' + className);
 			// Get the last element
 			const lastElement = elements[elements.length - 1];
 			// Change its background color to red
-			if (lastElement) 
-			{
+			if (lastElement) {
 				lastElement.classList.add('treatmentDate');
 			}
-			});
+		});
 	}
 	// To display the Date with the suffix format
-	getOrdinalNumber(number) 
-	{
+	getOrdinalNumber(number) {
 		const suffixes = [Th, st, Nd, rd];
 		const v = number % 100;
 		return number + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
 	}
 	// To calculate the days left
-	getReminderDate(treatmentDate, daysBefore) 
-	{
+	getReminderDate(treatmentDate, daysBefore) {
 		const date = new Date(treatmentDate);
 		date.setDate(treatmentDate.getDate() - daysBefore);
 		const options = { month: 'short', day: 'numeric', weekday: 'short' };
 		return date.toLocaleDateString(labelus, options);
 	}
 	// To get the day of week
-	getDayOfWeek(date) 
-	{
+	getDayOfWeek(date) {
 		return new Date(date).toLocaleDateString(labelus, { weekday: 'long' });
 	}
 	// Method to calculate days left until the earliest date
-	calculateDaysLeft(earliestDate) 
-	{
+	calculateDaysLeft(earliestDate) {
 		const currentDate = new Date();
 		// const pacificTime = new Date(today.toLocaleString(labelus, { timeZone: 'America/Los_Angeles' })); // Get PST time
 		const treatmentDateTime = new Date(earliestDate); // Get treatment date
@@ -259,8 +227,7 @@ export default class biPspbReminderWidget extends NavigationMixin(LightningEleme
 	}
 	// Method to retrieve the day of the week from a given date
 	// Method to calculate additional reminder dates based on treatment date
-	calculateAdditionalDates(treatmentDate) 
-	{
+	calculateAdditionalDates(treatmentDate) {
 		let additionalDates = [];
 		const daysBefore = [14, 10, 7, 3, 1, 0];
 		const treatmentDateTime = new Date(treatmentDate);
@@ -276,13 +243,11 @@ export default class biPspbReminderWidget extends NavigationMixin(LightningEleme
 		return additionalDates;
 	}
 	// Method to handle adding a date
-	handleAddDate() 
-	{
+	handleAddDate() {
 		// Navigate to the reminder page
 		window.location.assign(brandedsiteurl + reminderpageurl);
 	}
-	showToast(title, message, variant) 
-	{
+	showToast(title, message, variant) {
 		const event = new ShowToastEvent({
 			title: title,
 			message: message,

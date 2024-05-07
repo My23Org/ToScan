@@ -120,7 +120,7 @@
 	width: 100%;
 	display: flex;
 	background-color: #fbfaf5;
-	padding: 75px 5% 20px 5%;
+	padding: 45px 5% 20px 5%;
 	gap: 75px;
 	padding-bottom: 80px;
 	min-height: 66vh;
@@ -172,6 +172,7 @@
 	width: 100%;
 	position: relative;
 	right: 13px;
+	top: 17px;
 }
 
 .title {
@@ -244,7 +245,7 @@
 
 .postimage {
 	margin-left: 36%;
-	margin-top: 6%;
+	margin-top: 7%;
 	width: 140px;
 	height: 120px;
 }
@@ -255,7 +256,8 @@
 	color: #403a60;
 	line-height: 28px;
 	text-align: center;
-	left: 11%;
+	left: 10%;
+	margin-bottom: -50px;
 	top: 25px;
 	height: 210px;
 	width: 70%;
@@ -637,7 +639,7 @@
 		background-color: #F6EFD9;
 		height: 150px;
 		position: relative;
-		bottom: 75px;
+		bottom: 45px;
 		width: 124%;
 		right: 46px;
 		overflow-y: hidden;
@@ -724,13 +726,13 @@
 
 
 	.title {
-		color: #403a60;
-		font-size: 20px;
-		font-family: 'Eina-Bold';
-		line-height: 44px;
-		position: relative;
-		right: 16px;
-		bottom: 76px;
+	    color: #403a60;
+        font-size: 20px;
+        font-family: 'Eina-Bold';
+        line-height: 44px;
+        position: relative;
+        right: 16px;
+        bottom: 64px;
 
 	}
 

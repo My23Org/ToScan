@@ -393,12 +393,6 @@ export default class BiPspbCareGiverProfile extends LightningElement {
 				this.template
 					.querySelector('label[data-field="MobilePhone"]')
 					.classList.remove('input-error-label');
-				this.template
-					.querySelector('lightning-input[data-field="MobilePhone"]')
-					.classList.remove('textInput');
-				this.template
-					.querySelector('label[data-field="MobilePhone"]')
-					.classList.remove('input-label');
 				this.phoneerrorMessage = false;
 			}
 		}
@@ -917,6 +911,35 @@ export default class BiPspbCareGiverProfile extends LightningElement {
 			this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from Lwc
 		}
 	}
+
+	// To allow only letters as input
+	handleKeyDown1(event) {
+		const allowedCharacters = /^[A-Za-z]+$/;
+		if (!allowedCharacters.test(event.key)) {
+			event.preventDefault();
+		}
+	}
+
+	// Allow only numbers 0-9 and + symbol for mobile number
+	handleKeyDown(event) {
+		// Get the keycode of the pressed key
+		const keyCode = event.keyCode || event.which;
+	
+		// Allow the backspace key (keyCode 8)
+		if (keyCode === 8) {
+			return;
+		}
+	
+		// Define the allowed characters regex
+		const allowedCharacters = /^[0-9\+]+$/;
+	
+		// Check if the pressed key matches the allowed characters
+		if (!allowedCharacters.test(event.key)) {
+			// If not, prevent the default action (input of the character)
+			event.preventDefault();
+		}
+	}
+	
 
 	// showToast used for all the error messages caught
 	showToast(title, message, variant) {

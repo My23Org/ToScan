@@ -29,7 +29,10 @@ public class BI_PSP_LetsPersonliseTest {
         );
         insert settings;
         // Create a test user
-
+		
+        // Call the method or class where the applicationName is accessed
+        String applicationName = BI_PSP_LetsPersonlise.applicationName;
+        
         String currentUserName = 'Test User';
         String currentUserEmail = '';
         Profile standardUserProfile = [
@@ -179,6 +182,9 @@ public class BI_PSP_LetsPersonliseTest {
             System.runAs(testUser2) {
                 Test.startTest();
                 BI_PSP_LetsPersonlise.draftRespoDeletion(resid);
+                  // Assert the result
+        System.assertEquals('', BI_PSP_LetsPersonlise.applicationName);
+                
                 List<AssessmentQuestionResponse> draftRecords = [
                     SELECT Id
                     FROM AssessmentQuestionResponse
@@ -395,6 +401,7 @@ public class BI_PSP_LetsPersonliseTest {
             );
         }
     }
+    
     //@Description This test method verifies the insertion of multiple draft assessment question response
     // records by invoking the mulitipleDraftRecordsInsertion method in the BI_PSP_LetsPersonlise class, under the
     //  context of a standard user
@@ -750,6 +757,7 @@ public class BI_PSP_LetsPersonliseTest {
             'Expected characters after first two'
         ); // Succeeds
     }
+
 
     //@Description This test method verifies the insertion of multiple draft assessment question response
     // records by invoking the mulitipleDraftRecordsInsertion method in the BI_PSP_LetsPersonlise class.
@@ -1614,7 +1622,6 @@ public class BI_PSP_LetsPersonliseTest {
             try {
                 Test.startTest();
                 BI_PSP_LetsPersonlise.createNewAssessment(
-                    idsd,
                     responseTexts,
                     responseTexts,
                     pickval
@@ -1810,7 +1817,6 @@ public class BI_PSP_LetsPersonliseTest {
         System.runAs(testUser2) {
             Test.startTest();
             BI_PSP_LetsPersonlise.createNewAssessment(
-                idsd,
                 questionIds,
                 responseTexts,
                 pickval
@@ -2068,7 +2074,6 @@ public class BI_PSP_LetsPersonliseTest {
                 Test.startTest();
 
                 BI_PSP_LetsPersonlise.createNewAssessment(
-                    idsd,
                     questionIds,
                     responseTexts,
                     pickval
@@ -2153,7 +2158,7 @@ public class BI_PSP_LetsPersonliseTest {
                 BI_PSP_LetsPersonlise.mulitipleDraftRecordsInsertion(
                     null,
                     null,
-                    0
+                    null
                 );
 
                 Test.stopTest();

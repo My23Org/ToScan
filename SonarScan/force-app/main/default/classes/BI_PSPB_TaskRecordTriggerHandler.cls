@@ -17,7 +17,7 @@ public with sharing class BI_PSPB_TaskRecordTriggerHandler {
 	 * community SMS,Email and Insite Notification.
 	 * @param newTasks The list of Task records being inserted.
 	 */
-	public static void handleBeforeInsert(List<Task> newTasks) {
+	public static void handleAfterInsert(List<Task> newTasks) {
 		try {
 			String communityUserName;
 			String category;
@@ -96,7 +96,7 @@ public with sharing class BI_PSPB_TaskRecordTriggerHandler {
 					NotificationType ==
 					BI_PSPB_constantsClass.ACTION_TYPE_GENERAL
 				) {
-					BI_PSPB_smsAndEmailHandlerdemoTest.handleTrigger(
+					BI_PSPB_smsAndEmailHandler.handleTrigger(
 						recordId,
 						BI_PSPB_constantsClass.generalChallenges,
 						''
@@ -108,7 +108,7 @@ public with sharing class BI_PSPB_TaskRecordTriggerHandler {
 					NotificationType ==
 					BI_PSPB_constantsClass.ACTION_TYPE_GENERAL
 				) {
-					BI_PSPB_smsAndEmailHandlerdemoTest.handleTrigger(
+					BI_PSPB_smsAndEmailHandler.handleTrigger(
 						recordId,
 						BI_PSPB_constantsClass.generalSymptomTracker,
 						''

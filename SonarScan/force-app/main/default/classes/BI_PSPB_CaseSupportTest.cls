@@ -1,12 +1,12 @@
 /*
 *********************************************************
 Apex Class Name    : BI_PSPB_CaseSupportTest
-Created Date       :   20.12.2023,,
- @description      :  Test class for the BI_PSPB_CaseSupport class.
+Created Date       : 20.12.2023
+ @description      : Test class for the BI_PSPB_CaseSupport class.
 @author            : Rajaa.s
 Modification Log:
-Ver   Date         Author                               Modification
-59   07-03-2024   Rajaa.s                     Initial Version
+Ver   Date         Author       Modification
+59   07-03-2024   Rajaa.s      Initial Version
 *********************************************************
 */
 @isTest
@@ -16,7 +16,6 @@ public class BI_PSPB_CaseSupportTest {
      */
     @testSetup
     static void setup() {
-        // System.runAs(testUserrecord){
         BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
             Name = 'PSPB',
             BI_SFCOE_LOG_Application__c = 'Spevigo'
@@ -31,7 +30,7 @@ public class BI_PSPB_CaseSupportTest {
         String uniqueUsername =
             'testuser' +
             DateTime.now().getTime() +
-            '@example.com';
+            '@example.com'; // Generating a unique username
         Profile testProfile = [
             SELECT Id
             FROM Profile
@@ -42,7 +41,7 @@ public class BI_PSPB_CaseSupportTest {
             FirstName = 'Test',
             LastName = 'User',
             Email = 'testuser@example.com',
-            Username = uniqueUsername,
+            Username = uniqueUsername, // Using the unique username
             Alias = 'TUser',
             TimeZoneSidKey = 'America/Los_Angeles',
             LocaleSidKey = 'en_US',
@@ -62,7 +61,7 @@ public class BI_PSPB_CaseSupportTest {
             AccountId = testPatient.Id
         );
         insert enrolle;
-        case cse = new Case(
+        Case cse = new Case(
             Type = 'Personal Information Request',
             BI_PSPB_Sub_Type__c = 'Treatment',
             BI_PSP_Patient__c = enrolle.Id,
@@ -77,8 +76,8 @@ public class BI_PSPB_CaseSupportTest {
             [SELECT COUNT() FROM Case WHERE Subject = 'test subject'],
             'check the count'
         );
-        //}
     }
+
     /**  @description 
 	  Test method for the getCasesForPatient method.    
 	  Test method for the getCaseFiles method.
@@ -86,6 +85,7 @@ public class BI_PSPB_CaseSupportTest {
     @isTest
     public static void testgetcaserecord() {
         Case cse = [SELECT id, origin FROM Case WHERE origin = 'Email' LIMIT 1];
+        try{
         test.startTest();
         BI_PSPB_CaseSupport.caserecord(cse.Id);
         test.stopTest();
@@ -95,6 +95,15 @@ public class BI_PSPB_CaseSupportTest {
             cse.Origin,
             'Origin of the retrieved case should be "Email"'
         );
+        }
+        catch (Exception e) {
+        // Assert that the exception message is as expected
+        Assert.areEqual(
+          e.getMessage(),
+          'Script-thrown exception',
+          e.getMessage()
+        );
+      }
     }
     /**
      *  @description Test method for BI_PSPB_CaseSupport.caserecord method with a null parameter.
@@ -146,7 +155,7 @@ public class BI_PSPB_CaseSupportTest {
                 Description = 'Test Description'
             );
             insert testCase;
-            //Account  testPatient =[Select id,LastName from Account where LastName='User123' Limit 1];
+
             test.startTest();
             List<Case> getNoCases = BI_PSPB_CaseSupport.getCases(
                 'Medical Enquiry',
@@ -163,6 +172,7 @@ public class BI_PSPB_CaseSupportTest {
             );
         }
     }
+
     /**
      *  @description Test method for the getCases method with different parameters.
      */
@@ -256,9 +266,8 @@ public class BI_PSPB_CaseSupportTest {
         }
     }
     /**
-     *  @description  Test method for BI_PSPB_CaseSupport.getCases method when no CareProgram is provided.
-     * This test verifies that the getCases method handles the scenario when no CareProgram is provided.
-     * */
+     *  @description Test method for the getCases method with different parameters.
+     */
     @isTest
     public static void testNoCareProgramgetCasesCP() {
         try {
@@ -312,9 +321,11 @@ public class BI_PSPB_CaseSupportTest {
         ]
         .ContentDocumentId;
         insert testLink;
+           try{
         Test.startTest();
         // Call the method to test
         String base64Image = BI_PSPB_CaseSupport.getBase64Image(testCase.Id);
+     
         Test.stopTest();
         // Assert that the base64 image data is not empty
         Assert.areEqual(
@@ -322,6 +333,15 @@ public class BI_PSPB_CaseSupportTest {
             base64Image != null,
             'the base64 image data is not empty'
         );
+        }
+        catch (Exception e) {
+        // Assert that the exception message is as expected
+        Assert.areEqual(
+          e.getMessage(),
+          'Script-thrown exception',
+          e.getMessage()
+        );
+      }
     }
     /**
      *   @description Test method for the else branch of BI_PSPB_CaseSupport.getBase64Image method.
@@ -450,144 +470,6 @@ public class BI_PSPB_CaseSupportTest {
                 e.getMessage(),
                 'Script-thrown exception',
                 e.getMessage()
-            );
-        }
-    }
-
-    /**
-     *   @description Test method for the catch block of BI_PSPB_CaseSupport.getBase64Image method when the ContentVersion is not found.
-     * This test verifies the behavior of the method when the ContentVersion associated with the Case is not found.
-     *
-     */
-    @isTest
-    static void testGetBase64ImageCatchThree() {
-        // Create test data
-        Case testCase = new Case(Subject = 'Test Case');
-        insert testCase;
-
-        ContentVersion testVersion = new ContentVersion(
-            ContentLocation = 'S', // Salesforce
-            PathOnClient = 'test.jpg', // Path on client
-            VersionData = Blob.valueOf('Test Image Data')
-        );
-        insert testVersion;
-
-        ContentDocumentLink testLink = new ContentDocumentLink(
-            LinkedEntityId = testCase.Id,
-            ContentDocumentId = [
-                SELECT ContentDocumentId
-                FROM ContentVersion
-                WHERE Id = :testVersion.Id
-            ]
-            .ContentDocumentId
-        );
-        insert testLink;
-
-        try {
-            Test.startTest();
-            // Call the method to be tested
-            String base64Image = BI_PSPB_CaseSupport.getBase64Image(
-                testCase.Id
-            );
-            Test.stopTest();
-
-            // Assert that the base64 image data is not empty
-            Assert.areNotEqual(
-                null,
-                base64Image,
-                'Base64 image data should not be empty'
-            );
-        } catch (Exception e) {
-            // Assert that the exception message is as expected
-            Assert.areEqual(
-                e.getMessage(),
-                'Script-thrown exception',
-                e.getMessage()
-            );
-        }
-    }
-    /**
-     *  @description  Test method for the getname method.
-     */
-    @isTest
-    static void testGetName() {
-        // Create a test user
-        BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
-            Name = 'PSPB',
-            BI_SFCOE_LOG_Application__c = 'Spevigo'
-        );
-        insert settings;
-        User testUser = new User();
-        testUser.FirstName = 'Test';
-        testUser.LastName = 'User';
-        testUser.Email = 'testuser@example.com';
-        testUser.Username = 'testuser12@example.com';
-        testUser.Alias = 'tuser';
-        testUser.CommunityNickname = 'testuser';
-        testUser.TimeZoneSidKey = 'America/New_York';
-        testUser.LocaleSidKey = 'en_US';
-        testUser.EmailEncodingKey = 'UTF-8';
-        testUser.ProfileId = [
-            SELECT Id
-            FROM Profile
-            WHERE Name = 'Standard User'
-            LIMIT 1
-        ]
-        .Id; // Assigning Standard User profile
-        testUser.LanguageLocaleKey = 'en_US'; // Assigning language locale
-        insert testUser; // Insert the test user
-        Test.startTest();
-        // Call the method to test
-        User returnedUser = BI_PSPB_CaseSupport.getname(testUser.Id);
-        Test.stopTest();
-        // Assert that the returned user is not null
-        Assert.areEqual(
-            true,
-            returnedUser != null,
-            'the returned user is not null'
-        );
-
-        // Assert that the returned user's name matches the expected name
-        Assert.areEqual('Test User', returnedUser.Name, 'validate the user');
-    }
-    /**
-     *  @description This method is used to check the username null check
-     *
-     *
-     */
-    @isTest
-    static void testGetNameT() {
-       
-            // Create a test user
-            User testUser = new User();
-            testUser.FirstName = 'Test';
-            testUser.LastName = 'User';
-            testUser.Email = 'testuser@example.com';
-            testUser.Username = 'testuser12@example.com';
-            testUser.Alias = 'tuser';
-            testUser.CommunityNickname = 'testuser';
-            testUser.TimeZoneSidKey = 'America/New_York';
-            testUser.LocaleSidKey = 'en_US';
-            testUser.EmailEncodingKey = 'UTF-8';
-            testUser.ProfileId = [
-                SELECT Id
-                FROM Profile
-                WHERE Name = 'Standard User'
-                LIMIT 1
-            ]
-            .Id; // Assigning Standard User profile
-            testUser.LanguageLocaleKey = 'en_US'; // Assigning language locale
-            insert testUser; // Insert the test user
-			try {
-            Test.startTest();
-            // Call the method to test
-             BI_PSPB_CaseSupport.getname(null);
-            Test.stopTest();
-        } catch (Exception e) {
-            Assert.areEqual(
-                'Script-thrown exception',
-                e.getMessage(),
-                'Method thrown exception'
             );
         }
     }

@@ -237,7 +237,7 @@ public with sharing class BI_PSPB_EmojiReactionCtrl {
 						if (String.isNotBlank(errorMessage)) {
 							// Log the error message and throw an exception.
 							BI_SFCOE_LOG_Util.logMessage(applicationName,
-								BI_PSPB_FollowUserCtrl.class.toString(), '', System.now(),
+							BI_PSPB_EmojiReactionCtrl.class.toString(), '', System.now(),
 								errorMessage, BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 							throw new AuraHandledException(errorWhileUnreacting);
 						}

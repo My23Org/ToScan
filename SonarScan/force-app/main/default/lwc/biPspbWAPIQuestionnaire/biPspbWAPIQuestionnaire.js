@@ -949,9 +949,8 @@ export default class BiPspbWAPIQuestionnaire extends LightningElement {
 	 */
 	addSliderEventListener() {
 		// Get primary slider element
-		var slider;
-		var slidersec;
-		slider = this.template.querySelector('.slider');
+		
+		const slider = this.template.querySelector('.slider');
 
 		// Define function to update thumb position for primary slider
 		const updateThumbPosition1 = () => {
@@ -966,7 +965,7 @@ export default class BiPspbWAPIQuestionnaire extends LightningElement {
 
 		// Get secondary slider element
 
-		slidersec = this.template.querySelector('.slidersec');
+		const slidersec = this.template.querySelector('.slidersec');
 
 		// Define function to update thumb position for secondary slider
 		const updateThumbPosition2 = () => {
@@ -1185,7 +1184,7 @@ export default class BiPspbWAPIQuestionnaire extends LightningElement {
 		const val = event.target.value;
 		if (val === this.yes) {
 			this.countquestion = 6;
-
+			this.sliderValue=0;
 			this.firstQuesIsYes = true;
 			this.firstQuesIsNo = false;
 
@@ -1194,7 +1193,6 @@ export default class BiPspbWAPIQuestionnaire extends LightningElement {
 
 		if (val === this.no) {
 			this.countquestion = 2;
-           
 			if (this.totalDraftResponses >= 6) {
 			this.totalDraftResponses = 2;
 			}

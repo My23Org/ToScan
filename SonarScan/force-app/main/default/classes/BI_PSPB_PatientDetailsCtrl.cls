@@ -12,14 +12,14 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 		'PSPB'
 	);
 	//A variable That holds the name of our application to be used in catch exception handler.
-	private static String applicationName = settings != null
-		? settings.BI_SFCOE_LOG_Application__c
+	private static String applicationName = settings != null? settings.BI_SFCOE_LOG_Application__c
 		: '';
 	private static String errorMsg = '';
 	// Custom labels
 	private static String errorDml = System.Label.BI_PSPB_UnableToUpdateRecord;
 	private static String errorReturn = System.Label.BI_PSPB_Error_Returning;
 	private static String Accounterror = System.Label.BI_PSPB_Error_For_Account;
+	private static String Caregivererror = System.Label.BI_PSP_EnrolleeCaregiver_ErrorMessage;
 	/**
 *@description  		method to is used to get the User Id of the caregiver during his/her login and show the 
 					list of patients associated with that user.
@@ -27,11 +27,9 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 *@return   			caregiverAccounts List of Patients.this return in the biPspbCaregiverpostlogin component
 **/
 	@AuraEnabled(cacheable=true)
-	public static List<Map<String, String>> getCaregiverAccounts()
-    {
-        List<Map<String, String>> caregiverAccounts = new List<Map<String, String>>();
+	public static List<Map<String, String>> getCaregiverAccounts() {
+		List<Map<String, String>> caregiverAccounts = new List<Map<String, String>>();
 		try {
-			
 			String currentUserName = UserInfo.getName();
 			String currentUserEmail = UserInfo.getUserEmail();
 
@@ -50,17 +48,29 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 					BI_PSPB_Caregiver__r.Name = :currentUserName
 					AND BI_PSPB_Caregiver__r.PersonEmail = :currentUserEmail
 					AND BI_PSPB_Status__c = :BI_PSPB_ConstantsClass.ACTION_TYPE_Active
-					WITH USER_MODE
+				WITH USER_MODE
 			];
 
-            Map<String, String> accountMap = new Map<String, String>();
-            //eclist nullcheck
-			for (BI_PSPB_Enrollee_Caregiver__c ec : ecList) {
-				accountMap.put('Id', ec.BI_PSPB_Patient__r.Id);
-				accountMap.put('Name', ec.BI_PSPB_Patient__r.Name);
-				accountMap.put('Status', ec.BI_PSPB_Status__c);
-				accountMap.put('CaregiveID', ec.BI_PSPB_Caregiver__c);
-				caregiverAccounts.add(accountMap);
+			Map<String, String> accountMap = new Map<String, String>();
+			//eclist nullcheck
+			if (!ecList.isEmpty()) {
+				for (BI_PSPB_Enrollee_Caregiver__c ec : ecList) {
+					accountMap.put('Id', ec.BI_PSPB_Patient__r.Id);
+					accountMap.put('Name', ec.BI_PSPB_Patient__r.Name);
+					accountMap.put('Status', ec.BI_PSPB_Status__c);
+					accountMap.put('CaregiveID', ec.BI_PSPB_Caregiver__c);
+					caregiverAccounts.add(accountMap);
+				}
+			} else {
+				BI_SFCOE_LOG_Util.logMessage(
+					applicationName,
+					BI_PSPB_PatientDetailsCtrl.class.toString(),
+					'',
+					System.now(),
+					Caregivererror,
+					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+				);
+				throw new AurahandledException(Caregivererror);
 			}
 
 			List<Account> accounts = [
@@ -72,15 +82,40 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 					AND IsPersonAccount = TRUE
 				WITH USER_MODE
 			];
-			for (Account acc : accounts) {
-				if (acc.PersonEmail != currentUserEmail) {
-					// Exclude the user's account
-					accountMap.put('Id', acc.Id);
-					accountMap.put('Name', acc.Name);
-					caregiverAccounts.add(accountMap);
+			if (!accounts.isEmpty()) {
+				for (Account acc : accounts) {
+					if (acc.PersonEmail != currentUserEmail) {
+						// Exclude the user's account
+						accountMap.put('Id', acc.Id);
+						accountMap.put('Name', acc.Name);
+						caregiverAccounts.add(accountMap);
+					}
 				}
+			} else {
+				BI_SFCOE_LOG_Util.logMessage(
+					applicationName,
+					BI_PSPB_PatientDetailsCtrl.class.toString(),
+					'',
+					System.now(),
+					Accounterror,
+					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+				);
+				throw new AurahandledException(Accounterror);
 			}
-     
+			if(!caregiverAccounts.isEmpty())
+			{
+				return caregiverAccounts;
+			} else {
+				BI_SFCOE_LOG_Util.logMessage(
+					applicationName,
+					BI_PSPB_PatientDetailsCtrl.class.toString(),
+					'',
+					System.now(),
+					Accounterror,
+					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+				);
+				throw new AurahandledException(Accounterror);
+			}
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(
 				ex,
@@ -91,7 +126,8 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 			);
 			throw new AurahandledException(Accounterror);
 		}
-        return caregiverAccounts;
+		
+		
 	}
 	/**
 
@@ -105,14 +141,13 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 		String SelectedAccountId
 	) {
 		try {
-			if (!String.isBlank(UserID) || !String.isBlank(SelectedAccountId)) {
+			if (!String.isBlank(UserID) && !String.isBlank(SelectedAccountId)) {
 				Account accountToUpdate = new Account(Id = UserID);
 				// Set the selected patient ID and caregiver check fields
 				accountToUpdate.BI_PSPB_Selected_Patient_ID__c = SelectedAccountId;
 				accountToUpdate.BI_PSPB_CaregiverCheck__c = true;
 				// Update the Account record
 
-				//update accountToUpdate;
 				Database.SaveResult updateResult = Database.update(
 					accountToUpdate,
 					false,
@@ -144,14 +179,13 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 				}
 			} else {
 				BI_SFCOE_LOG_Util.logMessage(
-				applicationName,
-				BI_PSPB_PatientDetailsCtrl.class
-					.toString(),
+					applicationName,
+					BI_PSPB_PatientDetailsCtrl.class.toString(),
 					BI_PSPB_constantsClass.parameterError,
-				System.now(),
-				'',
-				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-			);
+					System.now(),
+					'',
+					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+				);
 				throw new AuraHandledException(
 					BI_PSPB_constantsClass.parameterError
 				);
@@ -178,29 +212,29 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 	@AuraEnabled(cacheable=true)
 	public static Account getcaregiverAccountforSwitch(String accountId) {
 		try {
-			if (String.isBlank(accountId)) {		
-			return [
-				SELECT
-					id,
-					BI_PSPB_Selected_Patient_ID__c,
-					BI_PSPB_CaregiverCheck__c
-				FROM Account
-				WHERE id = :accountId
-				WITH USER_MODE
-			];
-		}
-		else{
-			BI_SFCOE_LOG_Util.logMessage(
-			applicationName,
-			BI_PSPB_PatientDetailsCtrl.class
-				.toString(),
-				BI_PSPB_constantsClass.error,
-			System.now(),
-			'',
-			BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-		);
-		throw new AuraHandledException(BI_PSPB_constantsClass.parameterError);
-		}
+			if (!String.isBlank(accountId)) {
+				return [
+					SELECT
+						id,
+						BI_PSPB_Selected_Patient_ID__c,
+						BI_PSPB_CaregiverCheck__c
+					FROM Account
+					WHERE id = :accountId
+					WITH USER_MODE
+				];
+			} else {
+				BI_SFCOE_LOG_Util.logMessage(
+					applicationName,
+					BI_PSPB_PatientDetailsCtrl.class.toString(),
+					BI_PSPB_constantsClass.error,
+					System.now(),
+					'',
+					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+				);
+				throw new AuraHandledException(
+					BI_PSPB_constantsClass.parameterError
+				);
+			}
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(
 				ex,
@@ -226,53 +260,70 @@ public with sharing class BI_PSPB_PatientDetailsCtrl {
 		Boolean check
 	) {
 		try {
-			if (!String.isBlank(UserID)) {
-			Account accountToUpdate = new Account(Id = UserID);
-			if (SelectedAccountId != null) {
+			if (!String.isBlank(UserID) && !String.isBlank(SelectedAccountId) && check!=null) {
+				Account accountToUpdate = new Account(Id = UserID);
 				accountToUpdate.BI_PSPB_Selected_Patient_ID__c = SelectedAccountId;
-			}
-			accountToUpdate.BI_PSPB_CaregiverCheck__c = check;
-			Database.SaveResult updateResult = Database.update(
-				accountToUpdate,
-				false,
-				AccessLevel.USER_MODE
-			);
-			if (!updateResult.isSuccess()) {
-				for (Database.Error error : updateResult.getErrors()) {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,
-						BI_PSPB_PatientDetailsCtrl.class.toString(),
-						'',System.now(),errorMsg='Error ' + error.getFields() +'--' +
-							error.getMessage(),BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+				accountToUpdate.BI_PSPB_CaregiverCheck__c = check;
+				Database.SaveResult updateResult = Database.update(
+					accountToUpdate,
+					false,
+					AccessLevel.USER_MODE
+				);
+				if (!updateResult.isSuccess()) {
+					for (Database.Error error : updateResult.getErrors()) {
+						BI_SFCOE_LOG_Util.logMessage(
+							applicationName,
+							BI_PSPB_PatientDetailsCtrl.class.toString(),
+							'',
+							System.now(),
+							errorMsg =
+								'Error ' +
+								error.getFields() +
+								'--' +
+								error.getMessage(),
+							BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+						);
+					}
 				}
-			}
-			if (!String.isBlank(errorMsg)) {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,BI_PSPB_PatientDetailsCtrl.class.toString(),
-					'',System.now(),errorMsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
-				DmlException e = new DmlException();
-				e.setMessage(errorMsg);throw e;
-			}
-			if (accountToUpdate != null) {
-				return accountToUpdate;
+				if (!String.isBlank(errorMsg)) {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSPB_PatientDetailsCtrl.class.toString(),
+						'',
+						System.now(),
+						errorMsg,
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+					DmlException e = new DmlException();
+					e.setMessage(errorMsg);
+					throw e;
+				}
+				if (accountToUpdate != null) {
+					return accountToUpdate;
+				} else {
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSPB_PatientDetailsCtrl.class.toString(),
+						errorReturn,
+						System.now(),
+						'',
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					);
+					throw new AuraHandledException(errorReturn);
+				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(applicationName,
-			BI_PSPB_PatientDetailsCtrl.class.toString(),
-				errorReturn,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
-				throw new AuraHandledException(errorReturn);
+				BI_SFCOE_LOG_Util.logMessage(
+					applicationName,
+					BI_PSPB_PatientDetailsCtrl.class.toString(),
+					BI_PSPB_constantsClass.parameterError,
+					System.now(),
+					'',
+					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+				);
+				throw new AuraHandledException(
+					BI_PSPB_constantsClass.parameterError
+				);
 			}
-		}
-		else{
-			BI_SFCOE_LOG_Util.logMessage(
-			applicationName,
-			BI_PSPB_PatientDetailsCtrl.class
-				.toString(),
-				BI_PSPB_constantsClass.parameterError,
-			System.now(),
-			'',
-			BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-		);
-		throw new AuraHandledException(BI_PSPB_constantsClass.parameterError);
-		}
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(
 				ex,

@@ -177,7 +177,7 @@ getbrandedHistory(acc)
 {
 try 
 {
-	historytask({ accountId: acc, notificatonType: BI_PSPB_History })
+	historytask({ enroleeId: acc, notificatonType: BI_PSPB_History })
 	// Null data is checked and AuraHandledException is thrown from the Apex
 	.then((data) => 
 	{
@@ -230,7 +230,7 @@ getunassignedHistory(acc)
 try 
 {
 	historytaskUnassigned({
-	accountId: acc,
+	enroleeId: acc,
 	notificatonType: BI_PSPB_History
 	})
 	// Null data is checked and AuraHandledException is thrown from the Apex
@@ -304,7 +304,7 @@ historyfunc(type)
 {
 try 
 {
-	historytask({ accountId: this.accname, notificatonType: type })
+	historytask({ enroleeId: this.accname, notificatonType: type })
 	.then((result) => 
 	{
 		if (result) 
@@ -355,7 +355,7 @@ historyfuncU(type)
 {
 try 
 {
-	historytaskUnassigned({ accountId: this.accname, notificatonType: type })
+	historytaskUnassigned({ enroleeId: this.accname, notificatonType: type })
 	// Null data is checked and AuraHandledException is thrown from the Apex
 	.then((result) => 
 	{
@@ -408,7 +408,7 @@ historyCatfunc(type, cate)
 try 
 {
 	historyCat({
-	accountId: this.accname,
+	enroleeId: this.accname,
 	notificatonType: type,
 	category: cate
 	})
@@ -463,7 +463,7 @@ historystatfunc(type, cate, stat)
 try 
 {
 	historystat({
-	accountId: this.accname,
+	enroleeId: this.accname,
 	notificatonType: type,
 	category: cate,
 	status: stat

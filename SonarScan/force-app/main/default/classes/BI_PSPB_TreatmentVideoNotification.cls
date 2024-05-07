@@ -72,7 +72,7 @@ public with sharing class BI_PSPB_TreatmentVideoNotification {
 							);
 						}
 					}
-				if (!enrolleeIds.isEmpty()) { BI_PSPB_smsAndEmailHandlerdemoTest.handleTrigger(
+				if (!enrolleeIds.isEmpty()) { BI_PSPB_smsAndEmailHandler.handleTrigger(
 						enrolleeIds, BI_PSPB_constantsClass.video, ''
 					);
 				}

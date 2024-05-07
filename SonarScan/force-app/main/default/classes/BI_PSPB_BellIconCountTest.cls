@@ -195,24 +195,24 @@ private class BI_PSPB_BellIconCountTest {
 	@isTest
 	static void testGetTaskCountUANegativeScenario() {
 		// Create test data
-		// Account testAccount = new Account(Name = 'Test Account');
+		 Account testAccount = new Account(Name = 'Test Account');
 
 		BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
 			Name = 'ApplicationName',
 			BI_SFCOE_LOG_Application__c = 'Spevigo'
 		);
 		insert settings;
-		// CareProgramEnrollee testCPE = new CareProgramEnrollee(
-		//     AccountId = testAccount.Id,
-		//     Name= 'testcpeaccount'
+		CareProgramEnrollee testCPE = new CareProgramEnrollee(
+	    AccountId = testAccount.Id,
+	    Name= 'testcpeaccount'
 
-		// );
+		 );
 
 		//  Mock an exception by passing an invalid AccountId
 		try {
 			Test.startTest();
 
-			// Integer result = BI_PSPB_BellIconCount.getTaskCountUA('0');
+			  BI_PSPB_BellIconCount.getTaskCountUA('0');
 
 			Test.stopTest();
 		} catch (Exception e) {
@@ -224,4 +224,22 @@ private class BI_PSPB_BellIconCountTest {
 			);
 		}
 	}
+    /**
+ * @description	Test method to verify behavior when AccountId is blank.
+ */
+    @isTest
+    static void testGetTaskCountWithBlankAccountId() {
+        // Test setup
+        // Insert necessary test data
+        CareProgramEnrollee testCPE = new CareProgramEnrollee(AccountId = null); // Blank accountId
+
+        // Call the method with a blank accountId
+        Test.startTest();
+        Integer result = BI_PSPB_BellIconCount.getTaskCountUA(testCPE.Id);
+        Test.stopTest();
+
+        // Assert the result
+        Assert.areEqual(null, result, 'Task count should be null for blank accountId');
+    }
+    
 }

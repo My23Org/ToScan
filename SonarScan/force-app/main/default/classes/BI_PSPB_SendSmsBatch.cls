@@ -37,11 +37,10 @@ public with sharing class BI_PSPB_SendSmsBatch implements Database.Batchable<SOb
 		String desturl,
 		String notificationDate
 	) {
-		//notificationDeveloperName,desturl, notificationDate can be empty values
 		if (
 			!contactIds.isEmpty() &&
-			notificationDeveloperName != null &&
-			desturl != null &&
+			!String.isBlank(notificationDeveloperName) &&
+			!String.isBlank(desturl) &&
 			notificationDate != null
 		) {
 			this.contactIds = contactIds;
@@ -93,9 +92,7 @@ public with sharing class BI_PSPB_SendSmsBatch implements Database.Batchable<SOb
 		List<BI_PSPB_OmnichannelLog__c> smsLogList = new List<BI_PSPB_OmnichannelLog__c>();
 		try {
 			String accessToken = BI_PSPB_GetAccessToken.getAccessToken();
-			if (
-                String.isNotBlank(accessToken)
-            ) {
+			if (!String.isBlank(accessToken)) {
 				BI_PSPB_Omnichannel_API_Setting__mdt setting = BI_PSPB_Omnichannel_API_Setting__mdt.getInstance(
 					smsEndpoint
 				);
@@ -124,7 +121,8 @@ public with sharing class BI_PSPB_SendSmsBatch implements Database.Batchable<SOb
 				if (!scope.isEmpty()) {
 					for (Contact targetContacts : scope) {
 						if (
-							targetContacts.Phone != null ||targetContacts.Name != null
+							targetContacts.Phone != null &&
+                            targetContacts.Name != null
 						) {
 							String userPhoneNumber = targetContacts.Phone;
 							Contact userName = targetContacts;
@@ -198,7 +196,7 @@ public with sharing class BI_PSPB_SendSmsBatch implements Database.Batchable<SOb
 									notification.BI_PSPB_Subject__c +',' +smsBody +',' +smsBodyLink +
 									',' +eventName +',' +eventType +',' +smsResponse +',' +accessToken +
 									',' +messageId +',' +status;
-								BI_SFCOE_LOG_Util.logMessage(app,BI_PSPB_AsynchronousSmsCallout.class.toString(),
+								BI_SFCOE_LOG_Util.logMessage(app,BI_PSPB_SendSmsBatch.class.toString(),
 									BI_PSPB_constantsClass.httpResponseError,System.now(),concatenatedParams,
 									BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 								);

@@ -108,6 +108,7 @@ public without sharing class BI_PSPB_BellIconCount {
 		Integer taskCount = 0;
 		try {
 			if (!String.isBlank(accountId)) {
+				//This query has CareProgramEnrollee object query were it won't support With User_Mode
 				List<CareProgramEnrollee> cpeList = [
 					SELECT Id
 					FROM CareProgramEnrollee
@@ -136,8 +137,13 @@ public without sharing class BI_PSPB_BellIconCount {
 				//taskCount can never be null or empty as it is initialised with 0
 				return taskCount;
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_BellIconCount.class.toString(),
-					BI_PSPB_constantsClass.parameterError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+				BI_SFCOE_LOG_Util.logMessage(
+                    applicationName,
+                    BI_PSPB_BellIconCount.class.toString(),
+					BI_PSPB_constantsClass.parameterError,
+                    System.now(),
+                    '',
+                    BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				return null;
 			}
 		} catch (Exception ex) {

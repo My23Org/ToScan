@@ -25,7 +25,8 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     private static String recordCannotFound = System.Label.BI_PSP_record_not_found_error_message;
     private static String recordInsertionFailed = System.Label.BI_PSP_record_insert_error_message;
     /*  
-@description		Used to Create the Lead record return in lwc biPspbHcpEnrollement
+@description		Used to Create the Lead record return in lwc biPspbHcpEnrollment,
+                    all the wrapper class parameters null check in lwc 
 @param				String combinedString combination value of the given value lead in hcp enrollemnet
 @param				String HCPID Created physician record id
 @param				String licence Selected physician license
@@ -118,7 +119,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
         }
     }
     /*  
-@description		Used to create Lead Caregiver Object if Patient is minor return in lwc biPspbHcpEnrollement
+@description		Used to create Lead Caregiver Object if Patient is minor return in lwc biPspbHcpEnrollment
 @param				String combinedStringcaregiver combination value of the given value leadcaregiver in hcp enrollemnet
 @param				String LeadID created lead record id
 @return				caregiver id
@@ -127,8 +128,8 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     public static Id caregiverCreate(DataWrapper caregiverdata, String LeadID) {
         try {
             if(caregiverdata != null){
-                if (!string.isblank(caregiverdata.firstName)&&!string.isblank(caregiverdata.lastName)&&!string.isblank(caregiverdata.email)
-                    &&!string.isblank(caregiverdata.dob)&&!string.isblank(caregiverdata.relation)&&!string.isblank(LeadID) ) {
+                if (!String.isblank(caregiverdata.firstName)&&!String.isblank(caregiverdata.lastName)&&!String.isblank(caregiverdata.email)
+                    &&!String.isblank(caregiverdata.dob)&&!String.isblank(caregiverdata.relation)&&!String.isblank(LeadID) ) {
                     BI_PSPB_Lead_Caregiver__c care = new BI_PSPB_Lead_Caregiver__c();
                     care.BI_PSPB_First_Name__c = caregiverdata.firstName;
                     care.BI_PSPB_Last_Name__c = caregiverdata.lastName;
@@ -185,7 +186,8 @@ public without sharing class BI_PSPB_leadCreationCtrl {
         }
     }
     /* 
-@description		Used to Create the HCP record (Physician record) return in lwc biPspbHcpEnrollement
+@description		Used to Create the HCP record (Physician record) return in lwc biPspbHcpEnrollment,
+                    all the wrapper class parameters null check in lwc 
 @param				String combinedString combination value of the given value physician in hcp enrollemnet
 @return				return Hcpcreate id
 */
@@ -252,7 +254,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     }
     
     /*  
-@description		Used to Create the Prescription record return in lwc biPspbHcpEnrollement
+@description		Used to Create the Prescription record return in lwc biPspbHcpEnrollment,all the wrapper class parameters null check in lwc 
 @param  			String combinedString combination value of the given value prescription in hcp enrollemnet
 @param           	String dosage 
 @param           	String refill value of given patient while enrollenment
@@ -268,14 +270,14 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     ) {
         try {
             //Since this object is invoked from a Guest User Profile which has limited access to the Health Cloud objects, User Mode cannot be used here
-            if (prescriptiondata != null) {
+            if (prescriptiondata != null && !String.isBlank(Quantity) && !String.isBlank(refill) && !String.isBlank(LeadID)) {
                 CareProgramProduct[] Drugs = [
                     SELECT Id, BI_PSPB_Unit__c, BI_PSPB_Dosage__c, BI_PSPB_Product_code__c
                     FROM CareProgramProduct
                     WHERE Name = :prescriptiondata.drug
                     LIMIT 1
                 ];
-               
+               if(!Drugs.IsEmpty()){
                 BI_PSPB_Lead_Prescription__c pres = new BI_PSPB_Lead_Prescription__c();
                 pres.BI_PSPB_Dosage__c = Drugs[0].BI_PSPB_Dosage__c;
                 pres.BI_PSPB_Quantity__c = integer.valueOf(Quantity);
@@ -324,6 +326,10 @@ public without sharing class BI_PSPB_leadCreationCtrl {
                 // Handle the case where values list does not have at least 9 elements
                 throw new AuraHandledException( recordCannotFound );
             }
+            } else {
+                // Handle the case where values list does not have at least 9 elements
+                throw new AuraHandledException( recordCannotFound );
+            }
         } catch (Exception ex) {
             BI_SFCOE_LOG_Util.handleException(
                 ex, applicationName, BI_PSPB_LeadCreationCtrl.class.toString(),
@@ -333,7 +339,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
         }
     }
     /*  
-@description     	Used to Create the Consent record ,return in lwc biPspbHcpEnrollement
+@description     	Used to Create the Consent record ,return in lwc biPspbHcpEnrollment
 @param           	String LeadID created lead id
 @return         	return Consent id
 
@@ -341,7 +347,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     @AuraEnabled
     public static Id consentCreate(String LeadID) {
         try {
-            if(!string.isBlank(LeadID)){
+            if(!String.isBlank(LeadID)){
             BI_PSP_Lead_Consent__c consent = new BI_PSP_Lead_Consent__c();
             consent.BI_PSP_I_agree__c = true;
             consent.BI_PSPB_Consent_Category__c = HealthcareProvider;
@@ -387,13 +393,13 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     }
     
     /*  
-@description     	Used to fetch the account email,return in lwc biPspbHcpEnrollement
+@description     	Used to fetch the account email,return in lwc biPspbHcpEnrollment
 @return         	return account email
 */
     @AuraEnabled(cacheable=true)
-    public static List<Account> getExistingAccounts(string email) {
+    public static List<Account> getExistingAccounts(String email) {
         try {
-            if(!string.isBlank(email)){
+            if(String.isBlank(email)){
               // If there is no account, we return null, ensuring the absence of an error when proceeding with the creation process.
                 return null;
             }
@@ -432,14 +438,14 @@ public without sharing class BI_PSPB_leadCreationCtrl {
    
     
     /*  
-@description     	Used to fetch the the created lead,return in lwc biPspbHcpEnrollement
+@description     	Used to fetch the the created lead,return in lwc biPspbHcpEnrollment
 @param          	ID createLeadId created lead id
 @return         	return lead record
 */
     @AuraEnabled(cacheable=true)
-    public static list<lead> getLead(Id createLeadId) {
+    public static list<lead> getLead(String createLeadId) {
         try {
-            if(createLeadId != null || createLeadId !=''){
+            if(!String.isBlank(createLeadId)){
             // Since the guest user has limited access, the data is returned to them, so user mode is not used.
             list<lead> ld = [
                 SELECT
@@ -477,7 +483,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
         }
     }
     /*  
-@description     	Used to fetch the the caregiver record,return in lwc biPspbHcpEnrollement
+@description     	Used to fetch the the caregiver record,return in lwc biPspbHcpEnrollment
 @param           	String CaregivercreateId created caregiver id
 @return         	return caregiver record
 */
@@ -488,7 +494,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
         try {
             if(!String.isBlank(CaregivercreateId)){
             // Since the guest user has limited access, the data is returned to them, so user mode is not used.
-            list<BI_PSPB_Lead_Caregiver__c> cg = [
+            list<BI_PSPB_Lead_Caregiver__c> leadCaregiver = [
                 SELECT
                 Id,
                 BI_PSPB_First_Name__c,
@@ -500,8 +506,8 @@ public without sharing class BI_PSPB_leadCreationCtrl {
                 FROM BI_PSPB_Lead_Caregiver__c
                 WHERE BI_PSPB_Lead__c = :CaregivercreateId
             ];
-            if (!cg.IsEmpty()) {
-                return cg;
+            if (!leadCaregiver.IsEmpty()) {
+                return leadCaregiver;
             } else {
                 throw new AuraHandledException(
                     recordCannotFound
@@ -521,7 +527,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
         }
     }
     /*  
-@description     	Used to fetch the the prescribtion record,return in lwc biPspbHcpEnrollement
+@description     	Used to fetch the the prescribtion record,return in lwc biPspbHcpEnrollment
 @param           	String PrescriptionrcreateId created Prescription id 
 @return         	return prescribtion record
 */
@@ -530,9 +536,9 @@ public without sharing class BI_PSPB_leadCreationCtrl {
         String PrescriptionrcreateId
     ) {
         try {
-            if(PrescriptionrcreateId != null){
+            if(!String.isBlank (PrescriptionrcreateId)){
             // Since the guest user has limited access, the data is returned to them, so user mode is not used.
-            list<BI_PSPB_Lead_Prescription__c> pc = [
+            list<BI_PSPB_Lead_Prescription__c> leadPrescription = [
                 SELECT
                 Id,
                 BI_PSPB_Lead_Prescription__c.BI_PSPB_Drug__r.Name,
@@ -548,8 +554,8 @@ public without sharing class BI_PSPB_leadCreationCtrl {
                 FROM BI_PSPB_Lead_Prescription__c
                 WHERE BI_PSPB_Lead__c = :PrescriptionrcreateId
             ];
-            if (!pc.IsEmpty()) {
-                return pc;
+            if (!leadPrescription.IsEmpty()) {
+                return leadPrescription;
             } else {
                 throw new AuraHandledException(
                     recordCannotFound
@@ -572,6 +578,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
   
     /*  
 @description     	Used to create the caregiver record,return in lwc biPspbaddcaregiver
+                    all the wrapper class parameters null check in lwc 
 @param           	String combinedStringhcare combination value of Add caregiver 
 @return         	return caregiver record
 */
@@ -687,7 +694,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     }
     /* 
 @description Used to  the enroolee caregiver record for associate the patient and caregiver,
-             return in lwc biPspbaddcaregiver
+             return in lwc biPspbaddcaregiver all the wrapper class parameters null check in lwc 
 @param       String patientId careprogram enrolle id
 @param       String firstName Name of the Caregiver
 @param       String email Name of the Caregiver
@@ -697,10 +704,10 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     public static Id createEnroleeCargiver(
         String patientId,
         String firstName,
-        string email
+        String email
     ) {
         try {
-            if(!string.isBlank(patientId) &&string.isBlank(firstName)&& !string.isBlank(email)){
+        if(!String.isBlank(patientId) && String.isBlank(firstName) && !String.isBlank(email)){
             //Since this object is invoked from a Guest User Profile which has limited access, User Mode cannot be used here
             BI_PSPB_Enrollee_Caregiver__c caregiverToInsert = new BI_PSPB_Enrollee_Caregiver__c();
             CareProgramEnrollee enrollee = [
@@ -755,9 +762,9 @@ public without sharing class BI_PSPB_leadCreationCtrl {
             }// Return the Id of the inserted BI_PSPB_Enrollee_Caregiver__c record
          
             }
-            else {
+        else {
                 throw new AuraHandledException( recordCannotFound  );
-            }
+        }
         } catch (Exception ex) {
             BI_SFCOE_LOG_Util.handleException(
                 ex,applicationName, BI_PSPB_LeadCreationCtrl.class.toString(),
@@ -770,7 +777,7 @@ public without sharing class BI_PSPB_leadCreationCtrl {
     }
     /*  
 @description     	Used to check if a caregiver record already exists based on the caregiver creation ID,
-return in lwc biPspbHcpEnrollement
+return in lwc biPspbHcpEnrollment
 @param           	String CaregivercreateId: The ID of the caregiver record being created.
 @return         	Returns a Boolean value indicating whether a caregiver record already exists.
 */
@@ -778,9 +785,9 @@ return in lwc biPspbHcpEnrollement
     @AuraEnabled(cacheable=true)
     public static Boolean getcothanks(String CaregivercreateId) {
         try {
-            if(!string.isBlank(CaregivercreateId)){
+            if(!String.isBlank(CaregivercreateId)){
             // Since the guest user has limited access, the data is returned to them, so user mode is not used.
-            list<BI_PSPB_Lead_Caregiver__c> cg = [
+            list<BI_PSPB_Lead_Caregiver__c> leadCaregiver = [
                 SELECT
                 Id,
                 BI_PSPB_First_Name__c,
@@ -793,14 +800,14 @@ return in lwc biPspbHcpEnrollement
                 WHERE BI_PSPB_Lead__c = :CaregivercreateId
             ];
             // Since the guest user has limited access, the data is returned to them, so user mode is not used.
-            if(!cg.IsEmpty()){
+            if(!leadCaregiver.IsEmpty()){
                 list<Contact> con = [
                     SELECT Id, Name
                     FROM Contact
                     WHERE
-                    FirstName = :cg[0].BI_PSPB_First_Name__c
-                    AND LastName = :cg[0].BI_PSPB_Last_Name__c
-                    AND Email = :cg[0].BI_PSPB_E_mail_ID__c
+                    FirstName = :leadCaregiver[0].BI_PSPB_First_Name__c
+                    AND LastName = :leadCaregiver[0].BI_PSPB_Last_Name__c
+                    AND Email = :leadCaregiver[0].BI_PSPB_E_mail_ID__c
                     LIMIT 1
                 ];
                 if (con.size() == 1) {

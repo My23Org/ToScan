@@ -196,6 +196,7 @@ Program, please complete the form on this page.`;
 	@track selectedName = '';
 	@track isDropdownOpen = false;
 	@track nameregex = /^[a-zA-Z]+$/;
+	@track picklistOrdered2 = [];
 	@track selectedOption = {
 		src: HCP_Entrollment_patient_Avater,
 		name: '',
@@ -247,7 +248,7 @@ Program, please complete the form on this page.`;
 	prescriptionID;
 	consentID;
 	selectedAvatarSrc = HCP_Entrollment_patient_Avater;
-	picklistOrdered2 = [];
+	
 	selectedSearchResult2;
 	hcpIdVariable;
 	picklistOrdered = [];
@@ -673,7 +674,7 @@ Program, please complete the form on this page.`;
 				this.template.querySelector('label[data-field="hc"]').className = 'input-error-label';
 			} else {
 
-				if (!/^[a-zA-Z]+$/.test(this.HCpFields.city)) {
+				if (!/^[a-zA-Z\s]+$/.test(this.HCpFields.city)) {
 					this.RPcityerrorMessage = false;
 					this.RPcityerrorMessagevalid = true;
 					cityField.className = 'textInput-err';
@@ -970,11 +971,11 @@ Program, please complete the form on this page.`;
 				// The error handle with null value throw from apex	
 				.then((result) => {
 					if (result !== null && result.length > 0) {
-						const picklistOrdered2 = result.map((item) => ({
+						this. picklistOrdered2 = result.map((item) => ({
 							label: item.BI_PSPB_License_number__c,
 							value: item.Id
 						}));
-						picklistOrdered2.sort((a, b) => {
+						this.picklistOrdered2.sort((a, b) => {
 							if (a.label < b.label) {
 								return -1;
 							}
@@ -1179,6 +1180,7 @@ provide the caregiver's information as
 well.`;
 	}
 	goToStepThree() {
+		console.log('jj')
 		this.handleClose();
 		getExistingAccounts({ email: this.leadFields.Email })
 			// Null data is checked and AuraHandledException is thrown from the Apex
@@ -1194,7 +1196,7 @@ well.`;
 
 				}
 				else {
-
+                     console.log('isi')
 					if (!this.patientvalidateForm()) {
 						// No need for a return here
 
@@ -2193,22 +2195,21 @@ this page.`;
 			this.addNewHCPSectionClass = 'addNewHcpSection';
 		}
 
-		// this.searchResults2 = this.picklistOrdered2.filter(element => (
-		// 	element?.label !== null && element?.label !== undefined
-		// )).filter((picklistOption2) => (
-		// 	picklistOption2?.label.toString().includes(input)
-
-		// ))
-console.log('data',this.picklistOrdered2)
-		const searchedResult2 = this.picklistOrdered2.filter(element => (
+		this.searchResults2 = this.picklistOrdered2.filter(element => (
 			element?.label !== null && element?.label !== undefined
 		)).filter((picklistOption2) => (
 			picklistOption2?.label.toString().includes(input)
 
 		))
 
-		this.searchresultempty2 = searchedResult2.length === 0 ? true : false
+	this.searchResult2 = this.picklistOrdered2.filter(element => (
+			element?.label != null && element?.label != undefined
+		)).filter((picklistOption2) => (
+			picklistOption2?.label.toString().includes(input)
 
+		))
+
+		this.searchresultempty2 = this.searchResult2.length === 0 ? true : false
 
 		if (this.searchresultempty2 === true) {
 			this.physicianNameInputDisabled = true;
@@ -2216,7 +2217,7 @@ console.log('data',this.picklistOrdered2)
 	}
 	showHcpIdPicklist() {
 
-		if (!this.searchedResult2.length === 0) {
+		if (!this.searchResult2.length === 0) {
 			this.searchResults2 = this.picklistOrdered2.filter(element => {
 				return element?.label !== null && element?.label !== undefined
 			})
@@ -2415,6 +2416,25 @@ console.log('data',this.picklistOrdered2)
 			event.preventDefault();
 		}
 	}
+	handleKeyDown2(event) {
+    // Allow only numbers, backspace, and delete
+    if (!((event.keyCode >= 48 && event.keyCode <= 57) ||  // 0-9
+	    (event.keyCode >= 96 && event.keyCode <= 105) ||
+        event.keyCode === 8 ||  // Backspace
+        event.keyCode === 46 ||  // Delete
+        (event.keyCode >= 37 && event.keyCode <= 40) ||
+        event.keyCode === 9 ||  // Tab
+        (event.shiftKey && event.keyCode === 9)
+    )) {
+        event.preventDefault();
+    }
+    // Prevent input of special characters
+    if (event.key.match(/[^a-zA-Z0-9]/)) {
+        event.preventDefault();
+    }
+}
+
+
 	//This function is used to check for Patient Validation
 	UniqueValidation() {
 		let isValid = true;

@@ -10,9 +10,6 @@
  */
 
 public with sharing class BI_PSP_LetsPersonlise {
-    
-    //A list variable for storing existing assessment response records.
-     private static List<AssessmentQuestionResponse> listOFexistingresponses;
 	//holds the assessment details of the user whose record is in progress status.
 	private static List<Assessment> existingAssessments;
 	//holds a assessment Question record.
@@ -50,7 +47,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 		System.Label.BI_PSP_ExpireDateForQualitative
 	);
 	//List Variable that holds the care giver account.
-	private static Account caregiverAccount;
+	private static List<Account> caregiverAccount;
 	//List Variable that holds the care giver account ID.
 	private static List<Account> caregvrAccountid;
 	//List Variable that holds the patinet Enrollee Record.
@@ -62,7 +59,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 		'PSPB'
 	);
 	//this variable holds the apllication name to ne used in Catch and Throws.
-	private static string applicationName = settings != null
+	public static string applicationName = settings != null
 		? settings.BI_SFCOE_LOG_Application__c
 		: '';
 	//holds the response Value of Questions.
@@ -81,12 +78,12 @@ public with sharing class BI_PSP_LetsPersonlise {
 	private static String assessmentFalied = System.Label.BI_PSP_AssessmentSubFailed;
 	//This label states that the selected response hasnt changed.
 	private static String respnsNotdeltd = System.Label.BI_PSP_RespDelFailed;
-    //This label states the parmeter that holds personalisation status caught with an exception.
-	private static String perstnStatusErr = System.Label.BI_PSP_PersnlatnStatus;
-    //This label states that the logged in user is not in the system.
-	private static String undefinedUser = System.Label.BI_PSP_UndefinedUser;
-    //An integer label that holds the personalisation status.
+    //This label states that the selected response hasnt changed.
+	private static String errorPersnltnStatus = System.Label.BI_PSP_PersnlatnStatus;
+    //this vriable holds the personalisation status.
     private static integer PersonalizeStatus;
+    //variable that holds the account details.
+    private static List<Account> patientAccount;
 	/*
 	* @Description Method for inserting multiple draft records.
 	* This method checks for an existing 'In Progress' assessment for the user.
@@ -109,20 +106,20 @@ public with sharing class BI_PSP_LetsPersonlise {
 
 			String currentUserName = UserInfo.getName();
 			String currentUserEmail = UserInfo.getUserEmail();
-            if(InprogressOrCompelete != null)
+            if(InprogressOrCompelete !=null)
             {
                  PersonalizeStatus = InprogressOrCompelete;
             }
-            else {
-					BI_SFCOE_LOG_Util.logMessage(
+            else{
+                BI_SFCOE_LOG_Util.logMessage(
 						applicationName,
 						BI_PSP_LetsPersonlise.class.toString(),
 						'',
 						System.now(),
-						perstnStatusErr,
+						errorPersnltnStatus,
 						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
-				}
+            }
 
 			if (PersonalizeStatus == 1) {
 				pickListValue = complete;
@@ -134,12 +131,11 @@ public with sharing class BI_PSP_LetsPersonlise {
 				SELECT Id, Name, BI_PSPB_Caregiver__c
 				FROM User
 				WHERE name = :currentUserName
+                And email=:currentUserEmail
 				WITH USER_MODE
 				LIMIT 1
 			];
-            
-            if(currentUser !=null)
-            {
+
 			if (currentUser.BI_PSPB_Caregiver__c == true) {
 				caregiverAccount = [
 					SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
@@ -151,12 +147,14 @@ public with sharing class BI_PSP_LetsPersonlise {
 						AND BI_PSPB_Selected_Patient_ID__c != NULL
 					WITH USER_MODE
 				];
-				if (caregiverAccount !=null ) {
+                 /*A user will only have one Account therefore using list for a single record can be negotiable and there may be a
+            use for this in the future.*/
+				if (!caregiverAccount.isEmpty() ) {
 					caregvrAccountid = [
 						SELECT id, Name, PersonEmail
 						FROM account
 						WHERE
-							id = :caregiverAccount
+							id = :caregiverAccount[0]
 								.BI_PSPB_Selected_Patient_ID__c
 						WITH USER_MODE
 					];
@@ -170,6 +168,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
 				}
+                 /*A user will only have one Account therefore using list for a single record can be negotiable and there may be a
+            use for this in the future.*/
 				if (!caregvrAccountid.isEmpty()) {
 					// USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry
 					//object using Healthcare license.
@@ -183,7 +183,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						System.now(),caregiversSelectedpatienterrmsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
 				}
-
+				   /*A user will only have one CareProgramEnrollee therefore using list for a single record can be negotiable and there may be a
+            use for this in the future.*/
 				if (!enrolleeRecord.isEmpty()) {
 					enrolleeId = enrolleeRecord[0].id;
 				} else {
@@ -192,7 +193,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 					);
 				}
 			} else {
-				List<Account> patientAccount = [
+				patientAccount = [
 					SELECT id, Name, PersonEmail
 					FROM account
 					WHERE
@@ -200,6 +201,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						AND Name = :currentUserName
 					WITH USER_MODE
 				];
+                   /*A user will only have one Account therefore using list for a single record can be negotiable and there may be a
+            use for this in the future.*/
 				if (!patientAccount.isEmpty()) {
 					// USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry
 					//object using Healthcare license.
@@ -218,7 +221,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
 				}
-
+				   /*A user will only have one CareProgramEnrollee therefore using list for a single record can be negotiable and there may be a
+            use for this in the future.*/
 				if (!enrolledPatient.isEmpty()) {
 					enrolleeId = enrolledPatient[0].Id;
 				} else {
@@ -233,17 +237,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 					throw new AuraHandledException(patientEnrolleeerrormsg);
 				}
 			}
-            }
-             else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+
 			// Step 2: Check for an existing 'In Progress' assessment for the user.
 			// USER_MODE is not used because Assessment is an Salesforce Industry object
 			// using Healthcare license.
@@ -276,6 +270,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 			} else {
 				// Create a new assessment if no 'In Progress' assessment exists.
 				createNewAssessment(
+					
 					darftQuestionIds,
 					draftResponseTexts,
 					pickListValue
@@ -320,7 +315,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 				!String.isBlank(existingAssessmentId)) &&
 				(!draftQuestionIds.isEmpty())
 			) {
-                 listOFexistingresponses=[
+				// Retrieve existing responses outside the loop.
+				for (AssessmentQuestionResponse existingResponse : [
 					SELECT
 						Id,
 						Assessment.Id,
@@ -332,19 +328,13 @@ public with sharing class BI_PSP_LetsPersonlise {
 						AssessmentQuestionId IN :draftQuestionIds
 						AND AssessmentId = :existingAssessmentId
 					ORDER BY BI_PSP_ResponseOrder__c ASC
-				];
-				// Retrieve existing responses outside the loop.
-				if(!listOFexistingresponses.isEmpty())
-                {
-                    for (AssessmentQuestionResponse existingResponse : listOFexistingresponses) {
+				]) {
 					existingResponsesMap.put(
 						existingResponse.AssessmentQuestionId,
 						existingResponse
 					);
 					assessmentIdsToUpdate.add(existingResponse.Assessment.Id);
 				}
-                }
-      
 			} else {
 				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSP_LetsPersonlise.class.toString(),'',
 					System.now(),emptyQuestionaresponse,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
@@ -380,7 +370,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 				);
 			}
 			// Update existing responses using Database class method.
-			if (!existingResponsesToUpdate.isEmpty() && !String.isBlank(pickListValue)) {
+			if (!existingResponsesToUpdate.isEmpty()) {
 				Database.SaveResult[] updateResults = Database.update(
 					existingResponsesToUpdate,false
 				);
@@ -407,7 +397,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 			// Update Assessment records outside the loop.
 			// USER_MODE is not used because Assessment is an Salesforce Industry object.
 			//using Healthcare license.
-			if (!assessmentIdsToUpdate.isEmpty()) {
+			if (!assessmentIdsToUpdate.isEmpty() && !String.isBlank(pickListValue)) {
 				assessmentsToUpdate = [
 					SELECT Id
 					FROM Assessment
@@ -418,6 +408,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 					System.now(),emptyAssesment,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 				);
 			}
+            
 			for (Assessment assessmentRecord : assessmentsToUpdate) {
 				assessmentRecord.BI_PSP_StatusForPersonalization__c = pickListValue;
 			}
@@ -484,12 +475,14 @@ public with sharing class BI_PSP_LetsPersonlise {
 	 *@Description Helper method to create a new assessment and associate responses.
 	 * This method creates a new assessment record and associates responses to it.
 	 *
+	 * @param userId              ID of the user performing the operation.
 	 * @param darftQuestionIds    List of draft question IDs.
 	 * @param draftResponseTexts  List of draft response texts.
 	 * @param pickListValue       Picklist value for assessment status.
 	 */
 	public static void createNewAssessment(
-        List<String> darftQuestionIds,
+		
+		List<String> darftQuestionIds,
 		List<String> draftResponseTexts,
 		String pickListValue
 	) {
@@ -669,11 +662,11 @@ public with sharing class BI_PSP_LetsPersonlise {
 				SELECT Id, Name, BI_PSPB_Caregiver__c
 				FROM User
 				WHERE name = :currentUserName
+                And email=:currentUserEmail
 				WITH USER_MODE
 				LIMIT 1
 			]; //'0057Z00000D849fQAB' caregiverid for testing.
-             if(currentUser !=null)
-            {
+			
 			if (currentUser.BI_PSPB_Caregiver__c == true) {
 				caregiverAccount = [
 					SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
@@ -685,12 +678,14 @@ public with sharing class BI_PSP_LetsPersonlise {
 						AND BI_PSPB_Selected_Patient_ID__c != NULL
 					WITH USER_MODE
 				];
-				if (caregiverAccount !=null ) {
+                   /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+				if (!caregiverAccount.isEmpty() ) {
 					caregvrAccountid = [
 						SELECT id, Name, PersonEmail
 						FROM account
 						WHERE
-							id = :caregiverAccount
+							id = :caregiverAccount[0]
 								.BI_PSPB_Selected_Patient_ID__c
 						WITH USER_MODE
 					];
@@ -704,7 +699,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
 				}
-
+				/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
 				if (!caregvrAccountid.isEmpty()) {
 					// USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object.
 					//using Healthcare license
@@ -718,7 +714,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						System.now(),caregiversSelectedpatienterrmsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
 				}
-
+				/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
 				if (!enrolleeRecord.isEmpty()) {
 					enrolleeId = enrolleeRecord[0].id;
 				} else {
@@ -732,7 +729,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 					);
 				}
 			} else {
-				List<Account> patientAccount = [
+				patientAccount = [
 					SELECT id, Name, PersonEmail
 					FROM account
 					WHERE
@@ -740,6 +737,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						AND Name = :currentUserName
 					WITH USER_MODE
 				];
+                /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
 				if (!patientAccount.isEmpty()) {
 					// USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object.
 					//using Healthcare license
@@ -748,6 +747,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						FROM CareProgramEnrollee
 						WHERE AccountID = :patientAccount[0].id
 					];
+                    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
 					if (!enrolledPatient.isEmpty()) {
 						enrolleeId = enrolledPatient[0].id;
 					}
@@ -757,17 +758,6 @@ public with sharing class BI_PSP_LetsPersonlise {
 					);
 				}
 			}
-            }
-             else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
 			// USER_MODE is not used because AssessmentQuestionResponse is an Salesforce Industry object.
 			//using Healthcare license
 			if (idOfRes != null && !String.isBlank(idOfRes)) {

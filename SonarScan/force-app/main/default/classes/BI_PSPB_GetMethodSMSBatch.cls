@@ -71,7 +71,7 @@ public class BI_PSPB_GetMethodSMSBatch implements Database.Batchable<sObject>, D
 		try {
 			String statusqueued = BI_PSPB_constantsClass.queued;
 			String accessToken = BI_PSPB_GetAccessToken.getAccessToken();
-			if (String.isNotBlank(accessToken)) {
+			if (!String.isBlank(accessToken)) {
 				List<BI_PSPB_OmnichannelLog__c> logsToUpdate = new List<BI_PSPB_OmnichannelLog__c>();
 				// Declare a list to store sms log record Ids for update
 				List<Id> smsLogsIdsToUpdate = new List<Id>();
@@ -190,7 +190,10 @@ public class BI_PSPB_GetMethodSMSBatch implements Database.Batchable<sObject>, D
 	 */
 	public static void updatesmsLogs(List<Id> logIds, String smsBodyrespose) {
 		try {
-			if (!logIds.isEmpty() && !String.isBlank(smsBodyrespose)) {
+			if (
+                !logIds.isEmpty() && 
+                !String.isBlank(smsBodyrespose)
+            ) {
 				List<BI_PSPB_OmnichannelLog__c> smsLogsToUpdate = new List<BI_PSPB_OmnichannelLog__c>();
 				// Retrieve the sms log records using the provided Ids
 				smsLogsToUpdate = [

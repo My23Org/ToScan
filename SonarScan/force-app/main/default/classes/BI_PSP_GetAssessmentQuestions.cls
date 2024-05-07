@@ -13,8 +13,6 @@
 */
 
 public with sharing class BI_PSP_GetAssessmentQuestions {
-    //This label states that the logged in user is not in the system.
-	private static String undefinedUser = System.Label.BI_PSP_UndefinedUser;
     //this list varibale holds the CareProgramEnrollee  record details
     private static List<CareProgramEnrollee> cpelist;
     //This variable holds a label that shows error when there is no care program enrollee record.
@@ -68,16 +66,16 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
     //variable that holds the Assessment Questions of deifferent Categories.
     private static List<AssessmentQuestion> assessmentQuestions;
     //variable that holds the care giver account details
-    private static Account caregiverAccount;
+    private static list<Account> caregiverAccount;
     //variable that holds the care givers selected patient account details.
-    private static Account caregiversPatient;
+    private static List<Account> caregiversPatient;
     /*variable that holds the information of care program enrollee record related to the selected patient.
      Account details*/
-    private static CareProgramEnrollee selectedPatientEnrollee;
+    private static List<CareProgramEnrollee> selectedPatientEnrollee;
     //variable that holds the account information of the patient.
-    private static Account patientAccount;
+    private static List<Account> patientAccount;
     //holds the enrolled patient record details.
-    private static CareProgramEnrollee enrolledPatient;
+    private static List<CareProgramEnrollee> enrolledPatient;
     //holds a list of AssessmentQuestionResponse  records.
     private static List<AssessmentQuestionResponse> liAssessRespon;
     /**
@@ -177,6 +175,7 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
         try {
             //care give access code
             String currentUserName = UserInfo.getName();
+            String currentUserEmail = UserInfo.getUserEmail();
 
             // Query for the user's Id based on the name
             //We are getting custom field from User Object. Hence we have to use SOQL
@@ -184,13 +183,12 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
 
-            String currentUserEmail = UserInfo.getUserEmail();
-             if(currentUser !=null)
-            {
+           
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 caregiverAccount = [
                     SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
@@ -202,28 +200,32 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-                if (caregiverAccount !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccount.isEmpty()) {
                     caregiversPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiverAccount
+                            Id = :caregiverAccount[0]
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
-
-                    if (caregiversPatient !=null) {
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                    if (!caregiversPatient.isEmpty()) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedPatientEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :caregiversPatient.Id
+                            WHERE AccountID = :caregiversPatient[0].Id
                         ];
-
-                        if (selectedPatientEnrollee !=null) {
-                            enrolleeId = selectedPatientEnrollee.Id;
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                        if (!selectedPatientEnrollee.isEmpty()) {
+                            enrolleeId = selectedPatientEnrollee[0].Id;
                         }
                     }
                 } else {
@@ -245,17 +247,17 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (patientAccount !=null) {
+                if (!patientAccount.isEmpty()) {
                     /* USER_MODE is not used because AssessmentQuestion is an Salesforce Industry object
                      using Healthcare license*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patientAccount.Id
+                        WHERE AccountID = :patientAccount[0].Id
                     ];
 
-                    if (enrolledPatient !=null) {
-                        enrolleeId = enrolledPatient.Id;
+                    if (!enrolledPatient.isEmpty()) {
+                        enrolleeId = enrolledPatient[0].Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -268,17 +270,6 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                     );
                 }
             }
-            }
-             else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_GetAssessmentQuestions.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
             //care give access code
             /* USER_MODE is not used because AssessmentQuestion is an Salesforce Industry object
              using Healthcare license*/
@@ -480,6 +471,7 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
             String isunassigned = '';
             //care give access code
             String currentUserName = UserInfo.getName();
+            String currentUserEmail = UserInfo.getUserEmail();
 
             // Query for the user's Id based on the name
             //We are getting custom field from User Object. Hence we have to use SOQL
@@ -487,13 +479,11 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
 
-            String currentUserEmail = UserInfo.getUserEmail();
-			 if(currentUser !=null)
-            {
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 caregiverAccount = [
                     SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
@@ -505,28 +495,32 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-                if (caregiverAccount !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccount.isEmpty()) {
                     caregiversPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiverAccount
+                            Id = :caregiverAccount[0]
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
-
-                    if (caregiversPatient !=null) {
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                    if (!caregiversPatient.isEmpty()) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         selectedPatientEnrollee = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :caregiversPatient.Id
+                            WHERE AccountID = :caregiversPatient[0].Id
                         ];
-
-                        if (selectedPatientEnrollee !=null) {
-                            enrolleeId = selectedPatientEnrollee.Id;
+				 /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+                 can be negotiable and there may be a use for this in the future.*/
+                        if (!selectedPatientEnrollee.isEmpty()) {
+                            enrolleeId = selectedPatientEnrollee[0].Id;
                         }
                     }
                 } else {
@@ -548,14 +542,15 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-
+				 /*A user will only have one Account therefore using list for a single record 
+                 can be negotiable and there may be a use for this in the future.*/
                 /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                  using Healthcare license*/
-                if (patientAccount !=null) {
+                if (!patientAccount.isEmpty()) {
                     enrolledPatient = [
                         SELECT id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patientAccount.id
+                        WHERE AccountID = :patientAccount[0].id
                     ];
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -567,8 +562,10 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-                if (enrolledPatient !=null) {
-                    enrolleeId = enrolledPatient.id;
+                 /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+                 can be negotiable and there may be a use for this in the future.*/
+                if (!enrolledPatient.isEmpty()) {
+                    enrolleeId = enrolledPatient[0].id;
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
                         applicationName,
@@ -580,17 +577,6 @@ public with sharing class BI_PSP_GetAssessmentQuestions {
                     );
                 }
             }
-            }
-             else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_GetAssessmentQuestions.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
             /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
              using Healthcare license*/
             if (enrolleeId != null && !String.isBlank(enrolleeId)) {

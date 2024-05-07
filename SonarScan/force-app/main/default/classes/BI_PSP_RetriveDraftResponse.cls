@@ -79,6 +79,7 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
@@ -92,7 +93,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccount.isEmpty()) {
                     // Retrieve the user's account information
                     Account firstAccount = patientAccount[0];
@@ -103,7 +105,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         FROM CareProgramEnrollee
                         WHERE AccountID = :firstAccount.Id
                     ];
-
+				/*A user will only have one CareProgramEnrollee therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
                     if (!enrolledPatient.isEmpty()) {
                         enrolleeId = enrolledPatient[0].Id;
                     }
@@ -130,7 +133,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-
+				/*A user will only have one Account therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
                 if (!caregiversPatientAcc.isEmpty()) {
                     selectedPatientAcc = [
                         SELECT Id, Name, PersonEmail
@@ -141,7 +145,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         WITH USER_MODE
                         LIMIT 1
                     ];
-
+					/*A user will only have one Account therefore using list for a single record 
+                    can be negotiable and there may be a use for this in the future.*/
                     if (!selectedPatientAcc.isEmpty()) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
@@ -150,7 +155,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                             FROM CareProgramEnrollee
                             WHERE AccountID = :selectedPatientAcc[0].Id
                         ];
-
+					/*A user will only have one CareProgramEnrollee therefore using list for a single record 
+                    can be negotiable and there may be a use for this in the future.*/
                         if (!selectedPatientId.isEmpty()) {
                             enrolleeId = selectedPatientId[0].Id;
                         }
@@ -235,6 +241,7 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
@@ -248,7 +255,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccount.isEmpty()) {
                     // Retrieve the user's account information
                     Account firstAccount = patientAccount[0];
@@ -259,7 +267,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         FROM CareProgramEnrollee
                         WHERE AccountID = :firstAccount.Id
                     ];
-
+				/*A user will only have one CareProgramEnrollee therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
                     if (!enrolledPatient.isEmpty()) {
                         enrolleeId = enrolledPatient[0].Id;
                     }
@@ -286,7 +295,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiversPatientAcc.isEmpty()) {
                     selectedPatientAcc = [
                         SELECT Id, Name, PersonEmail
@@ -297,7 +307,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         WITH USER_MODE
                         LIMIT 1
                     ];
-
+				/*A user will only have one Account therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
                     if (!selectedPatientAcc.isEmpty()) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
@@ -306,7 +317,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                             FROM CareProgramEnrollee
                             WHERE AccountID = :selectedPatientAcc[0].Id
                         ];
-
+					/*A user will only have one CareProgramEnrollee therefore using list for a single record 
+                    can be negotiable and there may be a use for this in the future.*/
                         if (!selectedPatientId.isEmpty()) {
                             enrolleeId = selectedPatientId[0].Id;
                         }
@@ -388,17 +400,18 @@ public with sharing class BI_PSP_RetriveDraftResponse {
         try {
             //care give access code
             String currentUserName = UserInfo.getName();
-
+			String currentUserEmail = UserInfo.getUserEmail();
             // Query for the user's Id based on the name
             //We are getting custom field from User Object. Hence we have to use SOQL
             User currentUser = [
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ]; //'0057Z00000D849fQAB' caregiverid for testing
-            String currentUserEmail = UserInfo.getUserEmail();
+            
 
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 caregiversPatientAcc = [
@@ -411,6 +424,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiversPatientAcc.isEmpty()) {
                     selectedPatientAcc = [
                         SELECT id, Name, PersonEmail
@@ -430,6 +445,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
+                /*A user will only have one Account therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
                 /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                  using Healthcare license*/
                 if (!selectedPatientAcc.isEmpty()) {
@@ -448,6 +465,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
+                /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
                 if (!selectedPatientId.isEmpty()) {
                     enrolleeId = selectedPatientId[0].id;
                 } else {
@@ -469,6 +488,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
+                /*A user will only have one Account therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccount.isEmpty()) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license.*/
@@ -487,6 +508,8 @@ public with sharing class BI_PSP_RetriveDraftResponse {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
+                /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
                 if (!enrolledPatient.isEmpty()) {
                     enrolleeId = enrolledPatient[0].id;
                 } else {

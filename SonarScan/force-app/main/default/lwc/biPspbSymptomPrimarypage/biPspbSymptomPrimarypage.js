@@ -40,6 +40,11 @@ import unAssignedUrlNavi from '@salesforce/label/c.BI_PSPB_UnassignedSiteURL';
 import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
 import symptommainpage from '@salesforce/label/c.BI_PSPB_symptomtrackermainpage';
+import replaceSadL from '@salesforce/resourceUrl/BI_PSP_Sad';
+import replaceHapy from '@salesforce/resourceUrl/BI_PSP_HappyColouredReal';
+import replaceJoyful from '@salesforce/resourceUrl/BI_PSP_Joyful';
+import replaceSpeechless from '@salesforce/resourceUrl/BI_PSP_Speechless';
+import replaceSWorried from '@salesforce/resourceUrl/BI_PSP_Worried';
 export default class symptomPrimarypage extends NavigationMixin(LightningElement) {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
 	//@api variable declaration
@@ -74,6 +79,20 @@ export default class symptomPrimarypage extends NavigationMixin(LightningElement
 	Vectorimg = Vector;
 	userId = Id;
 	Calenderimg = Calender;
+	Sadimage = replaceSadL;
+	Speechless=replaceSpeechless;
+	worried=replaceSWorried;
+	happy=replaceHapy;
+	joyfull=replaceJoyful;
+
+
+
+
+	Sadimagecolor =  replaceSadL;
+	Speechlesscolor = replaceSpeechless;
+	worriedcolor = replaceSWorried;
+	happycolor =   replaceHapy;
+	joyfullcolor = replaceJoyful;
 	currentDate
 	// Process retrieved allergy intolerance data, updating UI and properties, particularly for fatigue symptoms detection.
 	@wire(getAllergyIntolerancedata, { symptomTrackerId: '$symptomrecord' })
@@ -94,6 +113,21 @@ export default class symptomPrimarypage extends NavigationMixin(LightningElement
 				for (let record of data) {
 					this.moodreaction = record.BI_PSP_Mood__c;
 					console.log(this.moodreaction,'this.moodreaction',record)
+						  if (this.moodreaction === 'sad') {
+                          this.Sadimage = this.Sadimagecolor;
+	                      this.Speechless = '';
+					      this.worried= '';
+					      this.happy='';
+					      this.joyfull=''
+				
+                }
+				if(this.moodreaction === 'happy'){
+				          this.Sadimage ='';
+	                      this.Speechless = '';
+					      this.worried= '';
+					      this.happy = this.happycolor;
+					      this.joyfull=''
+				}
 				}
 			} catch (err) {
 				this.showToast(errormessage, err.message, errorvariant);

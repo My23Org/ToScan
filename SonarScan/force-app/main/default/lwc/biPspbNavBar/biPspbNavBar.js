@@ -713,7 +713,7 @@ export default class BiPspbNavBar extends LightningElement {
 		window.location.assign(this.baseUrl + this.siteUrlBranded + this.CAREGIVERNOTIFICATIONURL);
 	}
 	openCarNotSettings1() {
-		window.location.assign(this.baseUrl + + this.siteUrlBranded + this.MESSAGECENTERURL);
+		window.location.assign(this.baseUrl + this.siteUrlBranded + this.MESSAGECENTERURL);
 	}
 	/*--Caregiver Profile Links Ends--*/
 

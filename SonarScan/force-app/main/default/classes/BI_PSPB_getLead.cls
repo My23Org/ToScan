@@ -1,11 +1,11 @@
 /*
- * @description We are using without sharing because of the Lead records are created by guestuser 
-				profile the Enrollment Form.
- * History
- * Version	Author			Date		Detail		Description
- * 59		Niyas		06-01-2024		Created		Initial Version
- * 59		Niyas		18-04-2024		Updated		Code review changes
- */
+@description We are using without sharing because of the Lead records are created by guestuser 
+profile the Enrollment Form.
+History
+Version	Author			Date		Detail		Description
+59		Niyas		06-01-2024		Created		Initial Version
+59		Niyas		18-04-2024		Updated		Code review changes
+*/
 public without sharing class BI_PSPB_getLead {
 	private static BI_SFCOE_LOG_App_Settings__c settings = BI_SFCOE_LOG_App_Settings__c.getValues(
 		'PSPB'
@@ -14,11 +14,11 @@ public without sharing class BI_PSPB_getLead {
 		? settings.BI_SFCOE_LOG_Application__c
 		: '';
 	private static String BI_PSPB_Physician = System.Label.BI_PSPB_PhysicianRecordtype;
-	/**
-	 * @description Retrieves a Lead Caregiver record based on the Lead Id.
-	 * @param leadId The Id of the Lead record.
-	 * @return The Lead Caregiver record.
-	 */
+	/*
+	@description Retrieves a Lead Caregiver record based on the Lead Id.
+	@param leadId The Id of the Lead record.
+	@return The Lead Caregiver record.
+	*/
 	@AuraEnabled(cacheable=true)
 	public static BI_PSPB_Lead_Caregiver__c getEnrolleeCaregiverId(string leadId) {
 		if (String.isBlank(leadId)) {
@@ -66,13 +66,13 @@ public without sharing class BI_PSPB_getLead {
 			);
 		}
 	}
-	/**
-	 *@description Retrieves a Lead record based on the first name, last name, and date of birth.
-	 * @param firstName The first name of the Lead.
-	 * @param lastName The last name of the Lead.
-	 * @param dob The date of birth of the Lead.
-	 * @return The Lead record matching the criteria, or null if not found.
-	 */
+	/*
+	@description Retrieves a Lead record based on the first name, last name, and date of birth.
+	@param firstName The first name of the Lead.
+	@param lastName The last name of the Lead.
+	@param dob The date of birth of the Lead.
+	@return The Lead record matching the criteria, or null if not found.
+	*/
 	@AuraEnabled(cacheable=true)
 	public static Lead leadId(String firstName, String lastName, Date dob) {
 		if (
@@ -123,11 +123,11 @@ public without sharing class BI_PSPB_getLead {
 			);
 		}
 	}
-	/**
-	 *@description Retrieves a Lead record based on the Lead Id.
-	 * @param leadId The Id of the Lead record to retrieve.
-	 * @return The Lead record matching the provided Lead Id, or null if not found.
-	 */
+	/*
+	@description Retrieves a Lead record based on the Lead Id.
+	@param leadId The Id of the Lead record to retrieve.
+	@return The Lead record matching the provided Lead Id, or null if not found.
+	*/
 	@AuraEnabled(cacheable=true)
 	public static Lead getLeadId(String leadId) {
 		if (String.isBlank(leadId)) {
@@ -162,11 +162,11 @@ public without sharing class BI_PSPB_getLead {
 			);
 		}
 	}
-	/**
-	 *@description Retrieves a Lead Prescription record based on the Lead Id.
-	 * @param leadId The Id of the Lead associated with the Lead Prescription record to retrieve.
-	 * @return The Lead Prescription record matching the provided Lead Id, or null if not found.
-	 */
+	/*
+	@description Retrieves a Lead Prescription record based on the Lead Id.
+	@param leadId The Id of the Lead associated with the Lead Prescription record to retrieve.
+	@return The Lead Prescription record matching the provided Lead Id, or null if not found.
+	*/
 	@AuraEnabled(cacheable=true)
 	public static BI_PSPB_Lead_Prescription__c getLeadPresId(String leadId) {
 		if (String.isBlank(leadId)) {
@@ -199,12 +199,12 @@ public without sharing class BI_PSPB_getLead {
 			);
 		}
 	}
-	/**
-	 * @description Updates the Lead Caregiver record with the preferred method of communication and inserts a new Lead Consent record.
-	 * @param leadId The Id of the Lead Caregiver to update.
-	 * @param PreferredMethodofCommunication The preferred method of communication for the Lead Caregiver.
-	 * @param patientorcaregiver Indicates whether the consent is for the patient or caregiver.
-	 */
+	/*
+	@description Updates the Lead Caregiver record with the preferred method of communication and inserts a new Lead Consent record.
+	@param leadId The Id of the Lead Caregiver to update.
+	@param PreferredMethodofCommunication The preferred method of communication for the Lead Caregiver.
+	@param patientorcaregiver Indicates whether the consent is for the patient or caregiver.
+	*/
 
 	@AuraEnabled(cacheable=false)
 	public static void updateLead(
@@ -306,11 +306,11 @@ public without sharing class BI_PSPB_getLead {
 		}
 	}
 
-	/**
-	 *  @description Inserts a new Lead Consent record or updates an existing one.
-	 * @param leadId The Id of the Lead associated with the consent.
-	 * @param consentCategory The category of consent.
-	 */
+	/*
+	@description Inserts a new Lead Consent record or updates an existing one.
+	@param leadId The Id of the Lead associated with the consent.
+	@param consentCategory The category of consent.
+	*/
 	@AuraEnabled(cacheable=false)
 	public static void insertupdateLeadConsent(
 		String leadId,
@@ -358,10 +358,10 @@ public without sharing class BI_PSPB_getLead {
 			);
 		}
 	}
-	/**
-	 * @description Updates the Lead record and inserts a Lead Consent record.
-	 * @param LeadWrapper A Wrapper class containing updated values for the Lead record.
-	 */
+	/*
+	@description Updates the Lead record and inserts a Lead Consent record.
+	@param LeadWrapper A Wrapper class containing updated values for the Lead record.
+	*/
 	@AuraEnabled(cacheable=false)
 	public static void updateLeadRecord(LeadWrapper leadWrapper) {
 		//We are not checking LeadWrapper because all fields are mandatory in UI.
@@ -459,10 +459,10 @@ public without sharing class BI_PSPB_getLead {
 			);
 		}
 	}
-	/**
-	 *  @description Updates the Lead record with caregiver information and inserts a Lead Consent record.
-	 * @param LeadWrapper A Wrapper class containing updated values for the Lead record.
-	 */
+	/*
+	@description Updates the Lead record with caregiver information and inserts a Lead Consent record.
+	@param LeadWrapper A Wrapper class containing updated values for the Lead record.
+	*/
 
 	@AuraEnabled
 	public static void updateLeadCareRecord(LeadWrapper leadWrapper) {
@@ -529,14 +529,14 @@ public without sharing class BI_PSPB_getLead {
 		}
 	}
 
-	/**
-	 *  @description Creates a new Contact record for a healthcare professional (HCP).
-	 * @param firstName The first name of the HCP.
-	 * @param lastName The last name of the HCP.
-	 * @param phone The phone number of the HCP.
-	 * @param email The email address of the HCP.
-	 * @return The Id of the newly created Contact record.
-	 */
+	/*
+	@description Creates a new Contact record for a healthcare professional (HCP).
+	@param firstName The first name of the HCP.
+	@param lastName The last name of the HCP.
+	@param phone The phone number of the HCP.
+	@param email The email address of the HCP.
+	@return The Id of the newly created Contact record.
+	*/
 	@AuraEnabled
 	public static Id hcpCreate(
 		String firstName,
@@ -617,8 +617,8 @@ public without sharing class BI_PSPB_getLead {
 			);
 		}
 	}
-	/**
-	 * @description Retrieves the Contact record associated with the specified access code.
+	/*
+	@description Retrieves the Contact record associated with the specified access code.
 	 * @param accessCode The access code used to retrieve the Contact record.
 	 * @return The Contact record matching the access code, or null if not found.
 	 */

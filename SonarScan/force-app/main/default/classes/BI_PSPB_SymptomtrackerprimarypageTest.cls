@@ -26,8 +26,8 @@ that the method returns the correct caregiver account.
 		testUserPatient = new User(
 			FirstName = 'TestUser',
 			LastName = 'Patient',
-			Email = 'testuser12@example.com',
-			Username = 'testuser12@example.com',
+			Email = 'testuser1222@example.com',
+			Username = 'testuser1222@example.com',
 			BI_PSPB_Caregiver__c = false,
 			Alias = 'tuser1',
 			EmailEncodingKey = 'UTF-8',

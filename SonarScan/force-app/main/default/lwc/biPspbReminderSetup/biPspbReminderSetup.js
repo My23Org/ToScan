@@ -7,7 +7,7 @@ import saveReminderDates from '@salesforce/apex/BI_PSPB_TreatmentReminder.create
 import getEnrolle from '@salesforce/apex/BI_PSP_ChallengeCtrl.getEnrolle';
 import generateGoogleCalendarURL from '@salesforce/apex/BI_PSPB_ReminderCalendar.generateGoogleCalendarURL';
 import generateOutlookCalendarURL from '@salesforce/apex/BI_PSPB_ReminderCalendar.generateOutlookCalendarURL';
-import getLoggedInUserAccounts from '@salesforce/apex/BI_PSPB_avatarCtrl.getLoggedInUserAccounts';
+import getLoggedInUserAccounts from '@salesforce/apex/BI_PSPB_avatarCtrl.getLoggedInUserAccount';
 // To import current user ID
 import Id from '@salesforce/user/Id';
 // To import Static Resources

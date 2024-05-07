@@ -33,7 +33,7 @@ public without sharing class BI_PSPB_exuserGetAccid {
 	private static String username = UserInfo.getName();
 	private static String useremail = UserInfo.getUserEmail();
 	/**
-*  @description :Retrieves caregiver details based on the current user's ID
+* @description :Retrieves caregiver details based on the current user's ID
 				 return in lwc biPspbCaregiverProfile.Enrolee caregiver contains a lookup field to a Care Program Enrollee, 
 				 which is a Health Cloud object; hence, we cannot utilize user mode here.
 * @param        :none.

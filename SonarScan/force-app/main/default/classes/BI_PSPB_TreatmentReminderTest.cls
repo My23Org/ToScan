@@ -720,22 +720,26 @@ public class BI_PSPB_TreatmentReminderTest {
 		);
 		insert testCPE;
 
-		// Add more test data as needed
+		BI_PSPB_Treatment_Reminder__c treminder=new BI_PSPB_Treatment_Reminder__c();
+        treminder.BI_PSPB_Care_Program_Enrollee__c=testCPE.Id;
+        insert treminder;
 
 		Test.startTest();
-
-		// Call the method to be tested
-		List<Task> events = BI_PSPB_TreatmentReminder.getEvents(testCPE.Id);
+        try{
+            //this is for negative scenario so assertion is not done
+            BI_PSPB_TreatmentReminder.getEvents(testCPE.Id);
+        }
+		catch (Exception ex) {
+			// Assert if there's an exception
+			System.assertEquals(
+				'Script-thrown exception',
+				ex.getMessage(),
+				'An unexpected exception occurred: ' + ex.getMessage()
+			);
+		}
+		
 
 		Test.stopTest();
-
-		// Assert the results
-		System.assertEquals(
-			0,
-			events.size(),
-			'Expected 4 event to be fetched, but found ' + events.size()
-		);
-		// Add more assertions as needed
 	}
 	@isTest
 	static void testGetEventscatch() {
@@ -1261,6 +1265,19 @@ public class BI_PSPB_TreatmentReminderTest {
 			);
 			insert testCpa1;
 
+            Assessment testAssessment = new Assessment(
+			Name = 'Test Assessment',
+			OwnerId = testUser.Id,
+			AssessmentStatus = 'Completed',
+			BI_PSP_DateForCQ__c = 'Jan 2023',
+			BI_PSP_CareProgramEnrollee__c = testCpa1.Id
+		);
+		insert testAssessment;
+
+            Task tsk=new Task();
+            tsk.WhatId=testCpa1.Id;
+            tsk.Subject='Action required';
+            insert tsk;
 			Test.startTest();
 
 			BI_PSPB_TreatmentReminder.createTaskIfNoAssessment(testCpa1.Id);

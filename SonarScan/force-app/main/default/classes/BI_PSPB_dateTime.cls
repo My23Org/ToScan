@@ -14,8 +14,7 @@ public with sharing class BI_PSPB_dateTime implements Schedulable {
 		'PSPB'
 	);
 	//A variable That holds the name of our application to be used in catch exception handler.
-	private static String applicationName = settings != null
-		? settings.BI_SFCOE_LOG_Application__c
+	private static String applicationName = settings != null? settings.BI_SFCOE_LOG_Application__c
 		: '';
 	/**
 	 * @description  Executes the scheduled job to insert a record containing the current date into the BI_PSPB_DateTimeMention__c object.

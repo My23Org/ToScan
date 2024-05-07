@@ -9,8 +9,6 @@
 * 1.2		Abinsha		04-Apr-2024		Updated			Catch log added.
 */
 public with sharing class BI_PSP_QualitativeSatisfactions {
-    //This label states that the logged in user is not in the system.
-	private static String undefinedUser = System.Label.BI_PSP_UndefinedUser;
     //custom label for displaying an error message if the patinece enrollement details are null.
     private static String emptyEnrollerecrd = System.Label.BI_PSP_EmptyCareProgramEnrl;
     //used to store the care program enrollee id of the patient.
@@ -32,15 +30,15 @@ public with sharing class BI_PSP_QualitativeSatisfactions {
         ? settings.BI_SFCOE_LOG_Application__c
         : '';
     //this vriable holds the account record of the patient.
-    private static Account patientAccount;
+    private static List<Account> patientAccount;
     //this vriable holds the CareProgramEnrollee record of the patient.
-    private static CareProgramEnrollee enrolledPatient;
+    private static List<CareProgramEnrollee> enrolledPatient;
     //this vriable holds the record information of selected patient.
-    private static Account caregiverAccount;
+    private static list<Account> caregiverAccount;
     //this vriable holds the record information of selected patient Account.
-    private static Account selectedPatientAcc;
+    private static List<Account> selectedPatientAcc;
     //this vriable holds the record information of enrolled selected patients Account.
-    private static CareProgramEnrollee enrolledSelectdPatient;
+    private static List<CareProgramEnrollee> enrolledSelectdPatient;
     //Custom label for care givers patient.
     private static String caregiversPatientaccountErr = System.Label.BI_PSP_CaregiversPatient;
     //custom label that displays an error message when there is no account records for the selected patient.
@@ -79,11 +77,11 @@ public with sharing class BI_PSP_QualitativeSatisfactions {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
-			  if(currentUser !=null)
-            {
+
             if (currentUser.BI_PSPB_Caregiver__c == false) {
                 patientAccount = [
                     SELECT id, Name, PersonEmail
@@ -93,17 +91,20 @@ public with sharing class BI_PSP_QualitativeSatisfactions {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (patientAccount !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!patientAccount.isEmpty()) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patientAccount.Id
+                        WHERE AccountID = :patientAccount[0].Id
                     ];
-
-                    if (enrolledPatient !=null) {
-                        enrolleeId = enrolledPatient.Id;
+		    /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                    if (!enrolledPatient.isEmpty()) {
+                        enrolleeId = enrolledPatient[0].Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -126,29 +127,32 @@ public with sharing class BI_PSP_QualitativeSatisfactions {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-
-                if (caregiverAccount !=null) {
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccount.isEmpty()) {
                     selectedPatientAcc = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiverAccount
+                            Id = :caregiverAccount[0]
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
-
-                    if (selectedPatientAcc !=null) {
+				/*A user will only have one Account therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
+                    if (!selectedPatientAcc.isEmpty()) {
                         /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                          using Healthcare license*/
                         enrolledSelectdPatient = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatientAcc.Id
+                            WHERE AccountID = :selectedPatientAcc[0].Id
                         ];
-
-                        if (enrolledSelectdPatient !=null) {
-                            enrolleeId = enrolledSelectdPatient.Id;
+			   /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+               can be negotiable and there may be a use for this in the future.*/
+                        if (!enrolledSelectdPatient.isEmpty()) {
+                            enrolleeId = enrolledSelectdPatient[0].Id;
                         }
                     } else {
                         BI_SFCOE_LOG_Util.logMessage(
@@ -162,17 +166,6 @@ public with sharing class BI_PSP_QualitativeSatisfactions {
                     throw new AuraHandledException(errorForDates);
                 }
             }
-            }
-             else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_QualitativeSatisfactions.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
             // Query CareProgramEnrollee records
             /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
              using Healthcare license*/

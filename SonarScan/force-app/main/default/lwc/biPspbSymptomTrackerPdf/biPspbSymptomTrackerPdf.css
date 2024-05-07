@@ -59,13 +59,23 @@
 	display: grid;
 	grid-template-columns: auto auto;
 	gap: 10px;
+	    margin-left: 55%;
 }
-
+.grid-font{
+	    font-size: 16px;
+    font-family: 'Eina-bold';
+}
 .grid-containerPatient {
 	display: grid;
 	grid-template-columns: auto;
 	gap: 5px;
-	margin-left: 65%;
+	margin-left: 0%;
+}
+.grid-containerPatient1 {
+	display: grid;
+	grid-template-columns: auto;
+	gap: 5px;
+	margin-left: 10%;
 }
 
 .paraStyle {
@@ -142,7 +152,7 @@
 .lineimg {
 	height: 320px;
 	position: relative;
-	top: 121px;
+top: 233px;
 }
 
 .chart-image {

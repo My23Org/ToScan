@@ -176,6 +176,7 @@ getbrandedaction(acc)
 		actiontask({ enroleeId: acc, notificatonType: BI_PSPB_Action_required })
 			.then(result => 
 			{
+				console.log('dtaa',result)
 				// Null data is checked and AuraHandledException is thrown from the Apex
 				if (result) 
 				{
@@ -551,7 +552,7 @@ actionfunc(cate)
 {
 	try 
 	{
-		actiontask({ enroleeId: this.accname, category: cate })
+		actiontask({ enroleeId: this.accname,notificatonType: BI_PSPB_Action_required, category: cate })
 			.then(result => 
 			{
 				if (result && result.length > 3) 

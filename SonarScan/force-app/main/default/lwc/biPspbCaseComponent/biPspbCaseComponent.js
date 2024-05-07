@@ -7,7 +7,6 @@ import { NavigationMixin } from 'lightning/navigation';
 // To import Apex Classes
 import getCases from '@salesforce/apex/BI_PSPB_CaseSupport.getCases';
 import getCaseDetails from '@salesforce/apex/BI_PSPB_CaseSupport.caserecord';
-import userid from '@salesforce/apex/BI_PSPB_CaseSupport.getname';
 import getCaseImageURL from '@salesforce/apex/BI_PSPB_CaseSupport.getBase64Image';
 import getEnrolle from '@salesforce/apex/BI_PSP_ChallengeCtrl.getEnrolle';
 // To import current user id
@@ -105,22 +104,19 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	userId = Id;
 	accname = '';
 	// get method to retrieve the date format
-	get formattedCases() 
-	{
+	get formattedCases() {
 		return this.cases.map((flitercase) => ({
 			...flitercase,
 			FormattedDate: this.formatDate(flitercase.CreatedDate)
 		}));
 	}
 	// get method to retrieve the image	
-	get hasImage() 
-	{
+	get hasImage() {
 		return this.caseImageURL;
 	}
 
 	// To retireve current URL, based on that navigation will be set
-	connectedCallback() 
-	{
+	connectedCallback() {
 		try {
 			loadStyle(this, sldsclass);
 			const currentURL = window.location.href;
@@ -135,74 +131,58 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 					component.toLowerCase()
 				)
 			);
-			if (desiredComponent.toLowerCase() === brandedurl.toLowerCase()) 
-			{
+			if (desiredComponent.toLowerCase() === brandedurl.toLowerCase()) {
 				this.urlq = brandedurlNavi;
-			} 
-			else 
-			{
+			}
+			else {
 				this.urlq = unassignedurlNavi;
 			}
 			this.count = localStorage.getItem('count');
-			if (this.count !== 2) 
-			{
+			if (this.count !== 2) {
 				localStorage.setItem('count', 2);
-			} 
-			else 
-			{
+			}
+			else {
 				localStorage.setItem('count', 1);
 			}
-		} 
-		catch (error) 
-		{
+		}
+		catch (error) {
 			this.showToast(errormessage, error.message, errorvariant); //Error caught when current URL is not fetched
 		}
 	}
 
 	// To check any case record is available for the current user
 	@wire(getEnrolle, { userId: '$userId' })
-	wiredGetEnrolle({ error, data }) 
-	{
+	wiredGetEnrolle({ error, data }) {
 		// Null data is checked and AuraHandledException is thrown from the Apex
-		if (data) 
-		{
-			try 
-			{
-				if (data[0].patientEnrolle) 
-				{
+		if (data) {
+			try {
+				if (data[0].patientEnrolle) {
 					this.accname = data[0].patientEnrolle.Id;
 					this.loadCases(this.typeFilter, this.statusFilter);
-				} 
-				else if (data[0].error) 
-				{
+				}
+				else if (data[0].error) {
 					this.showError = true;
 					this.errorMessage = data[0].error;
 					this.showToast(errormessage, error.message, errorvariant);
 				}
-			} 
-			catch (err) 
-			{
+			}
+			catch (err) {
 				this.showToast(errormessage, err.message, errorvariant); //Error caught when data fetched is invalid
 			}
-		} 
-		else if (error) 
-		{
+		}
+		else if (error) {
 			this.showToast(errormessage, error.body.message, errorvariant); //Error caught when data is not fetched
 		}
 	}
 	// To retrieve images from case records
 	@wire(getCaseImageURL, { caseId: '$caseId' })
-	wiredGetCaseImageURL({ error, data }) 
-	{
+	wiredGetCaseImageURL({ error, data }) {
 		// Null data is checked and AuraHandledException is thrown from the Apex
-		if (data) 
-		{
-			try 
-			{
+		if (data) {
+			try {
 				this.caseImageURL = data;
 			}
-			catch (err) 
-			{
+			catch (err) {
 				this.showToast(errormessage, err.message, errorvariant); //Error caught for incorrect data fetch
 			}
 		}
@@ -211,17 +191,14 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 		}
 	}
 	// To retieve the case records based on the type and status fields
-	loadCases(typeFilter, statusFilter) 
-	{
+	loadCases(typeFilter, statusFilter) {
 		getCases({ cpeId: this.accname, type: typeFilter, status: statusFilter })
-		// Null data is checked and AuraHandledException is thrown from the Apex
+			// Null data is checked and AuraHandledException is thrown from the Apex
 			.then((result) => {
-				if (result[0].Type === lablePsp) 
-				{
+				if (result[0].Type === lablePsp) {
 					this.hidesubtype = false;
-				} 
-				else 
-				{
+				}
+				else {
 					this.hidesubtype = true;
 				}
 				// To set the color code for the last inserted record, a time delay should be introduced
@@ -241,24 +218,20 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 					let draftstatusdrafttf = false;
 					let draftstatustf = false;
 
-					if (caseRecord.Status === lableNeedmoreInformation) 
-					{
+					if (caseRecord.Status === lableNeedmoreInformation) {
 						draftstatusneed = lableNeedInfo;
 						draftstatusneedtf = true;
-					} 
-					else if (caseRecord.Status === lableDraft) 
-					{
+					}
+					else if (caseRecord.Status === lableDraft) {
 						draftstatusneedtf = false;
 						draftstatusdraft = lableDraft;
 						draftstatusdrafttf = true;
 					}
-					if (caseRecord.Status === lableSubmitted) 
-					{
+					if (caseRecord.Status === lableSubmitted) {
 						draftstatus = lableSubmitted;
 						draftstatustf = true;
-					} 
-					else 
-					{
+					}
+					else {
 						draftstatustf = false;
 					}
 					const imgfordraft1 = caseRecord.Status === lableDraft;
@@ -286,8 +259,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// To convert the date into formatted date
-	formatDate(createdDate) 
-	{
+	formatDate(createdDate) {
 		const dateObject = new Date(createdDate);
 		const formattedDate = dateObject.toLocaleDateString();
 		this.formattedDatenewone = dateObject.toLocaleDateString();
@@ -295,15 +267,12 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// To display the records based on click event
-	handleFilterChange(event) 
-	{
-		if (event.target.label === lableType) 
-		{
+	handleFilterChange(event) {
+		if (event.target.label === lableType) {
 			this.caseTypeFilter = event.target.value;
 			this.typeFilter = this.caseTypeFilter;
-		} 
-		else if (event.target.label === lableStatus) 
-		{
+		}
+		else if (event.target.label === lableStatus) {
 			this.casestatusFilter = event.target.value;
 			this.statusFilter = this.casestatusFilter;
 		}
@@ -311,8 +280,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// To view the Case details, based on the case records clicked
-	openForm() 
-	{
+	openForm() {
 		// Display the form.
 		this.showForm = true;
 		this.displayform = false;
@@ -321,8 +289,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// To display the newly created case from support center
-	createCase() 
-	{
+	createCase() {
 		// Find the form element and submit it to create the Case record
 		const form = this.template.querySelector('lightning-record-edit-form');
 		form.submit();
@@ -331,8 +298,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// Handler to display case details with the required background on the detailed side(left)
-	handleCaseClick(event) 
-	{
+	handleCaseClick(event) {
 		this.selectedCaseId = event.currentTarget.dataset.caseId;
 		const boxes = this.template.querySelectorAll('.large-screen-background');
 		const boxeses = this.template.querySelectorAll('.small-screen-background');
@@ -350,59 +316,45 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 		});
 
 		// Add appropriate background class to the clicked box
-		if (window.innerWidth < 600) 
-		{
+		if (window.innerWidth < 600) {
 			clickedBox.classList.remove('large-screen-background', 'white-background', 'resultDiv');//This values is used in the CSS
 			clickedBox.classList.add('small-screen-background');//This value is used in the CSS
-		} 
-		else 
-		{
+		}
+		else {
 			clickedBox.classList.remove('small-screen-background', 'white-background', 'resultDiv');//This values is used in the CSS
 			clickedBox.classList.add('large-screen-background');//This value is used in the CSS
 		}
 
 		// To display the case records based on the filter criteria selected in the left side of the page
 		getCaseDetails({ caseId: this.selectedCaseId })
-		// Null data is checked and AuraHandledException is thrown from the Apex
-		.then((result) => {
+			// Null data is checked and AuraHandledException is thrown from the Apex
+			.then((result) => {
 				this.caserecordidget = result.Id;
 				localStorage.setItem('caserecordid', this.caserecordidget);
 				this.selectedCase = result;
 				this.typevalue = this.selectedCase.Type;
 				this.subTypePlatformFilter = this.selectedCase.BI_PSPB_Sub_Type__c;
 				this.stautusvarible = this.selectedCase.Status;
-				if (this.typevalue === lablePsp) 
-				{
+				this.username = this.selectedCase.CreatedBy.Name;
+				if (this.typevalue === lablePsp) {
 					this.subTypePlatformHide = false;
-				} 
-				else 
-				{
+				}
+				else {
 					this.subTypePlatformHide = true;
 				}
-				userid({ userid: this.selectedCase.CreatedById })
-					.then((result1) => {
-						this.username = result1.Name;
-					})
-					.catch((error) => {
-						this.showToast(errormessage, error.message, errorvariant); //Catching Potential Error
-					});
-
-				if (this.stautusvarible === lableSubmitted) 
-				{
+				if (this.stautusvarible === lableSubmitted) {
 					this.chnagestaus = 'submittedClass';
 					this.labelbtn = lableSubmitted;
 					this.editicon = false;
-				} 
-				else if (this.stautusvarible === lableDraft) 
-				{
+				}
+				else if (this.stautusvarible === lableDraft) {
 					this.chnagestaus = 'draftClass';
 					this.labelbtn = lableDraft;
 					this.editicon = true;
 					this.editimg = draft;
 
-				} 
-				else if (this.stautusvarible === lableNeedmoreInformation) 
-				{
+				}
+				else if (this.stautusvarible === lableNeedmoreInformation) {
 					this.chnagestaus = 'NeedClass';
 					this.labelbtn = lableNeedInfo;
 					this.editicon = true;
@@ -410,12 +362,10 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 				}
 				this.showForm = false;
 				this.showcase = true;
-				if (this.selectedCase.Type === lablePsp) 
-				{
+				if (this.selectedCase.Type === lablePsp) {
 					this.hidesubtype = false;
-				} 
-				else 
-				{
+				}
+				else {
 					this.hidesubtype = true;
 				}
 				const createdate = result.CreatedDate;
@@ -428,8 +378,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// Handler to display case details with the required background on the summary side (right)
-	handleCaseClick1(id) 
-	{
+	handleCaseClick1(id) {
 		this.selectedCaseId = id;
 		const boxes = this.template.querySelectorAll('.resultDiv');
 		this.caseId = this.selectedCaseId;
@@ -438,8 +387,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 			box.classList.add('white-background');
 		});
 		boxes.forEach((box) => {
-			if (box.dataset.caseId === this.selectedCaseId) 
-			{
+			if (box.dataset.caseId === this.selectedCaseId) {
 				box.classList.remove('white-background');
 				box.classList.add('large-screen-background');
 			}
@@ -447,7 +395,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 
 		// To display the case records based on the filter criteria selected in the right side of the page
 		getCaseDetails({ caseId: this.selectedCaseId })
-		// Null data is checked and AuraHandledException is thrown from the Apex
+			// Null data is checked and AuraHandledException is thrown from the Apex
 			.then((result) => {
 				this.caserecordidget = result.Id;
 				localStorage.setItem('caserecordid', this.caserecordidget);
@@ -455,33 +403,26 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 				this.typevalue = this.selectedCase.Type;
 				this.subTypePlatformFilter = this.selectedCase.BI_PSPB_Sub_Type__c;
 				this.stautusvarible = this.selectedCase.Status;
-				if (this.typevalue === lablePsp) 
-				{
+				this.username = this.selectedCase.CreatedBy.Name;
+				if (this.typevalue === lablePsp) {
 					this.subTypePlatformHide = false;
-				} 
-				else 
-				{
+				}
+				else {
 					this.subTypePlatformHide = true;
 				}
-				userid({ userid: this.selectedCase.CreatedById }).then((result1) => {
-					this.username = result1.Name;
-				});
 
-				if (this.stautusvarible === lableSubmitted) 
-				{
+				if (this.stautusvarible === lableSubmitted) {
 					this.chnagestaus = 'submittedClass';//This value is used in the CSS
 					this.labelbtn = lableSubmitted;
 					this.editicon = false;
-				} 
-				else if (this.stautusvarible === lableDraft) 
-				{
+				}
+				else if (this.stautusvarible === lableDraft) {
 					this.chnagestaus = 'draftClass';//This value is used in the CSS
 					this.labelbtn = lableDraft;
 					this.editicon = true;
 					this.editimg = draft;
-				} 
-				else if (this.stautusvarible === lableNeedmoreInformation) 
-				{
+				}
+				else if (this.stautusvarible === lableNeedmoreInformation) {
 					this.chnagestaus = 'NeedClass';//This value is used in the CSS
 					this.labelbtn = lableDraft;
 					this.editicon = true;
@@ -499,8 +440,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// To convert the image to blob
-	readAsDataURL(blob) 
-	{
+	readAsDataURL(blob) {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.onload = (event) => {
@@ -517,8 +457,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// To navigate to the File Preview
-	previewHandler() 
-	{
+	previewHandler() {
 		this[NavigationMixin.Navigate]({
 			type: 'standard__namedPage',
 			attributes: {
@@ -532,10 +471,8 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 
 	// Handler to pass the URL when edit icon is clicked
 	// The following setTimeout() methods are used to show a success message or an error notification after a brief delay to improve the user experience
-	handledraft() 
-	{
-		if (this.typevalue === lableMie) 
-		{
+	handledraft() {
+		if (this.typevalue === lableMie) {
 			setTimeout(() => {
 				try {
 					window.location.assign(
@@ -545,9 +482,8 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 					this.showToast(errormessage, error.message, errorvariant); //Catching Potential Error 
 				}
 			}, 1000);
-		} 
-		else if (this.typevalue === lableRae) 
-		{
+		}
+		else if (this.typevalue === lableRae) {
 			setTimeout(() => {
 				try {
 					window.location.assign(this.urlq + raePage);
@@ -555,9 +491,8 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 					this.showToast(errormessage, error.message, errorvariant); //Catching Potential Error 
 				}
 			}, 1000);
-		} 
-		else if (this.typevalue === lablePsp) 
-		{
+		}
+		else if (this.typevalue === lablePsp) {
 			setTimeout(() => {
 				try {
 					window.location.assign(this.urlq + plsPage);
@@ -569,22 +504,19 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// Record gets visible only if click event occurs
-	click(event) 
-	{
+	click(event) {
 		const caseId = event.currentTarget.dataset.caseId;
 		this.updateCaseTouch(caseId, true);
 	}
 
 	// Record gets visible automatically without click event
-	notclick(event) 
-	{
+	notclick(event) {
 		const caseId = event.currentTarget.dataset.caseId;
 		this.updateCaseTouch(caseId, false);
 	}
 
 	// To update the draft records
-	updateCaseTouch(caseId, touchValue) 
-	{
+	updateCaseTouch(caseId, touchValue) {
 		this.cases = this.cases.map((caseRecord) => ({
 			...caseRecord,
 			touch: caseRecord.Id === caseId ? touchValue : caseRecord.touch,
@@ -596,8 +528,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 
 	// Toast message declaration for error handling
-	showToast(title, message, variant) 
-	{
+	showToast(title, message, variant) {
 		const event = new ShowToastEvent({
 			title: title,
 			message: message,

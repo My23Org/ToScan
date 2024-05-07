@@ -60,7 +60,7 @@ public with sharing class BI_PSPB_GetAccessToken {
 					// Successfully received a response
 					Map<String, Object> jsonResponse = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
 					String accesstoken = (String) jsonResponse.get('access_token');
-                    if(String.isNotBlank(accesstoken))
+                    if(!String.isBlank(accesstoken))
                     {
                     	return accesstoken;
                     }else{

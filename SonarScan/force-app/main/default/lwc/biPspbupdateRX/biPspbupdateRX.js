@@ -109,6 +109,19 @@ export default class BiPspbCaseSupport extends LightningElement {
 	}
 	handleConditionalfield3(event) {
 		this.pharmacyvalue = event.target.value;
+			const prescription = this.template.querySelector(
+			'lightning-input[data-field="prescription"]'
+		);
+		if(this.pharmacyvalue !=''){
+			this.PrescriptionerrorMessage = false;
+			prescription.className = "textInput";
+			this.template.querySelector(
+				'label[data-field="prescription"]'
+			).className = "input-label";
+
+
+
+		}
 	}
 
 	//if the priscription value is "yes" Additional Comments,files will show

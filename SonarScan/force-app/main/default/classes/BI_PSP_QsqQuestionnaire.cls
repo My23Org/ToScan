@@ -70,7 +70,7 @@ public with sharing class BI_PSP_QsqQuestionnaire {
         System.Label.BI_PSP_fourteenWeeksQualitative
     );
     //holds the acccount records.
-    private static Account caregiverAccountid;
+    private static List<Account> caregiverAccountid;
     //holds the CareProgramEnrollee records.
     private static List<CareProgramEnrollee> caregiverEnrollee;
     //holds the CareProgramEnrollee records.
@@ -93,8 +93,7 @@ public with sharing class BI_PSP_QsqQuestionnaire {
     private static List<AssessmentQuestionResponse> liAssessRespon;
     //This variable holds a label that shows error when there is no care program enrollee record.
     private static String emptyEnrolleerecrd = System.Label.BI_PSP_EmptyCareProgramEnrl;
-	//This label states that the logged in user is not in the system.
-	private static String undefinedUser = System.Label.BI_PSP_UndefinedUser;
+
     /**
      * @description Inserts responses for page one of the questionnaire.
      * @param questionIds List of question IDs.
@@ -116,11 +115,11 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE Name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
-			 if(currentUser !=null)
-            {
+
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 // Handle caregiver logic
                 handleCaregiverLogic(
@@ -150,17 +149,6 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     throw new AuraHandledException(emptyQuestionaresponse);
                 }
             }
-            }
-            else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
         } catch (Exception ex) {
             BI_SFCOE_LOG_Util.handleException(
                 ex,
@@ -190,7 +178,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     AND BI_PSPB_Selected_Patient_ID__c != NULL
                 WITH USER_MODE
             ];
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
             if (!caregiverAccount.isEmpty()) {
                 caregiverAccountid = [
                     SELECT Id, Name, PersonEmail
@@ -209,16 +198,18 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                 );
             }
-
-            if (caregiverAccountid !=null) {
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+            if (!caregiverAccountid.isEmpty()) {
                 /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                  using Healthcare license*/
                 caregiverEnrollee = [
                     SELECT Id, Name, CreatedDate
                     FROM CareProgramEnrollee
-                    WHERE AccountID = :caregiverAccountid.Id
+                    WHERE AccountID = :caregiverAccountid[0].Id
                 ];
-
+						/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverEnrollee.isEmpty()) {
                     enrolleeId = caregiverEnrollee[0].Id;
                     timeOfQsqEnrllee = caregiverEnrollee[0].CreatedDate;
@@ -266,7 +257,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     AND Name = :currentUserName
                 WITH USER_MODE
             ];
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
             if (!patientAccount.isEmpty()) {
                 /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                  using Healthcare license*/
@@ -280,7 +272,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     patientAccounterrormsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                 );
             }
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
             if (!patientAccountId.isEmpty()) {
                 enrolleeId = patientAccountId[0].Id;
                 timeOfQsqEnrllee = patientAccountId[0].CreatedDate;
@@ -516,11 +509,11 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE Name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
-			 if(currentUser !=null)
-            {
+
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 caregiverAccount = [
                     SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
@@ -532,6 +525,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverAccount.isEmpty()) {
                     caregiverAccountid = [
                         SELECT Id, Name, PersonEmail
@@ -551,21 +546,23 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-
-                if (caregiverAccountid !=null) {
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccountid.isEmpty()) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
                     caregiverEnrollee = [
                         SELECT Id, Name, CreatedDate
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :caregiverAccountid.Id
+                        WHERE AccountID = :caregiverAccountid[0].Id
                     ];
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSP_QsqQuestionnaire.class.toString(),'',
                         System.now(), caregiversSelectedpatienterrmsg, BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverEnrollee.isEmpty()) {
                     enrolleeId = caregiverEnrollee[0].Id;
                     timeOfQsqEnrllee = caregiverEnrollee[0].CreatedDate;
@@ -583,6 +580,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccount.isEmpty()) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
@@ -596,7 +595,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         System.now(),patientAccounterrormsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccountId.isEmpty()) {
                     enrolleeId = patientAccountId[0].Id;
                     timeOfQsqEnrllee = patientAccountId[0].CreatedDate;
@@ -606,17 +606,7 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     );
                 }
             }
-            }
-             else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+
             String activeVersionId = null;
             if (
                 (!darftQuestionIds.isEmpty()) && (!draftResponseTexts.isEmpty())
@@ -803,11 +793,11 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE Name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
-		     if(currentUser !=null)
-            {
+
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 list<Account> caregiverAccount = [
                     SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
@@ -819,6 +809,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverAccount.isEmpty()) {
                     caregiverAccountid = [
                         SELECT Id, Name, PersonEmail
@@ -838,21 +830,23 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-
-                if (caregiverAccountid !=null) {
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccountid.isEmpty()) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
                     caregiverEnrollee = [
                         SELECT Id, Name, CreatedDate
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :caregiverAccountid.Id
+                        WHERE AccountID = :caregiverAccountid[0].Id
                     ];
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSP_QsqQuestionnaire.class.toString(),'',
                         System.now(),caregiversSelectedpatienterrmsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverEnrollee.isEmpty()) {
                     enrolleeId = caregiverEnrollee[0].Id;
                     timeOfQsqEnrllee = caregiverEnrollee[0].CreatedDate;
@@ -875,6 +869,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccount.isEmpty()) {
                     /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
@@ -893,7 +889,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccountId.isEmpty()) {
                     enrolleeId = patientAccountId[0].Id;
                     timeOfQsqEnrllee = patientAccountId[0].CreatedDate;
@@ -903,17 +900,7 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     );
                 }
             }
-            }
-               else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+
             String activeVersionId = null;
             if ((!questionIds.isEmpty()) && (!responseTexts.isEmpty())) {
                 for (Integer i = 0; i < questionIds.size(); i++) {
@@ -1094,11 +1081,11 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE Name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
- 			 if(currentUser !=null)
-            {
+
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 caregiverAccount = [
                     SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
@@ -1110,6 +1097,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverAccount.isEmpty()) {
                     caregiverAccountid = [
                         SELECT Id, Name, PersonEmail
@@ -1129,19 +1118,23 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-                if (caregiverAccountid !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccountid.isEmpty()) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
                     caregiverEnrollee = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :caregiverAccountid.Id
+                        WHERE AccountID = :caregiverAccountid[0].Id
                     ];
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSP_QsqQuestionnaire.class.toString(),'',
                         System.now(),caregiversSelectedpatienterrmsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverEnrollee.isEmpty()) {
                     enrolleeId = caregiverEnrollee[0].Id;
                 } else {
@@ -1160,6 +1153,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccount.isEmpty()) {
                     /* USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object
                      using Healthcare license*/
@@ -1178,7 +1173,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccountId.isEmpty()) {
                     enrolleeId = patientAccountId[0].Id;
                 } else {
@@ -1187,17 +1183,6 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     );
                 }
             }
-            }
-               else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
 
             String activeVersionId = null;
             if (
@@ -1366,20 +1351,18 @@ public with sharing class BI_PSP_QsqQuestionnaire {
         try {
             //care give access code
             String currentUserName = UserInfo.getName();
-
+			String currentUserEmail = UserInfo.getUserEmail();
             // Query for the user's Id based on the name
             User currentUser = [
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
 
-            String currentUserEmail = UserInfo.getUserEmail();
-             if(currentUser !=null)
-            {
-            if (currentUser.BI_PSPB_Caregiver__c == true) {
+               if (currentUser.BI_PSPB_Caregiver__c == true) {
                 caregiverAccount = [
                     SELECT Id, Name, PersonEmail, BI_PSPB_Selected_Patient_ID__c
                     FROM Account
@@ -1390,6 +1373,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverAccount.isEmpty()) {
                     caregiverAccountid = [
                         SELECT id, Name, PersonEmail
@@ -1409,19 +1394,23 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-                if (caregiverAccountid !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccountid.isEmpty()) {
                     /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object using Healthcare
                      *license.*/
                     caregiverEnrollee = [
                         SELECT id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :caregiverAccountid.id
+                        WHERE AccountID = :caregiverAccountid[0].id
                     ];
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSP_QsqQuestionnaire.class.toString(),'',
                         System.now(),caregiversSelectedpatienterrmsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverEnrollee.isEmpty()) {
                     enrolleeId = caregiverEnrollee[0].id;
                 } else {
@@ -1435,22 +1424,25 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     );
                 }
             } else {
-                Contact caregiverAccountid = [
+                list<Contact> caregiverAccountid = [
                     SELECT ownerid, Name, Account.Id
                     FROM Contact
                     WHERE Name = :currentUserName AND Email = :currentUserEmail
                     WITH USER_MODE
                 ];
-                if (caregiverAccountid !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccountid.isEmpty()) {
                     /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object using Healthcare
                      *license.*/
                     lisOfCareEr = [
                         SELECT Id, AccountId
                         FROM CareProgramEnrollee
-                        WHERE AccountId = :caregiverAccountid.Account.Id
+                        WHERE AccountId = :caregiverAccountid[0].Account.Id
                         LIMIT 1
                     ];
-
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                     if (!lisOfCareEr.isEmpty()) {
                         enrolleeId = lisOfCareEr[0].Id;
                     }
@@ -1465,17 +1457,6 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     );
                 }
             }
-            }
-               else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
 
             /*USER_MODE is not used because AssessmentQuestionResponse is an Salesforce Industry object using Healthcare
              *license.*/
@@ -1543,19 +1524,16 @@ public with sharing class BI_PSP_QsqQuestionnaire {
         try {
             //care give access code
             String currentUserName = UserInfo.getName();
-
+			String currentUserEmail = UserInfo.getUserEmail();
             // Query for the user's Id based on the name
             User currentUser = [
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
-
-            String currentUserEmail = UserInfo.getUserEmail();
-             if(currentUser !=null)
-            {
 
             if (currentUser.BI_PSPB_Caregiver__c == true) {
                 caregiverAccount = [
@@ -1568,6 +1546,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!caregiverAccount.isEmpty()) {
                     caregiverAccountid = [
                         SELECT id, Name, PersonEmail
@@ -1587,15 +1567,18 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
                     );
                 }
-                if (caregiverAccountid !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccountid.isEmpty()) {
                     /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object using Healthcare
                      *license.*/
                     caregiverEnrollee = [
                         SELECT id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :caregiverAccountid.id
+                        WHERE AccountID = :caregiverAccountid[0].id
                     ];
-
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                     if (!caregiverEnrollee.isEmpty()) {
                         enrolleeId = caregiverEnrollee[0].id;
                     } else {
@@ -1618,6 +1601,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                 if (!patientAccount.isEmpty()) {
                     /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry object using Healthcare
                      *license.*/
@@ -1627,7 +1612,8 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                         WHERE AccountId = :patientAccount[0].id
                         LIMIT 1
                     ];
-
+			/*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
                     if (!lisOfCareEr.isEmpty()) {
                         enrolleeId = lisOfCareEr[0].Id;
                     }
@@ -1642,17 +1628,6 @@ public with sharing class BI_PSP_QsqQuestionnaire {
                     );
                 }
             }
-            }
-               else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
 
             //USER_MODE is not used because AssessmentQuestionResponse is an Salesforce Industry object using Healthcare license
             if (enrolleeId != null && !String.isBlank(enrolleeId)) {

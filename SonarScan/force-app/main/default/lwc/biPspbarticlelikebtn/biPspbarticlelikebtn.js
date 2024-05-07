@@ -89,7 +89,7 @@ export default class BiPspbarticlelikebtn extends LightningElement {
 		try {
 			if (data) {
 				// Assign the data to the reactive property
-				if (data === 'Like') {
+				if (data === likelabel) {
 					this.thumbsUpIcon = Thumbsresponse;
 				} else {
 					this.thumbsUpIcon = THUMBS_UP_ICON;

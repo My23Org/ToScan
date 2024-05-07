@@ -34,7 +34,7 @@
 										Name*</label>
 									<lightning-input class="textInput" field-name="FirstName" data-field="FirstName"
 										placeholder="Enter First Name" variant="label-hidden" value={FirstName}
-										onchange={handlenamechange}>
+										onchange={handlenamechange} onkeydown={handleKeyDown1}>
 									</lightning-input>
 									<span class="slds-form-element__help" if:true={firstNameerrorMessage}>
 										<lightning-icon icon-name="utility:warning" alternative-text="warning"
@@ -46,7 +46,7 @@
 									<label for="LastName" data-field="LastName" class="input-label">Last Name*</label>
 									<lightning-input class="textInput" field-name="LastName" data-field="LastName"
 										placeholder="Enter Last Name" value={LastName} variant="label-hidden"
-										onchange={handlelastnamechange}>
+										onchange={handlelastnamechange} onkeydown={handleKeyDown1}>
 									</lightning-input>
 									<span class="slds-form-element__help" if:true={LastNameerrorMessage}>
 										<lightning-icon icon-name="utility:warning" alternative-text="warning"
@@ -106,9 +106,9 @@
 									<div if:true={phoneNumberVisible}>
 										<label for="MobilePhone" data-field="MobilePhone" class="input-label">Phone
 											number</label>
-										<lightning-input field-name="Phone" class="textInput" variant="label-hidden"
+										<lightning-input field-name="Phone" class="textInput" maxlength="16" variant="label-hidden"
 											placeholder="Enter phone number" value={Phoneval}
-											onchange={phonechangeevent}>
+											onchange={phonechangeevent} onkeydown={handleKeyDown}>
 										</lightning-input>
 										<span class="slds-form-element__help" if:true={phoneerrorMessage}>
 											<img src={warning} />{label.phonefield}
@@ -120,9 +120,9 @@
 										<div class="input-div">
 											<label for="MobilePhone" data-field="MobilePhone" class="input-label">Phone
 												number*</label>
-											<lightning-input field-name="Phone" class="textInput" variant="label-hidden"
+											<lightning-input field-name="Phone" maxlength="16" class="textInput" variant="label-hidden"
 												data-field="MobilePhone" placeholder="Enter phone number"
-												value={Phoneval} onchange={phonechangeevent}>
+												value={Phoneval} onchange={phonechangeevent} onkeydown={handleKeyDown}>
 											</lightning-input>
 											<span class="slds-form-element__help" if:true={phoneerrorMessage}>
 												<img src={warning} />{label.phonefield}

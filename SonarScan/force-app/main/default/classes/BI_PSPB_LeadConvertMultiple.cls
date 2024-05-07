@@ -206,7 +206,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				BI_SFCOE_LOG_Util.handleDatabaseSaveResults(saveResult,
 					BI_PSPB_LeadConvertMultiple.class.toString(),System.now());
 			}
-
+			//To create a care program enrollee for a patient associated with a care program.
 			Map<Id, CareProgramEnrollee> careProgramEnrolleesToInsert = new Map<Id, CareProgramEnrollee>();
 			map<string, string> mpPatientEnrollee = new Map<string, string>();
 			list<CareProgramEnrollee> lstCareProgEnrolleeInsert = new List<CareProgramEnrollee>();
@@ -323,6 +323,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				.get(caregiver)
 				.getRecordTypeId();
 			// We verify that all contact email addresses match existing email addresses; we are unable to use limit checks.
+			//To create the contact for a caregiver of a minor patient.
 			List<Contact> cont = [SELECT id, Name, email FROM contact WHERE RecordType.Id = :recordTypeId];
 			List<Contact> caregiverContactsToInsert = new List<Contact>();
 			List<BI_PSPB_Enrollee_Caregiver__c> enrolleeCaregiversToInsert = new List<BI_PSPB_Enrollee_Caregiver__c>();
@@ -334,7 +335,6 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					Date birthdate = lead.HealthCloudGA__BirthDate__c;
 					Date today = Date.today();
 					Integer age = today.year() - birthdate.year();
-
 					if (age < 18) {
 						BI_PSPB_Lead_Caregiver__c leadCaregiver = leadCaregiverMap.get(
 							lead.Id
@@ -421,7 +421,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				);
 			}
 			// Now, perform the operations inside the loop
-
+			//To create the enrollee caregiver for a patient associated with the caregiver and care program program enrollee.
 			for (Account acc : accountsToUpdate) {
 				Lead lead = leadMap.get(acc.Id);
 				BI_PSPB_Lead_Caregiver__c leadCaregiver = leadCaregiverMap.get(
@@ -497,12 +497,14 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				Lead lead = leadMap.get(acc.Id);
 				if (lead != null) {
 					lstLeadPrescription = getleadPrescription(lead.Id);
+                    if (
+						!lstLeadPrescription.isEmpty()&&
+						lstLeadPrescription != null
+					) {
 					List<Contact> lstphysician = getContact(
 							lead.BI_PSPB_Physician_Name_c__c
 						);
-					if (
-						!lstLeadPrescription.isEmpty() && !lstPhysician.isEmpty()
-					) {
+					
 						
 						CareProgramProvider cpp = new CareProgramProvider(
 							BI_PSPB_Care_Program_Enrollee__c = mpPatientEnrollee.get(
@@ -587,6 +589,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 			}
 			// Query Medication records based on all gathered BI_PSPB_Care_Program__c values
 			// There is no need to use user mode because this class operates as a system administrator.
+			// To create medication and dosage information for a patient.
 			List<Medication> meds = [
 				SELECT Id, BI_PSPB_Care_Program__c
 				FROM Medication
@@ -708,6 +711,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				BI_SFCOE_LOG_Util.handleDatabaseSaveResults(savePatMedValues,
 					BI_PSPB_LeadConvertMultiple.class.toString(),System.now());
 			}
+			
 			List<String> notificationtypes = new List<String>{
 				treatmentremainders,
 				newcontentupdate,
@@ -716,7 +720,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				challenges,
 				community
 			};
-			// create the notification setting for paticular patient
+			// To create the notification setting for paticular patient
 			List<BI_PSP_Notification_Setting__c> notificationSettings = new List<BI_PSP_Notification_Setting__c>();
 				for (Account acc : accountsToUpdate) {
 					// Assuming AccoundIds is a List<Id> and Patient is a String
@@ -755,7 +759,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 						System.now(),notificationIdNull,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 			 
-
+           // To create Award for a particular patient  
 			List<Award> insertAward = new List<Award>(); // Moved the list declaration outside the loop
 			Id ChallengeRecordType = Schema.SObjectType.HealthCloudGA__CareProgramPlanTemplate__c.getRecordTypeInfosByName()
 				.get(System.Label.BI_PSP_Challenge)
@@ -947,7 +951,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 	private static List<Contact> getContact(Id physicianId) {
         List<Contact> lstPhysician;
 		try{
-			if(physicianId != null || physicianId != ''){
+			if(physicianId != null && physicianId != ''){
 		// There is no need to use user mode because this class operates as a system administrator.
 		lstPhysician = [
 			SELECT Id, Name, BI_PSPB_Practice_Name__c

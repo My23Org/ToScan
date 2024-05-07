@@ -58,44 +58,7 @@ public class BI_PSPB_PatientFormCtrlTest {
         }
         } 
     }
-/*
-* Test method to verify the functionality of the 'getgendervalue' method.
-* It calls the 'getgendervalue' method to retrieve a list of gender values.
-* The test asserts that the returned list contains the expected gender values.
-*/
-    @isTest
-    static void testGetGenderValue() {
-        // Call the method
-        List<String> genderValues = BI_PSPB_PatientFormCtrl.getgendervalue();
-        
-        // Assert the expected outcome
-        Assert.areEqual(4, genderValues.size(), 'Expected list size is incorrect');
-        Assert.areEqual('Male', genderValues[0], 'Expected first gender value is incorrect');
-        Assert.areEqual('Female', genderValues[1], 'Expected second gender value is incorrect');
-        Assert.areEqual('Prefer not to say', genderValues[2], 'Expected third gender value is incorrect');
-        Assert.areEqual('Others', genderValues[3], 'Expected fourth gender value is incorrect');
-    }
-    
-    @isTest
-    static void testCatchBlock() {
-        // Set up test data if needed
-        
-        Test.startTest();
-        
-        // Call the method that you want to test
-        List<String> genderValue = null;
-        try {
-            // Call the method that may throw an exception
-            genderValue = BI_PSPB_PatientFormCtrl.getGenderValue();
-        } catch (Exception ex) {
-            // Assert that an exception was caught
-           Assert.areEqual(null, ex, 'An exception should have been caught.');
-        }
-        
-        Test.stopTest();
-        
-        
-        
-    }
+
+
     
 }

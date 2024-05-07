@@ -1,11 +1,4 @@
-/*
- * @description This class used for filter the SMS and Email notification for patient or caregiver.
- * History
- * Version	Author			Date		Detail		Description
- * 59		Niyas		06-01-2024		Created		Initial Version
- * 59		Niyas		18-04-2024		Updated		Code review changes
- */
-public with sharing class BI_PSPB_smsAndEmailHandler {
+public class BI_PSPB_smsAndEmailHandler {
 	private static BI_SFCOE_LOG_App_Settings__c settings = BI_SFCOE_LOG_App_Settings__c.getValues(
 		'PSPB'
 	);
@@ -25,24 +18,35 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 	) {
 		if (recordId.isEmpty() || String.isBlank(notificationTypes)) {
 			BI_SFCOE_LOG_Util.logMessage(
-				applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-				BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+				applicationName,
+				BI_PSPB_smsAndEmailHandler.class.toString(),
+				'',
+				System.now(),
+				BI_PSPB_constantsClass.errorMsgRecordNotFound,
+				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 			);
 		}
 		String enroid;
 		String accID;
 		String notificationSubject;
 		String emailSubject;
-		String bDestUrl;
+		String bDestUrl = '';
 		String uDestUrl;
 		String urlPage;
 		Datetime treatmentDate;
 		Date dateOnly;
 		String notificationType;
 		String userType;
-		String url;
-		String followName;
-		String formattedDate;
+		String url = '';
+		String followName = '';
+		String formattedDate = '';
+		List<Id> contactIdsToSendSMS = new List<Id>();
+		List<Id> contactIdsToSendEmail = new List<Id>();
+		List<Id> enrolIds = new List<Id>();
+		List<Id> accountRec = new List<Id>();
+		List<Id> notificationAcc = new List<Id>();
+		List<Id> notificationCare = new List<Id>();
+		List<Id> notificationCareAcc = new List<Id>();
 		try {
 			BI_PSPB_Notification__mdt filteredNotifications = BI_PSPB_Notification__mdt.getInstance(
 				BI_PSPB_constantsClass.siteUrl
@@ -63,22 +67,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlSymptomTracker;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> symptomId = [
-					SELECT id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId Limit 1
-				];
-				if (!symptomId.isEmpty()) {
-					enroid = symptomId[0].Id;
-					accID = symptomId[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_SymptomTracker;
-                } else{
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_SymptomTracker;
 			} else if (
 				NotificationTypes == BI_PSPB_constantsClass.generalChallenges
 			) {
@@ -91,22 +80,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlChallenges;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> symptomId = [
-					SELECT id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId Limit 1
-				];
-				if (!symptomId.isEmpty()) {
-					enroid = symptomId[0].Id;
-					accID = symptomId[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Challenges;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Challenges;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.video) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalVideoSms
@@ -117,23 +91,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlArticle;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> symptomId = [
-					SELECT id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId
-					LIMIT 1
-				];
-				if (!symptomId.isEmpty()) {
-					enroid = symptomId[0].Id;
-					accID = symptomId[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralContent;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralContent;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.article) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalVideoSms
@@ -144,22 +102,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlArticle;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> symptomId = [
-					SELECT id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId Limit 1
-				];
-				if (!symptomId.isEmpty()) {
-					enroid = symptomId[0].Id;
-					accID = symptomId[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralContent;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralContent;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.createPost) {
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalPostEmail
@@ -167,22 +110,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlAllPost;
 				emailSubject = notificationsEmail.developername;
 				followName = communityUserName;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> symptomId = [
-					SELECT id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId Limit 1
-				];
-				if (!symptomId.isEmpty()) {
-					enroid = symptomId[0].Id;
-					accID = symptomId[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.comment) {
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalCommentEmail
@@ -190,22 +118,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlMyPost;
 				emailSubject = notificationsEmail.developername;
 				followName = communityUserName;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> symptomId = [
-					SELECT id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId Limit 1
-				];
-				if (!symptomId.isEmpty()) {
-					enroid = symptomId[0].Id;
-					accID = symptomId[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.reaction) {
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalReactionEmail
@@ -213,22 +126,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlMyPost;
 				emailSubject = notificationsEmail.developername;
 				followName = communityUserName;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> symptomId = [
-					SELECT id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId Limit 1
-				];
-				if (!symptomId.isEmpty()) {
-					enroid = symptomId[0].Id;
-					accID = symptomId[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.follow) {
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalFollowEmail
@@ -236,22 +134,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlFollower;
 				emailSubject = notificationsEmail.developername;
 				followName = communityUserName;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> symptomId = [
-					SELECT id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId Limit 1
-				];
-				if (!symptomId.isEmpty()) {
-					enroid = symptomId[0].Id;
-					accID = symptomId[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
 			}
 			//Action Notification
 			else if (
@@ -267,26 +150,6 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
 				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_SymptomTracker;
-				List<BI_PSP_Symptom_Tracker__c> symptomId = [
-					SELECT
-						id,
-						BI_PSP_Care_Program_Enrollee__r.AccountId,
-						BI_PSP_Care_Program_Enrollee__c
-					FROM BI_PSP_Symptom_Tracker__c
-					WHERE id = :recordId
-					ORDER BY CreatedDate ASC
-					LIMIT 1
-				];
-				if (!symptomId.isEmpty()) {
-					enroid = symptomId[0].BI_PSP_Care_Program_Enrollee__c;
-					accID = symptomId[0]
-						.BI_PSP_Care_Program_Enrollee__r.AccountId;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
 			} else if (NotificationTypes == BI_PSPB_constantsClass.tr1) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionT3Sms
@@ -297,33 +160,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlDashboard;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-				List<BI_PSPB_Treatment_Reminder__c> reminders = [
-					SELECT
-						BI_PSPB_Care_Program_Enrollee__c,
-						BI_PSPB_Care_Program_Enrollee__r.AccountId,
-						BI_PSPB_Reminder_Date__c,
-						BI_PSPB_Date_of_Treatment__c
-					FROM BI_PSPB_Treatment_Reminder__c
-					WHERE BI_PSPB_Care_Program_Enrollee__c = :recordId
-					Limit 1
-				];
-				if (!reminders.isEmpty()) {
-					treatmentDate = reminders[0].BI_PSPB_Date_of_Treatment__c;
-					dateOnly = treatmentDate.date();
-					formattedDate =String.valueOf(dateOnly.month()).leftPad(2, '0') +'/' +
-						String.valueOf(dateOnly.day()).leftPad(2, '0') +'/' +
-						String.valueOf(dateOnly.year());
-					enroid = reminders[0].BI_PSPB_Care_Program_Enrollee__c;
-					accID = reminders[0]
-						.BI_PSPB_Care_Program_Enrollee__r.AccountId;
-					notificationType = BI_PSPB_constantsClass.treatmentandRx;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgTreatmentRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.treatmentandRx;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.tr3) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionT3Sms
@@ -334,36 +171,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlDashboard;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-				List<BI_PSPB_Treatment_Reminder__c> reminders = [
-					SELECT
-						BI_PSPB_Care_Program_Enrollee__c,
-						BI_PSPB_Care_Program_Enrollee__r.AccountId,
-						BI_PSPB_Reminder_Date__c,
-						BI_PSPB_Date_of_Treatment__c
-					FROM BI_PSPB_Treatment_Reminder__c
-					WHERE id = :recordId Limit 1
-				];
-				if (!reminders.isEmpty()) {
-					treatmentDate = reminders[0].BI_PSPB_Date_of_Treatment__c;
-					dateOnly = treatmentDate.date();
-					formattedDate =String.valueOf(dateOnly.month()).leftPad(2, '0') +'/' +
-						String.valueOf(dateOnly.day()).leftPad(2, '0') +'/' +
-						String.valueOf(dateOnly.year());
-					enroid = reminders[0].BI_PSPB_Care_Program_Enrollee__c;
-					accID = reminders[0]
-						.BI_PSPB_Care_Program_Enrollee__r.AccountId;
-					notificationType = BI_PSPB_constantsClass.treatmentandRx;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSPB_smsAndEmailHandler.class.toString(),
-						'',
-						System.now(),
-						BI_PSPB_constantsClass.errorMsgTreatmentRecordNotFound,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.treatmentandRx;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.tr7) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionT7Sms
@@ -374,36 +182,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlDashboard;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-				List<BI_PSPB_Treatment_Reminder__c> reminders = [
-					SELECT
-						BI_PSPB_Care_Program_Enrollee__c,
-						BI_PSPB_Care_Program_Enrollee__r.AccountId,
-						BI_PSPB_Reminder_Date__c,
-						BI_PSPB_Date_of_Treatment__c
-					FROM BI_PSPB_Treatment_Reminder__c
-					WHERE BI_PSPB_Care_Program_Enrollee__c = :recordId
-					Limit 1
-				];
-				if (!reminders.isEmpty()) {
-					treatmentDate = reminders[0].BI_PSPB_Date_of_Treatment__c;
-					dateOnly = treatmentDate.date();
-					formattedDate =
-						String.valueOf(dateOnly.month()).leftPad(2, '0') +
-						'/' +
-						String.valueOf(dateOnly.day()).leftPad(2, '0') +
-						'/' +
-						String.valueOf(dateOnly.year());
-					enroid = reminders[0].BI_PSPB_Care_Program_Enrollee__c;
-					accID = reminders[0]
-						.BI_PSPB_Care_Program_Enrollee__r.AccountId;
-					notificationType = BI_PSPB_constantsClass.treatmentandRx;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgTreatmentRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.treatmentandRx;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.tr10) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionT10Sms
@@ -414,36 +193,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlDashboard;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-				List<BI_PSPB_Treatment_Reminder__c> reminders = [
-					SELECT
-						BI_PSPB_Care_Program_Enrollee__c,
-						BI_PSPB_Care_Program_Enrollee__r.AccountId,
-						BI_PSPB_Reminder_Date__c,
-						BI_PSPB_Date_of_Treatment__c
-					FROM BI_PSPB_Treatment_Reminder__c
-					WHERE BI_PSPB_Care_Program_Enrollee__c = :recordId
-					Limit 1
-				];
-				if (!reminders.isEmpty()) {
-					treatmentDate = reminders[0].BI_PSPB_Date_of_Treatment__c;
-					dateOnly = treatmentDate.date();
-					formattedDate =
-						String.valueOf(dateOnly.month()).leftPad(2, '0') +
-						'/' +
-						String.valueOf(dateOnly.day()).leftPad(2, '0') +
-						'/' +
-						String.valueOf(dateOnly.year());
-					enroid = reminders[0].BI_PSPB_Care_Program_Enrollee__c;
-					accID = reminders[0]
-						.BI_PSPB_Care_Program_Enrollee__r.AccountId;
-					notificationType = BI_PSPB_constantsClass.treatmentandRx;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgTreatmentRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.treatmentandRx;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.tr14) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionT14Sms
@@ -454,36 +204,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlDashboard;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-				List<BI_PSPB_Treatment_Reminder__c> reminders = [
-					SELECT
-						BI_PSPB_Care_Program_Enrollee__c,
-						BI_PSPB_Care_Program_Enrollee__r.AccountId,
-						BI_PSPB_Reminder_Date__c,
-						BI_PSPB_Date_of_Treatment__c
-					FROM BI_PSPB_Treatment_Reminder__c
-					WHERE BI_PSPB_Care_Program_Enrollee__c = :recordId
-					Limit 1
-				];
-				if (!reminders.isEmpty()) {
-					treatmentDate = reminders[0].BI_PSPB_Date_of_Treatment__c;
-					dateOnly = treatmentDate.date();
-					formattedDate =
-						String.valueOf(dateOnly.month()).leftPad(2, '0') +
-						'/' +
-						String.valueOf(dateOnly.day()).leftPad(2, '0') +
-						'/' +
-						String.valueOf(dateOnly.year());
-					enroid = reminders[0].BI_PSPB_Care_Program_Enrollee__c;
-					accID = reminders[0]
-						.BI_PSPB_Care_Program_Enrollee__r.AccountId;
-					notificationType = BI_PSPB_constantsClass.treatmentandRx;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgTreatmentRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.treatmentandRx;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.pd0) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionPdSms
@@ -494,29 +215,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlDashboard;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-				List<BI_PSPB_Treatment_Reminder__c> reminders = [
-					SELECT
-						BI_PSPB_Care_Program_Enrollee__c,
-						BI_PSPB_Care_Program_Enrollee__r.AccountId,
-						BI_PSPB_Reminder_Date__c,
-						BI_PSPB_Date_of_Treatment__c
-					FROM BI_PSPB_Treatment_Reminder__c
-					WHERE BI_PSPB_Care_Program_Enrollee__c = :recordId
-					Limit 1
-				];
-				if (!reminders.isEmpty()) {
-					treatmentDate = reminders[0].BI_PSPB_Date_of_Treatment__c;
-					enroid = reminders[0].BI_PSPB_Care_Program_Enrollee__c;
-					accID = reminders[0]
-						.BI_PSPB_Care_Program_Enrollee__r.AccountId;
-					notificationType = BI_PSPB_constantsClass.treatmentandRx;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgTreatmentRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.treatmentandRx;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.pd1) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionPd1Sms
@@ -527,29 +226,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlDashboard;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-				List<BI_PSPB_Treatment_Reminder__c> reminders = [
-					SELECT
-						BI_PSPB_Care_Program_Enrollee__c,
-						BI_PSPB_Care_Program_Enrollee__r.AccountId,
-						BI_PSPB_Reminder_Date__c,
-						BI_PSPB_Date_of_Treatment__c
-					FROM BI_PSPB_Treatment_Reminder__c
-					WHERE BI_PSPB_Care_Program_Enrollee__c = :recordId
-					Limit 1
-				];
-				if (!reminders.isEmpty()) {
-					treatmentDate = reminders[0].BI_PSPB_Date_of_Treatment__c;
-					enroid = reminders[0].BI_PSPB_Care_Program_Enrollee__c;
-					accID = reminders[0]
-						.BI_PSPB_Care_Program_Enrollee__r.AccountId;
-					notificationType = BI_PSPB_constantsClass.treatmentandRx;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgTreatmentRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.treatmentandRx;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.pd3) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionPd3Sms
@@ -560,29 +237,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlDashboard;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-				List<BI_PSPB_Treatment_Reminder__c> reminders = [
-					SELECT
-						BI_PSPB_Care_Program_Enrollee__c,
-						BI_PSPB_Care_Program_Enrollee__r.AccountId,
-						BI_PSPB_Reminder_Date__c,
-						BI_PSPB_Date_of_Treatment__c
-					FROM BI_PSPB_Treatment_Reminder__c
-					WHERE BI_PSPB_Care_Program_Enrollee__c = :recordId
-					Limit 1
-				];
-				if (!reminders.isEmpty()) {
-					treatmentDate = reminders[0].BI_PSPB_Date_of_Treatment__c;
-					enroid = reminders[0].BI_PSPB_Care_Program_Enrollee__c;
-					accID = reminders[0]
-						.BI_PSPB_Care_Program_Enrollee__r.AccountId;
-					notificationType = BI_PSPB_constantsClass.treatmentandRx;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgTreatmentRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.treatmentandRx;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.dlqi) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionDlqiSms
@@ -593,23 +248,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlQuestionnaires;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> enrolleeRecord = [
-					SELECT Id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId
-					Limit 1
-				];
-				if (!enrolleeRecord.isEmpty()) {
-					enroid = enrolleeRecord[0].Id;
-					accID = enrolleeRecord[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.pss) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionPssSms
@@ -620,23 +259,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlQuestionnaires;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> enrolleeRecord = [
-					SELECT Id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId
-					Limit 1
-				];
-				if (!enrolleeRecord.isEmpty()) {
-					enroid = enrolleeRecord[0].Id;
-					accID = enrolleeRecord[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.wpai) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionWpaiSms
@@ -647,23 +270,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlQuestionnaires;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> enrolleRecord = [
-					SELECT Id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId
-					Limit 1
-				];
-				if (!enrolleRecord.isEmpty()) {
-					enroid = enrolleRecord[0].Id;
-					accID = enrolleRecord[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.qsq) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.actionQsqSms
@@ -674,189 +281,203 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				urlPage = BI_PSPB_constantsClass.urlQuestionnaires;
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
-				//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-				List<CareProgramEnrollee> enrolleRecord = [
-					SELECT Id, AccountId
-					FROM CareProgramEnrollee
-					WHERE id = :recordId
-					Limit 1
-				];
-				if (!enrolleRecord.isEmpty()) {
-					enroid = enrolleRecord[0].Id;
-					accID = enrolleRecord[0].AccountId;
-					notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires;
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
-			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-					BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
-			}
-			Account accountRecord;
-			//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-			BI_PSPB_Enrollee_Caregiver__c enrolleeCaregiverRec;
-			List<BI_PSP_Notification_Setting__c> settings = [
-				SELECT
-					Id,
-					BI_PSP_Patient__c,
-					BI_PSP_SMS__c,
-					BI_PSP_Email__c,
-					BI_PSP_Notification_Type__c
-				FROM BI_PSP_Notification_Setting__c
-				WHERE
-					BI_PSP_Patient__c = :accID
-					AND BI_PSP_Notification_Type__c = :NotificationType
-				LIMIT 1
-			];
-			if (!settings.isEmpty()) {
-				BI_PSP_Notification_Setting__c setting = settings[0];
-				accountRecord = [
-					SELECT Id, PersonContactId, BI_PSP_Birthdate__c
-					FROM Account
-					WHERE Id = :accID
-					Limit 1
-				];
-				List<Id> contactIds = new List<Id>();
-				if (accountRecord != null) {
-					// Access fields directly from the accRecord variable
-					Id personContactId = accountRecord.PersonContactId;
-					Date birthdate = accountRecord.BI_PSP_Birthdate__c;
-					if (birthdate != null) {
-						// Calculate age based on birthdate
-						Integer age = Date.today().year() - birthdate.year();
-						//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
-						CareProgramEnrollee enrolleeUserType = [
-							SELECT id, AccountId, BI_PSPB_PatientStatus__c
-							FROM CareProgramEnrollee
-							WHERE id = :enroid
-							Limit 1
-						];
-						if (enrolleeUserType == null) {
-							BI_SFCOE_LOG_Util.logMessage(
-								applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-								BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-							);
-						}
-						UserType = enrolleeUserType.BI_PSPB_PatientStatus__c;
-						if (userType == BI_PSPB_constantsClass.Unassigned) {
-							url = uDestUrl + urlPage;
-						} else {
-							url = bDestUrl + urlPage;
-						}
-						if (age < 18) {
-							String fName;
-							String lName;
-							//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
-							enrolleeCaregiverRec = [
-								SELECT
-									Id,
-									BI_PSPB_Contact_Id__c,
-									BI_PSPB_Contact_Id__r.FirstName,
-									BI_PSPB_Contact_Id__r.LastName
-								FROM BI_PSPB_Enrollee_Caregiver__c
-								WHERE BI_PSPB_Care_Program_Enrollee__c = :enroid
-								Limit 1
-							];
-							if (enrolleeCaregiverRec != null) {
-								fName = enrolleeCaregiverRec.BI_PSPB_Contact_Id__r.FirstName;
-								lName = enrolleeCaregiverRec.BI_PSPB_Contact_Id__r.LastName;
-								accountRecord = [
-									SELECT
-										Id,
-										PersonContactId,
-										BI_PSP_Birthdate__c
-									FROM Account
-									WHERE
-										FirstName = :fName
-										AND LastName = :lName
-									LIMIT 1
-								];
-								if (accountRecord != null) {
-									contactIds.add(
-										accountRecord.PersonContactId
-									);
-									if (setting.BI_PSP_SMS__c == true) {
-										BI_PSPB_AsynchronousSmsCallout.sendSMS(
-											contactIds,
-											notificationSubject,
-											url,
-											formattedDate
-										);
-									}
-									if (setting.BI_PSP_Email__c == true) {
-										BI_PSPB_AsynchronousEmailCallout.sendEmail(
-											contactIds,
-											emailSubject,
-											url,
-											formattedDate,
-											followName
-										);
-									}
-								} else {
-									BI_SFCOE_LOG_Util.logMessage(
-										applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-										BI_PSPB_constantsClass.errorMsgAccountRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-									);
-								}
-							} else {
-								BI_SFCOE_LOG_Util.logMessage(
-									applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-									BI_PSPB_constantsClass.errorMsgEnorlleeCaregiverRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-								);
-							}
-						} else if (age > 18) {
-							accountRecord = [
-								SELECT Id, PersonContactId, BI_PSP_Birthdate__c
-								FROM Account
-								WHERE Id = :accID
-								LIMIT 1
-							];
-							if (accountRecord == null) {
-								BI_SFCOE_LOG_Util.logMessage(
-									applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-									BI_PSPB_constantsClass.errorMsgRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-								);
-							}
-							contactIds.add(accountRecord.PersonContactId);
-							if (setting.BI_PSP_SMS__c == true) {
-								BI_PSPB_AsynchronousSmsCallout.sendSMS(
-									contactIds,
-									notificationSubject,
-									url,
-									formattedDate
-								);
-							}
-							if (setting.BI_PSP_Email__c == true) {
-								BI_PSPB_AsynchronousEmailCallout.sendEmail(
-									contactIds,
-									emailSubject,
-									url,
-									formattedDate,
-									followName
-								);
-							}
-						}
-					}
-				} else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,BI_PSPB_smsAndEmailHandler.class.toString(),'',System.now(),
-						BI_PSPB_constantsClass.errorMsgAccountRecordNotFound,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires;
 			} else {
 				BI_SFCOE_LOG_Util.logMessage(
 					applicationName,
 					BI_PSPB_smsAndEmailHandler.class.toString(),
 					'',
 					System.now(),
-					BI_PSPB_constantsClass.errorMsgNotificationSettingNotFound,
+					BI_PSPB_constantsClass.errorMsgRecordNotFound,
 					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 				);
+			}
+			//This condition is working for the patient is major i will be send a email and sms.
+			for (CareProgramEnrollee enrollee : [
+				SELECT
+					Id,
+					AccountId,
+					BI_PSPB_PatientStatus__c,
+					Account.PersonContactId,
+					Account.BI_PSP_Birthdate__c
+				FROM CareProgramEnrollee
+				WHERE Id IN :recordId
+			]) {
+				enrolIds.add(enrollee.Id);
+				accountRec.add(enrollee.AccountId);
+			}
+			Map<Id, List<BI_PSP_Notification_Setting__c>> accountToNotificationsMap = new Map<Id, List<BI_PSP_Notification_Setting__c>>();
+
+			for (BI_PSP_Notification_Setting__c enrolleId : [
+				SELECT
+					Id,
+					BI_PSP_Patient__c,
+					BI_PSP_Patient__r.BI_PSP_Birthdate__c,
+					BI_PSP_Patient__r.PersonContactId,
+					BI_PSP_SMS__c,
+					BI_PSP_Email__c,
+					BI_PSP_Notification_Type__c
+				FROM BI_PSP_Notification_Setting__c
+				WHERE
+					BI_PSP_Patient__c IN :accountRec
+					AND BI_PSP_Notification_Type__c = :NotificationType
+			]) {
+				if (enrolleId.BI_PSP_Patient__c != null) {
+					Id accountId = enrolleId.BI_PSP_Patient__c;
+					if (!accountToNotificationsMap.containsKey(accountId)) {
+						accountToNotificationsMap.put(
+							accountId,
+							new List<BI_PSP_Notification_Setting__c>()
+						);
+					}
+					accountToNotificationsMap.get(accountId).add(enrolleId);
+				}
+			}
+			Set<Id> notificationAccs = new Set<Id>();
+			for (CareProgramEnrollee enrollee : [
+				SELECT
+					Id,
+					AccountId,
+					BI_PSPB_PatientStatus__c,
+					Account.PersonContactId,
+					Account.BI_PSP_Birthdate__c
+				FROM CareProgramEnrollee
+				WHERE AccountId IN :accountToNotificationsMap.keySet()
+			]) {
+				notificationAccs.add(enrollee.AccountId);
+			}
+			for (CareProgramEnrollee enrollee : [
+				SELECT
+					Id,
+					AccountId,
+					BI_PSPB_PatientStatus__c,
+					Account.PersonContactId,
+					Account.BI_PSP_Birthdate__c
+				FROM CareProgramEnrollee
+				WHERE AccountId IN :notificationAccs
+			]) {
+				List<BI_PSP_Notification_Setting__c> notificationss = accountToNotificationsMap.get(
+					enrollee.AccountId
+				);
+				Id personContactId;
+				Date birthdate = enrollee.Account.BI_PSP_Birthdate__c;
+				if (birthdate != null) {
+					Integer age = Date.today().year() - birthdate.year();
+					userType = enrollee.BI_PSPB_PatientStatus__c;
+					if (userType == BI_PSPB_constantsClass.Unassigned) {
+						url = uDestUrl + urlPage;
+					} else {
+						url = bDestUrl + urlPage;
+					}
+					if (age > 18) {
+						for (
+							BI_PSP_Notification_Setting__c notification : notificationss
+						) {
+							if (notification.BI_PSP_Email__c == true) {
+								contactIdsToSendEmail.add(
+									enrollee.Account.PersonContactId
+								);
+							}
+							if (notification.BI_PSP_SMS__c == true) {
+								contactIdsToSendSMS.add(
+									enrollee.Account.PersonContactId
+								);
+							}
+						}
+					}
+				}
+			}
+
+			//This condition is working for the patient is minor i will be send a email and sms.
+			Map<Id, List<BI_PSP_Notification_Setting__c>> accountToNotificationsMaps = new Map<Id, List<BI_PSP_Notification_Setting__c>>();
+			// Populate the map with Account Ids and notification settings
+			for (CareProgramEnrollee enrollee : [
+				SELECT
+					Id,
+					AccountId,
+					BI_PSPB_PatientStatus__c,
+					Account.PersonContactId,
+					Account.BI_PSP_Birthdate__c
+				FROM CareProgramEnrollee
+				WHERE Id IN :enrolIds
+			]) {
+				accountToNotificationsMaps.put(
+					enrollee.AccountId,
+					new List<BI_PSP_Notification_Setting__c>()
+				);
+			}
+
+			// Iterate through BI_PSPB_Enrollee_Caregiver__c records
+			for (BI_PSPB_Enrollee_Caregiver__c enrolleCaregiverId : [
+				SELECT
+					Id,
+					BI_PSPB_Caregiver__c,
+					BI_PSPB_Patient__c,
+					BI_PSPB_Patient__r.PersonContactId,
+					BI_PSPB_Caregiver__r.PersonContactId,
+					BI_PSPB_Patient__r.BI_PSP_Birthdate__c,
+					BI_PSPB_Care_Program_Enrollee__c
+				FROM BI_PSPB_Enrollee_Caregiver__c
+				WHERE BI_PSPB_Patient__c IN :accountRec
+			]) {
+				if (enrolleCaregiverId.BI_PSPB_Patient__c != null) {
+					Id personContactId = enrolleCaregiverId.BI_PSPB_Caregiver__r.PersonContactId;
+					Id accIds = enrolleCaregiverId.BI_PSPB_Patient__r.Id;
+					Date birthdate = enrolleCaregiverId.BI_PSPB_Patient__r.BI_PSP_Birthdate__c;
+
+					if (birthdate != null) {
+						Integer age = Date.today().year() - birthdate.year();
+						if (age < 18 && personContactId != null) {
+							notificationCare.add(personContactId);
+							notificationCareAcc.add(accIds);
+						}
+					}
+				}
+			}
+
+			// Process caregiver notifications and associate them with notification settings
+			for (Id acccId : notificationCareAcc) {
+				// Get notification settings for this Account Id
+				List<BI_PSP_Notification_Setting__c> notificationSettings = accountToNotificationsMap.get(
+					acccId
+				);
+
+				// Add caregiver notifications to the corresponding notification settings
+				if (notificationSettings != null) {
+					for (
+						BI_PSP_Notification_Setting__c notificationSetting : notificationSettings
+					) {
+						if (notificationSetting.BI_PSP_Email__c == true) {
+							for (Id contactId : notificationCare) {
+								contactIdsToSendEmail.add(contactId);
+							}
+						}
+						if (notificationSetting.BI_PSP_SMS__c == true) {
+							for (Id contactId : notificationCare) {
+								contactIdsToSendSMS.add(contactId);
+							}
+						}
+					}
+				}
+			}
+			if (!contactIdsToSendEmail.isEmpty()) {
+				BI_PSPB_SendEmailBatch sendEmail = new BI_PSPB_SendEmailBatch(
+					contactIdsToSendEmail,
+					emailSubject,
+					url,
+					formattedDate,
+					followName
+				);
+				database.executeBatch(sendEmail, 45);
+			}
+			if (!contactIdsToSendSMS.isEmpty()) {
+				BI_PSPB_SendSmsBatch sendSms = new BI_PSPB_SendSmsBatch(
+					contactIdsToSendSMS,
+					notificationSubject,
+					url,
+					formattedDate
+				);
+				database.executeBatch(sendSms, 45);
 			}
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(

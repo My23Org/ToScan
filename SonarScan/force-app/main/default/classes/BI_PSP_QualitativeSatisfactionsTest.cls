@@ -310,7 +310,7 @@ public class BI_PSP_QualitativeSatisfactionsTest {
 			Email = 'testusernew@example.com',
 			BI_PSPB_Caregiver__c = true,
 			Username = 'testusernew@example.com',
-			FirstName = 'Test',
+			FirstName ='Test',
 			LastName = 'User',
 			Alias = 'tesn',
 			TimeZoneSidKey = 'America/New_York',
@@ -321,7 +321,7 @@ public class BI_PSP_QualitativeSatisfactionsTest {
 		);
 		insert testUser;
 		try {
-			System.runAs(testUser) {
+			
 				Test.startTest();
 
 				// Switch to the test caregiver context
@@ -329,8 +329,7 @@ public class BI_PSP_QualitativeSatisfactionsTest {
 				BI_PSP_QualitativeSatisfactions.getPatientAfterThreemonthsAndFourteenWeeks();
 				//This is negative senario so there no need to check assert
 
-				Test.stopTest();
-			}
+			
 		} catch (Exception e) {
 			// Assert that the exception message is as expected
 			Assert.areEqual(

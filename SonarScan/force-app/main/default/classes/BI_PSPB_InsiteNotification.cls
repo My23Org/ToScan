@@ -49,7 +49,7 @@ public without sharing class BI_PSPB_InsiteNotification {
 			}
 			if (
 				notificatonType ==
-				BI_PSPB_ConstantsClass.ACTION_TYPE_NotificatonTypeAction
+				BI_PSPB_ConstantsClass.ACTION_TYPE_NotificatonTypeAction && String.isBlank(category)
 			) {
 				List<Task> relatedTasksTreatment = [
 					SELECT
@@ -156,10 +156,6 @@ public without sharing class BI_PSPB_InsiteNotification {
 					ORDER BY CreatedDate DESC
 					LIMIT 100
 				];
-			} else {
-				throw new AuraHandledException(
-					BI_PSPB_ConstantsClass.recordcannotfound
-				);
 			}
 			//If this relatedTasks becomes null the error will be shown in biPspNotificationActionForm.
 			return relatedTasks;
@@ -728,6 +724,7 @@ public without sharing class BI_PSPB_InsiteNotification {
 				];
 			} else if (
 				(category ==
+				BI_PSPB_ConstantsClass.ACTION_TYPE_SymptomTracker ||category ==
 				BI_PSPB_ConstantsClass.ACTION_TYPE_GeneralCommunity ||
 				category == BI_PSPB_ConstantsClass.ACTION_TYPE_Challenges) &&
 				notificatonType ==
@@ -789,10 +786,6 @@ public without sharing class BI_PSPB_InsiteNotification {
 					ORDER BY CreatedDate DESC
 					LIMIT 100
 				];
-			} else {
-				throw new AuraHandledException(
-					BI_PSPB_ConstantsClass.recordcannotfound
-				);
 			}
 			//If this relatedTasks becomes null the error will be shown in biPspNotificationHistoryForm.
 			return relatedTasks;

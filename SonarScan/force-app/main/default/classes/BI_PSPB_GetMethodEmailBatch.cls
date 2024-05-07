@@ -69,7 +69,7 @@ public class BI_PSPB_GetMethodEmailBatch implements Database.Batchable<sObject>,
 		// Prepare lists to collect updates
 		try {
 			String accessToken = BI_PSPB_GetAccessToken.getAccessToken();
-			if (accessToken != null && String.isNotBlank(accessToken)) {
+			if (accessToken != null && !String.isBlank(accessToken)) {
 				// Declare a list to store email log record Ids for update
 				List<Id> emailLogsIdsToUpdate = new List<Id>();
 				// Retrieve setting from custom metadata type
@@ -189,7 +189,10 @@ public class BI_PSPB_GetMethodEmailBatch implements Database.Batchable<sObject>,
 		String emailBodyrespose
 	) {
 		try {
-			if (!logIds.isEmpty() && !String.isBlank(emailBodyrespose)) {
+			if (
+                !logIds.isEmpty() && 
+                !String.isBlank(emailBodyrespose)
+            ) {
 				List<BI_PSPB_OmnichannelLog__c> emailLogsToUpdate = new List<BI_PSPB_OmnichannelLog__c>();
 				// Retrieve the email log records using the provided Ids
 				emailLogsToUpdate = [
@@ -212,7 +215,7 @@ public class BI_PSPB_GetMethodEmailBatch implements Database.Batchable<sObject>,
 						System.now(),BI_PSPB_constantsClass.noRecordError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 				// Update the records
-				//update emailLogsToUpdate;
+				
 				Database.SaveResult[] saveResults = Database.update(
 					emailLogsToUpdate,
 					false,
@@ -237,8 +240,14 @@ public class BI_PSPB_GetMethodEmailBatch implements Database.Batchable<sObject>,
 					throw e;
 				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_GetMethodEmailBatch.class.toString(),
-					BI_PSPB_constantsClass.parameterError,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
+				BI_SFCOE_LOG_Util.logMessage(
+                    applicationName,
+                    BI_PSPB_GetMethodEmailBatch.class.toString(),
+					BI_PSPB_constantsClass.parameterError,
+                    System.now(),
+                    '',
+                    BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+                );
 			}
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(

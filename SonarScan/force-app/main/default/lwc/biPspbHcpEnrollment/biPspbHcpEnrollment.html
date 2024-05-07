@@ -41,7 +41,7 @@
 				<img src={BGpp} class="marTB20" alt="Beyond Gpp">
 				<h1 class="heading">Enroll a patient</h1>
 				<div class="slds-form-element__help" if:true={referringerrorMessage}>
-					<!-- <span class="errorFieldMsg error">{label.ReferringPractice}</span> -->
+					<span class="errorFieldMsg error">{label.ReferringPractice}</span>
 				</div>
 				<div class="PI ">
 					<div class="one">01&nbsp;</div>
@@ -87,9 +87,8 @@
 					</div>
 				</div>
 				<div class="slds-form-element__help" if:true={searchresultempty1}>
-					<lightning-icon icon-name='utility:warning' alternative-text='warning' variant='error'
-						size='x-small' title='warning' class="error-icon"></lightning-icon>
-					<span class="errorFieldMsg">Unable to find Physician</span>
+								<img class="warningclass" src={warning}>
+								<span class="errorFieldMsg">Unable to find Physician</span>
 				</div>
 
 				<div class="divclass">
@@ -132,12 +131,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="slds-form-element__help" if:true={searchresultempty2}>
-					<lightning-icon icon-name='utility:warning' alternative-text='warning' variant='error'
-						size='x-small' title='warning' class="error-icon"></lightning-icon>
-					<span class="errorFieldMsg">Unable to find Physician</span>
+                <div class="slds-form-element__help" if:true={searchresultempty2}>
+								<img class="warningclass" src={warning}>
+								<span class="errorFieldMsg">Unable to find Physician</span>
 				</div>
-
 				<hr class="hrclass2" />
 				<div class={addNewHCPSectionClass} onclick={expandAddNewForm}>
 					Could not find your information? Click here to add &nbsp;
@@ -207,7 +204,7 @@
 							</lightning-input>
 							<div class="slds-form-element__help" if:true={RPPracticenameerrorMessage}>
 								<img class="warningclass" src={warning}>
-								<span class="errorFieldMsg">{label.Practicename}</span>
+								<span class="errorFieldMsg">Practice field is required</span>
 							</div>
 							<div class="slds-form-element__help" if:true={RPPracticenameerrorMessagevalid}>
 								<img class="warningclass" src={warning}>
@@ -360,7 +357,7 @@
 				<div class="input-div">
 					<label class="input-label" data-field="pFN">First Name*</label>
 					<lightning-input label="First Name*" name="FirstName" value={leadFields.FirstName} class="textInput"
-						onkeydown={handleKeyDown1} onchange={handleInputChange} placeholder="Enter First Name"
+						 onchange={handleInputChange} placeholder="Enter First Name"
 						variant="label-hidden" data-field="pFN">
 					</lightning-input>
 					<div class="slds-form-element__help" if:true={firstnameerrorMessage}>
@@ -375,7 +372,7 @@
 				<div class="input-div">
 					<label class="input-label" data-field="pLN">Last Name*</label>
 					<lightning-input label="Last Name*" name="LastName" value={leadFields.LastName} class="textInput"
-						onkeydown={handleKeyDown1} onchange={handleInputChange} placeholder="Enter Last Name"
+						 onchange={handleInputChange} placeholder="Enter Last Name"
 						variant="label-hidden" data-field="pLN">
 					</lightning-input>
 					<div class="slds-form-element__help" if:true={lastnameerrorMessage}>
@@ -469,7 +466,7 @@
 				<div class="input-div">
 					<label class="input-label cFN">First Name*</label>
 					<lightning-input label="First Name*" name="CaregiverFirstName" value={CaregiverFields.FirstName}
-						onkeydown={handleKeyDown1} onchange={handleInputChange1} class="textInput cFN"
+						 onchange={handleInputChange1} class="textInput cFN"
 						variant="label-hidden" placeholder="Enter First Name">
 					</lightning-input>
 					<div class="slds-form-element__help" if:true={carefirstnameerrorMessage}>
@@ -484,7 +481,7 @@
 				<div class="input-div">
 					<label class="input-label cLN">Last Name*</label>
 					<lightning-input label="Last Name*" name="CaregiverLastName" value={CaregiverFields.LastName}
-						onkeydown={handleKeyDown1} onchange={handleInputChange1} class="textInput cLN"
+					 onchange={handleInputChange1} class="textInput cLN"
 						variant="label-hidden" placeholder="Enter Last Name">
 					</lightning-input>
 					<div class="slds-form-element__help" if:true={carelastnameerrorMessage}>
@@ -649,7 +646,7 @@
 				<div class="input-div">
 					<label class="input-label">Quantity</label>
 					<lightning-input label="Quantity*" name="Quantity" value={PrescriptionFields.Quantity}
-						onkeydown={handleKeyDown} onchange={handleInputChange2} class="textInput" variant="label-hidden"
+						onkeydown={handleKeyDown2} onchange={handleInputChange2} class="textInput" variant="label-hidden"
 						placeholder="Enter Quantity">
 					</lightning-input>
 				</div>
@@ -657,7 +654,7 @@
 					<div class="input-div dosage-unit-input-div">
 						<label class="input-label hFreq">Frequency</label>
 						<lightning-input label="Frequency*" name="Frequency" value={PrescriptionFields.Frequency}
-							onkeydown={handleKeyDown} onchange={handleInputChange2}
+							onkeydown={handleKeyDown2} onchange={handleInputChange2}
 							class="textInput hFreq dosage-frequency-input" variant="label-hidden" placeholder="0">
 						</lightning-input>
 
@@ -674,7 +671,7 @@
 				<div class="input-div">
 					<label class="input-label">Number of Refills</label>
 					<lightning-input label="No of refills*" name="refill" value={PrescriptionFields.refill}
-						onkeydown={handleKeyDown} onchange={handleInputChange2} class="textInput" variant="label-hidden"
+						onkeydown={handleKeyDown2} onchange={handleInputChange2} class="textInput" variant="label-hidden"
 						placeholder="Enter Number of Refills">
 					</lightning-input>
 				</div>

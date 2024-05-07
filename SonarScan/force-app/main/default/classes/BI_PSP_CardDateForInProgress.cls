@@ -9,8 +9,6 @@
 * 1.2		Abinsha		04-Apr-2024		Updated			Catch log added.
 */
 public with sharing class BI_PSP_CardDateForInProgress {
-    //This label states that the logged in user is not in the system.
-	private static String undefinedUser = System.Label.BI_PSP_UndefinedUser;
     //this list vraibles holds theh initial dated for all the questionniares except introduction and Qsq.
     private static List<BI_PSP_Questionnaire_Setups__c> customObjectRecords;
     // custom label that displays an error message when there is no AssessmnetQuestionResponse Record.
@@ -52,15 +50,15 @@ public with sharing class BI_PSP_CardDateForInProgress {
     // Label for 'Completed' status.
     private static String completed = System.Label.BI_PSP_Completed;
     //holds the account record details of the patient whos logged in.
-    private static Account patientAccount;
+    private static List<Account> patientAccount;
     //holds the care program enrollee record details of the patinet.
-    private static CareProgramEnrollee enrolledPatient;
+    private static List<CareProgramEnrollee> enrolledPatient;
     //this list holds the Account details of a care giver who logged in on behalf of the patient.
-    private static Account caregiverAccount;
+    private static list<Account> caregiverAccount;
     //this list holds the account details of the selected patient.
-    private static Account selectedPatient;
+    private static List<Account> selectedPatient;
     //holds the acre program enrolee record of the selected patient.
-    private static CareProgramEnrollee caregvrEnroledPatinet;
+    private static List<CareProgramEnrollee> caregvrEnroledPatinet;
 
     /*@Description  Aura enabled method to get the date in progress for DLQI category.
      We uset this method in biPspbDlqiCard  LWC component.*/
@@ -76,11 +74,11 @@ public with sharing class BI_PSP_CardDateForInProgress {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
-             if(currentUser !=null)
-            {
+
             if (currentUser.BI_PSPB_Caregiver__c == false) {
                 patientAccount = [
                     SELECT id, Name, PersonEmail
@@ -90,17 +88,20 @@ public with sharing class BI_PSP_CardDateForInProgress {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (patientAccount !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!patientAccount.isEmpty()) {
                     /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry
                      object using Healthcare license.*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patientAccount.Id
+                        WHERE AccountID = :patientAccount[0].Id
                     ];
-
-                    if (enrolledPatient !=null) {
-                        enrolleeId = enrolledPatient.Id;
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                    if (!enrolledPatient.isEmpty()) {
+                        enrolleeId = enrolledPatient[0].Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -120,29 +121,32 @@ public with sharing class BI_PSP_CardDateForInProgress {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-
-                if (caregiverAccount !=null) {
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccount.isEmpty()) {
                     selectedPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiverAccount
+                            Id = :caregiverAccount[0]
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
-
-                    if (selectedPatient !=null) {
+			  /*A user will only have one Account therefore using list for a single record 
+              can be negotiable and there may be a use for this in the future.*/
+                    if (!selectedPatient.isEmpty()) {
                         /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry
                          object using Healthcare license.*/
                         caregvrEnroledPatinet = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatient.Id
+                            WHERE AccountID = :selectedPatient[0].Id
                         ];
-
-                        if (caregvrEnroledPatinet !=null) {
-                            enrolleeId = caregvrEnroledPatinet.Id;
+		     /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                        if (!caregvrEnroledPatinet.isEmpty()) {
+                            enrolleeId = caregvrEnroledPatinet[0].Id;
                         }
                     }
                 } else {
@@ -154,17 +158,7 @@ public with sharing class BI_PSP_CardDateForInProgress {
                     );
                 }
             }
-            }
-             else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+
             Assessment previousAssessment = null;
 
             try {
@@ -262,11 +256,11 @@ public with sharing class BI_PSP_CardDateForInProgress {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
-			 if(currentUser !=null)
-            {
+
             if (currentUser.BI_PSPB_Caregiver__c == false) {
                 patientAccount = [
                     SELECT id, Name, PersonEmail
@@ -276,17 +270,20 @@ public with sharing class BI_PSP_CardDateForInProgress {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (patientAccount !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!patientAccount.isEmpty()) {
                     /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry
                      object using Healthcare license.*/
-                   enrolledPatient = [
+                    List<CareProgramEnrollee> enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patientAccount.Id
+                        WHERE AccountID = :patientAccount[0].Id
                     ];
-
-                    if (enrolledPatient !=null) {
-                        enrolleeId = enrolledPatient.Id;
+		    /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                    if (!enrolledPatient.isEmpty()) {
+                        enrolleeId = enrolledPatient[0].Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -307,28 +304,32 @@ public with sharing class BI_PSP_CardDateForInProgress {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-                if (caregiverAccount !=null) {
+                /*A user will only have one Account therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccount.isEmpty()) {
                     selectedPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiverAccount
+                            Id = :caregiverAccount[0]
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
-
-                    if (selectedPatient !=null) {
+					/*A user will only have one Account therefore using list for a single record 
+                    can be negotiable and there may be a use for this in the future.*/
+                    if (!selectedPatient.isEmpty()) {
                         /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry
                          object using Healthcare license.*/
                         caregvrEnroledPatinet = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatient.Id
+                            WHERE AccountID = :selectedPatient[0].Id
                         ];
-
-                        if (caregvrEnroledPatinet !=null) {
-                            enrolleeId = caregvrEnroledPatinet.Id;
+			   /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+               can be negotiable and there may be a use for this in the future.*/
+                        if (!caregvrEnroledPatinet.isEmpty()) {
+                            enrolleeId = caregvrEnroledPatinet[0].Id;
                         }
                     }
                 } else {
@@ -340,17 +341,7 @@ public with sharing class BI_PSP_CardDateForInProgress {
                     );
                 }
             }
-            }
-             else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
+
             Assessment previousAssessment = null;
 
             try {
@@ -449,12 +440,12 @@ public with sharing class BI_PSP_CardDateForInProgress {
                 SELECT Id, Name, BI_PSPB_Caregiver__c
                 FROM User
                 WHERE name = :currentUserName
+                And email=:currentUserEmail
                 WITH USER_MODE
                 LIMIT 1
             ];
-             if(currentUser !=null)
-            {
             if (currentUser.BI_PSPB_Caregiver__c == false) {
+                
                 patientAccount = [
                     SELECT id, Name, PersonEmail
                     FROM account
@@ -463,17 +454,20 @@ public with sharing class BI_PSP_CardDateForInProgress {
                         AND Name = :currentUserName
                     WITH USER_MODE
                 ];
-                if (patientAccount !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!patientAccount.isEmpty()) {
                     /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry
                      object using Healthcare license.*/
                     enrolledPatient = [
                         SELECT Id, Name
                         FROM CareProgramEnrollee
-                        WHERE AccountID = :patientAccount.Id
+                        WHERE AccountID = :patientAccount[0].Id
                     ];
-
-                    if (enrolledPatient !=null) {
-                        enrolleeId = enrolledPatient.Id;
+		    /*A user will only have one CareProgramEnrollee therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                    if (!enrolledPatient.isEmpty()) {
+                        enrolleeId = enrolledPatient[0].Id;
                     }
                 } else {
                     BI_SFCOE_LOG_Util.logMessage(
@@ -494,28 +488,32 @@ public with sharing class BI_PSP_CardDateForInProgress {
                         AND BI_PSPB_Selected_Patient_ID__c != NULL
                     WITH USER_MODE
                 ];
-                if (caregiverAccount !=null) {
+            /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                if (!caregiverAccount.isEmpty()) {
                     selectedPatient = [
                         SELECT Id, Name, PersonEmail
                         FROM Account
                         WHERE
-                            Id = :caregiverAccount
+                            Id = :caregiverAccount[0]
                                 .BI_PSPB_Selected_Patient_ID__c
                         WITH USER_MODE
                         LIMIT 1
                     ];
-
-                    if (selectedPatient !=null) {
+		    /*A user will only have one Account therefore using list for a single record 
+            can be negotiable and there may be a use for this in the future.*/
+                    if (!selectedPatient.isEmpty()) {
                         /*USER_MODE is not used because CareProgramEnrollee is an Salesforce Industry
                          object using Healthcare license.*/
                         caregvrEnroledPatinet = [
                             SELECT Id, Name
                             FROM CareProgramEnrollee
-                            WHERE AccountID = :selectedPatient.Id
+                            WHERE AccountID = :selectedPatient[0].Id
                         ];
-
-                        if (caregvrEnroledPatinet !=null) {
-                            enrolleeId = caregvrEnroledPatinet.Id;
+				/*A user will only have one CareProgramEnrollee therefore using list for a single record 
+                can be negotiable and there may be a use for this in the future.*/
+                        if (!caregvrEnroledPatinet.isEmpty()) {
+                            enrolleeId = caregvrEnroledPatinet[0].Id;
                         }
                     }
                 } else {
@@ -527,17 +525,6 @@ public with sharing class BI_PSP_CardDateForInProgress {
                     );
                 }
             }
-            }
-             else {
-					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
-						BI_PSP_LetsPersonlise.class.toString(),
-						'',
-						System.now(),
-						undefinedUser,
-						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-					);
-				}
 
             Assessment previousAssessment = null;
 

@@ -13,7 +13,8 @@ public with sharing class BI_PSPB_CaseSupport {
 	);
 	//A variable That holds the name of our application to be used in catch exception handler.
 	private static String applicationName = settings != null
-		? settings.BI_SFCOE_LOG_Application__c: '';
+		? settings.BI_SFCOE_LOG_Application__c
+		: '';
 	private static String statusSubmitted = System.Label.BI_PSPB_Submitted;
 	private static String statusDraft = System.Label.BI_PSPB_Draft;
 	private static String statusNeedmoreInformation = System.Label.BI_PSPB_NeedmoreInformation;
@@ -70,15 +71,20 @@ public with sharing class BI_PSPB_CaseSupport {
 							statusNeedmoreInformation +
 							'\')';
 					}
-					if (type != all && status != all) {
-						query += ' AND Type = :type AND Status = :status ';
-						if (status == statusDraft) {
-							query +=
-								' AND Type = :type AND (Status=\'' +
-								statusDraft +
-								'\' OR Status=\'' +
-								statusNeedmoreInformation +
-								'\')';
+					if (type != all) {
+						if (status != all) {
+							if (status == statusDraft) {
+								query +=
+									' AND Type = :type AND (Status=\'' +
+									statusDraft +
+									'\' OR Status=\'' +
+									statusNeedmoreInformation +
+									'\')';
+							} else {
+								query += ' AND Type = :type AND Status = :status ';
+							}
+						} else {
+							query += ' AND Type = :type ';
 						}
 					}
 					if (!String.isBlank(status) && status != all) {
@@ -112,10 +118,17 @@ public with sharing class BI_PSPB_CaseSupport {
 						);
 					}
 				} else {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_CaseSupport.class.toString(),
-						BI_PSPB_constantsClass.error,System.now(),'',BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+					BI_SFCOE_LOG_Util.logMessage(
+						applicationName,
+						BI_PSPB_CaseSupport.class.toString(),
+						BI_PSPB_constantsClass.error,
+						System.now(),
+						'',
+						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
-					throw new AuraHandledException(BI_PSPB_constantsClass.error);
+					throw new AuraHandledException(
+						BI_PSPB_constantsClass.error
+					);
 				}
 			} else {
 				BI_SFCOE_LOG_Util.logMessage(
@@ -126,9 +139,7 @@ public with sharing class BI_PSPB_CaseSupport {
 					'',
 					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 				);
-                throw new AuraHandledException(
-						BI_PSPB_constantsClass.error
-					);
+				throw new AuraHandledException(BI_PSPB_constantsClass.error);
 			}
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(
@@ -163,7 +174,7 @@ public with sharing class BI_PSPB_CaseSupport {
 						Status,
 						BI_PSPB_Sub_Type__c,
 						CreatedDate,
-						CreatedById
+						CreatedBy.Name
 					FROM Case
 					WHERE Id = :caseId
 					WITH USER_MODE
@@ -177,9 +188,9 @@ public with sharing class BI_PSPB_CaseSupport {
 					'',
 					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 				);
-               throw new AuraHandledException(
-				BI_PSPB_constantsClass.errorMsgCaseRecordNotFound
-			);
+				throw new AuraHandledException(
+					BI_PSPB_constantsClass.errorMsgCaseRecordNotFound
+				);
 			}
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(
@@ -192,53 +203,6 @@ public with sharing class BI_PSPB_CaseSupport {
 			throw new AuraHandledException(
 				BI_PSPB_constantsClass.errorMsgCaseRecordNotFound
 			);
-		}
-	}
-	/**
-	 * @description This method retrieves the name of the user identified by the userId parameter.
-	 * It queries the User object to find the user's name and returns the corresponding User record.
-	 * @return The User record containing the name of the user.
-	 * @param userid The Id of the user for which to retrieve the name.
-	 */
-	@AuraEnabled
-	public static User getname(Id userid) {
-		try {
-            
-			if (userid != null && userid !='') {
-				list<User> nam = [
-					SELECT Name,BI_PSPB_Caregiver__c
-					FROM User
-					WHERE Id = :userid
-					LIMIT 1
-				];
-				//system.debug(nam);
-				if (!nam.isEmpty()) {
-					return nam[0];
-				} else {
-					throw new AuraHandledException(
-						BI_PSPB_constantsClass.error
-					);
-				}
-			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_CaseSupport.class.toString(),
-					BI_PSPB_constantsClass.parameterError,
-					System.now(),
-					'',
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
-                throw new AuraHandledException(errorUserName);
-			}
-		} catch (Exception ex) {
-			BI_SFCOE_LOG_Util.handleException(
-				ex,
-				applicationName,
-				BI_PSPB_CaseSupport.class.toString(), //YourClassname
-				null,
-				System.now()
-			);
-			throw new AuraHandledException(errorUserName);
 		}
 	}
 	/**
@@ -293,7 +257,6 @@ public with sharing class BI_PSPB_CaseSupport {
 							'',
 							BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 						);
-						
 					}
 				} else {
 					BI_SFCOE_LOG_Util.logMessage(
@@ -304,7 +267,6 @@ public with sharing class BI_PSPB_CaseSupport {
 						'',
 						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
-					
 				}
 				if (!String.isBlank(base64URL)) {
 					return base64URL;
@@ -328,9 +290,9 @@ public with sharing class BI_PSPB_CaseSupport {
 					'',
 					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 				);
-                throw new AuraHandledException(
-				BI_PSPB_constantsClass.errorMsgCaseRecordNotFound
-			);
+				throw new AuraHandledException(
+					BI_PSPB_constantsClass.errorMsgCaseRecordNotFound
+				);
 			}
 		} catch (Exception ex) {
 			BI_SFCOE_LOG_Util.handleException(

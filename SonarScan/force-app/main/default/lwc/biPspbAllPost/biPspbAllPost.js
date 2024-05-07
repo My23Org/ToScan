@@ -278,7 +278,7 @@ export default class biPspbAllPost extends (LightningElement) {
 			else if (error) {
 				this.showToast(errormessage, error.body.message, errorvariant);//if data null throw exception 
 			}
-			else{
+			else {
 				this.showToast(errormessage, BI_PSPB_Error_For_Account, errorvariant); // Catch Exception
 			}
 		}
@@ -329,7 +329,7 @@ export default class biPspbAllPost extends (LightningElement) {
 				this.isLoading = true;
 				this.showToast(errormessage, error.body.message, errorvariant);//data null exception
 			}
-			else{
+			else {
 				console.log('error ');
 				this.isLoading = true;
 				this.showToast(errormessage, BI_PSPB_Error_For_Post_Creation, errorvariant); // catch Exception
@@ -459,13 +459,17 @@ export default class biPspbAllPost extends (LightningElement) {
 		const years = Math.floor(days / 365);
 		if (years > 0) {
 			return `${years} ${years === 1 ? BI_PSP_chatterYear : BI_PSP_chatterYears} ${BI_PSP_chatterAgo}`;
-		} if (months > 0) {
+		}
+		if (months > 0) {
 			return `${months} ${months === 1 ? BI_PSP_chatterMonth : BI_PSP_chatterMonths} ${BI_PSP_chatterAgo}`;
-		} if (days > 0) {
+		}
+		if (days > 0) {
 			return `${days} ${days === 1 ? BI_PSP_chatterDay : BI_PSP_chatterDays} ${BI_PSP_chatterAgo}`;
-		} if (hours > 0) {
+		}
+		if (hours > 0) {
 			return `${hours} ${hours === 1 ? BI_PSP_chatterHour : BI_PSP_chatterHours} ${BI_PSP_chatterAgo}`;
-		} if (minutes > 0) {
+		}
+		if (minutes > 0) {
 			return `${minutes} ${minutes === 1 ? BI_PSP_chatterMinute : BI_PSP_chatterMinutes} ${BI_PSP_chatterAgo}`;
 		}
 		return `${seconds} ${seconds === 1 ? BI_PSP_chatterSecond : BI_PSP_chatterSeconds} ${BI_PSP_chatterAgo}`;
@@ -1314,7 +1318,7 @@ export default class biPspbAllPost extends (LightningElement) {
 			this.username = event.target.dataset.username;
 			this.avt = event.currentTarget.dataset.accid;
 			this.avtvarfor = event.currentTarget.dataset.avat;
-			console.log('values',this.UserAccId,this.avt);
+			console.log('values', this.UserAccId, this.avt);
 			emojifollow({ loggedAccountId: this.UserAccId, otherAccountId: this.avt })
 				.then((result) => {
 					if (this.UserAccId === this.avt) {
@@ -1589,13 +1593,17 @@ export default class biPspbAllPost extends (LightningElement) {
 		const years = Math.floor(days / 365);
 		if (years > 0) {
 			return `${years} ${years === 1 ? BI_PSP_chatterYear : BI_PSP_chatterYears} ${BI_PSP_chatterAgo}`;
-		} if (months > 0) {
+		}
+		if (months > 0) {
 			return `${months} ${months === 1 ? BI_PSP_chatterMonth : BI_PSP_chatterMonths} ${BI_PSP_chatterAgo}`;
-		} if (days > 0) {
+		}
+		if (days > 0) {
 			return `${days} ${days === 1 ? BI_PSP_chatterDay : BI_PSP_chatterDays} ${BI_PSP_chatterAgo}`;
-		} if (hours > 0) {
+		}
+		if (hours > 0) {
 			return `${hours} ${hours === 1 ? BI_PSP_chatterHour : BI_PSP_chatterHours} ${BI_PSP_chatterAgo}`;
-		} if (minutes > 0) {
+		}
+		if (minutes > 0) {
 			return `${minutes} ${minutes === 1 ? BI_PSP_chatterMinute : BI_PSP_chatterMinutes} ${BI_PSP_chatterAgo}`;
 		}
 		return `${seconds} ${seconds === 1 ? BI_PSP_chatterSecond : BI_PSP_chatterSeconds} ${BI_PSP_chatterAgo}`;

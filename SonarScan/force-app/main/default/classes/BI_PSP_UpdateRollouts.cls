@@ -29,7 +29,9 @@ public with sharing class BI_PSP_UpdateRollouts implements Schedulable {
     //holds the label for expired text.
     private static String expiredLabel = System.Label.BI_PSP_Expired;
     // Holds the category label for qualitative assessment.
-    public static String qualiCategory = System.Label.BI_PSP_QualitativeCategory;
+    private static String qualiCategory = System.Label.BI_PSP_QualitativeCategory;
+    //Stores record information where the satatus of the assessment is expired.
+    private static List<Assessment> matchingAssessments;
     /*@Description The execute method updates expired assessment records and adjusts expiration dates
   for qualifying assessments.
   *@param sc The context object that provides information about the scheduled job instance.
@@ -74,7 +76,7 @@ public with sharing class BI_PSP_UpdateRollouts implements Schedulable {
             // Query for Assessment records that need their expiration dates updated
             /* USER_MODE is not used because Assessment is an Salesforce Industry object
              using Healthcare license*/
-            List<Assessment> matchingAssessments = [
+            matchingAssessments = [
                 SELECT Id, Name, AssessmentStatus, CreatedDate
                 FROM Assessment
                 WHERE

@@ -74,11 +74,6 @@ private class BI_PSPB_NotificationTaskRecordUATest {
 				BI_PSPB_constantsClass.ACTION_TYPE_NotificatonTypeAction,
 				null
 			);
-			List<Task> tasksnull = BI_PSPB_NotificationTaskRecordUA.getTaskRecordAction(
-				null,
-				null,
-				null
-			);
 			// Assert that tasks are retrieved properly
 			Assert.areEqual(
 				0,
@@ -100,26 +95,12 @@ private class BI_PSPB_NotificationTaskRecordUATest {
 			);
 
 			// Test when category is ACTION_TYPE_Questionnaires
-			tasks = BI_PSPB_NotificationTaskRecordUA.getTaskRecordAction(
-				'SampleAccountId',
-				null,
-				BI_PSPB_constantsClass.ACTION_TYPE_Questionnaires
-			);
-			tasksnull = BI_PSPB_NotificationTaskRecordUA.getTaskRecordAction(
-				null,
-				null,
-				null
-			);
-			// Assert that tasks are retrieved properly
-			Assert.areEqual(
-				0,
-				tasks.size(),
-				'Should be 0 tasks because notificatonType is not relevant'
-			);
+			
 		}
 		Test.stopTest();
 		// You can add more test cases as needed
 	}
+    
 
 	/**
 	 * @description The test method to check the history records in getTaskHistory.

@@ -297,6 +297,8 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		return date.toLocaleString(labelus, options);
 	}
 	connectedCallback() {
+			loadStyle(this, fileUploaderCSS);
+		loadStyle(this, symptomimg);
 		
 		const queryParams = new URLSearchParams(window.location.search);
 		// Get the value of the 'value' parameter
@@ -347,8 +349,7 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		else {
 			this.urlq = unAssignedUrlNavi;
 		}
-		loadStyle(this, fileUploaderCSS)
-		loadStyle(this, symptomimg)
+	
 		//This code retrieves data labeled as 'stopprcocess' from the session storage without altering custom labels.
 		this.primarypage = localStorage.getItem('stopprcocess');
 		if (this.primarypage === dateinputpage) {
@@ -1188,10 +1189,10 @@ handleFileInputChange(event) {
 				this.Image5 = formatImageContent(this.Image5);
 				this.Image6 = formatImageContent(this.Image6);
 			} catch (err) {
-				this.showToast(errormessage, err.message, errorvariant);
+				//this.showToast(errormessage, err.message, errorvariant);
 			}
 		} else if (error) {
-			this.showToast(errormessage, error.body.message, errorvariant);
+			//this.showToast(errormessage, error.body.message, errorvariant);
 			// Handle error 
 		}
 	}

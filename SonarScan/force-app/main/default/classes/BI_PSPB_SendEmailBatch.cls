@@ -39,27 +39,19 @@ public class BI_PSPB_SendEmailBatch implements Database.Batchable<SObject>, Data
 		String notificationDate,
 		String uname
 	) {
-		//notificationDeveloperName,desturl, notificationDate,uname can be empty values
-		if (
-			!contactIds.isEmpty() &&
-			notificationDeveloperName != null &&
-			desturl != null &&
-			notificationDate != null &&
-			uname != null
-		) {
+		try {
 			this.contactIds = contactIds;
 			this.notificationDeveloperName = notificationDeveloperName;
 			this.desturl = desturl;
 			this.notificationDate = notificationDate;
 			this.uname = uname;
-		} else {
-			BI_SFCOE_LOG_Util.logMessage(
+		} catch (Exception ex) {
+			BI_SFCOE_LOG_Util.handleException(
+				ex,
 				app,
 				BI_PSPB_SendEmailBatch.class.toString(),
-				BI_PSPB_constantsClass.parameterError,
-				System.now(),
-				'',
-				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
+				null,
+				System.now()
 			);
 		}
 	}
@@ -111,7 +103,7 @@ public class BI_PSPB_SendEmailBatch implements Database.Batchable<SObject>, Data
 
 		try {
 			String accessToken = BI_PSPB_GetAccessToken.getAccessToken();
-			if (String.isNotBlank(accessToken)) {
+			if (!String.isBlank(accessToken)) {
 				BI_PSPB_Omnichannel_API_Setting__mdt filteredSettings = BI_PSPB_Omnichannel_API_Setting__mdt.getInstance(
 					endPoint
 				);
@@ -369,7 +361,7 @@ public class BI_PSPB_SendEmailBatch implements Database.Batchable<SObject>, Data
 			'',
 			System.now(),
 			'Batch Finished',
-			BI_SFCOE_LOG_Util.LOG_SEVERITY_INFO
+			BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 		);
 	}
 }
