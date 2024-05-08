@@ -334,7 +334,7 @@ export default class BiPspbWAPIQuestionnaire extends LightningElement {
 			this.target14wksdate = data.target14wksdate ?? null;
 		} else if (error) {
 			// Log any errors if data retrieval fails
-			this.showToast(consoleErrorMessage, error.message, errorvariant); // Catching Potential Error from Apex
+			this.showToast(consoleErrorMessage,error.body.message, errorvariant); // Catching Potential Error from Apex
 		}
 		} catch (err) {
 		this.showToast(consoleErrorMessage, err.message, errorvariant); // Catching Potential Error from LWC
@@ -381,7 +381,7 @@ export default class BiPspbWAPIQuestionnaire extends LightningElement {
 			}
 		} else if (error) {
 			// Log any errors if data retrieval fails
-			this.showToast(consoleErrorMessage, error.message, errorvariant); // Catching Potential Error from Apex
+			this.showToast(consoleErrorMessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 		}
 		} catch (err) {
 		// Log any errors that occur during processing
@@ -611,7 +611,6 @@ export default class BiPspbWAPIQuestionnaire extends LightningElement {
 			else{
 				if(record.ResponseValue === firstYes)
 				{
-					console.log('OUTPUT antoo : ');
 				this.secondquestionvisible = true;
 				}
 				

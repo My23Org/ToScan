@@ -22,6 +22,10 @@
 		format("woff");
 }
 
+.qualtive {
+    font-weight: bold;
+	    margin-bottom: 10px;
+}
 .boldQsq {
 	color: #413a63;
 	font-family: "Eina-Bold";
@@ -33,19 +37,15 @@
 	align-items: center;
 	margin-bottom: 8px;
 }
-
 .close {
 	display: none;
 }
-
 .closesum {
 	display: none;
 }
-
 .close1 {
 	display: none;
 }
-
 .contentboxdot {
 	position: relative;
 	left: 5px;
@@ -53,7 +53,6 @@
 	color: #403a60;
 	font-size: x-large;
 }
-
 .contentboxdot2 {
 	position: relative;
 	left: 5px;
@@ -68,23 +67,19 @@
 	left: 80px;
 	position: relative;
 }
-
 .contentbox {
 	color: rgba(64, 58, 96, 1);
 	font-size: 14px;
 	overflow: hidden;
 	font-family: "Eina-Regular";
 }
-
 .summaryflex {
 	display: flex;
 	flex-direction: column;
 }
-
 .summary {
 	display: none;
 }
-
 .contentboxchal {
 	color: rgba(64, 58, 96, 1);
 	font-size: 14px;
@@ -95,7 +90,6 @@
 .contentboxmobile {
 	display: none;
 }
-
 .contentbox5 {
 	color: rgba(64, 58, 96, 1);
 	font-size: 14px;
@@ -105,7 +99,6 @@
 	position: relative;
 	right: 11px;
 }
-
 .contentbox2 {
 	color: rgba(64, 58, 96, 1);
 	font-size: 14px;
@@ -123,15 +116,12 @@
 	position: relative;
 	right: 11px;
 }
-
 .navigationcontentdot {
 	display: none;
 }
-
 .navigationcontentdot1 {
 	display: none;
 }
-
 .navigationcontent {
 	background-color: #ecdca8;
 	padding: 0px 11px 7px 18px;
@@ -142,7 +132,6 @@
 	width: max-content;
 	height: max-content;
 }
-
 .navigationcontent2 {
 	background-color: #ecdca8;
 	padding: 0px 11px 7px 12px;
@@ -162,7 +151,6 @@
 	width: 100%;
 	margin-left: -5px;
 }
-
 .navigationcontent3 {
 	background-color: #ecdca8;
 	padding: 2px 7px 7px 9px;
@@ -176,7 +164,6 @@
 .flex1 {
 	display: flex;
 }
-
 .navigationcontent3mobile {
 	background-color: #ecdca8;
 	padding: 2px 11px 7px 5px;
@@ -187,7 +174,6 @@
 	left: -5px;
 	width: 100%;
 }
-
 .navigationcontent4 {
 	background-color: #ecdca8;
 	padding: 2px 11px 7px 33px;
@@ -198,7 +184,6 @@
 	width: max-content;
 	height: max-content;
 }
-
 .navigationcontent5sub {
 	background-color: #ecdca8;
 	padding: 2px 11px 7px 18px;
@@ -209,7 +194,6 @@
 	width: fit-content;
 	height: max-content;
 }
-
 .navigationcontent5 {
 	background-color: #ecdca8;
 	padding: 2px 11px 7px 18px;
@@ -220,15 +204,12 @@
 	width: fit-content;
 	height: max-content;
 }
-
 .line {
 	display: none;
 }
-
 .text-content-for-mobile {
 	display: none;
 }
-
 @media only screen and (max-width: 768px) {
 	.navigationcontent {
 		width: fit-content;
@@ -243,38 +224,31 @@
 
 		position: relative;
 	}
-
 	/* .navigationcontent2mobile{
 		width: 100%;
 	} */
 }
-
 @media only screen and (max-width: 600px) {
 	.line {
 		right: 8px !important;
 	}
 }
-
 @media only screen and (max-width: 1200px) {
 	.navigationcontent2mobile {
 		width: 50%;
 	}
-
 	.avatar-container {
 		width: 64px;
 		height: 64px;
 		margin-top: 20px;
 		left: 0px;
 	}
-
 	.show-element {
 		display: block !important;
 	}
-
 	.summary {
 		display: block;
 	}
-
 	.close1 {
 		display: block;
 
@@ -292,14 +266,12 @@
 		margin-top: -12px;
 		/* margin-left: 92%; */
 	}
-
 	.closesum {
 		display: block;
 		position: absolute;
 		margin-top: -11px;
 		margin-left: 96%;
 	}
-
 	.text-content-for-mobile {
 		display: block;
 		width: 14%;
@@ -312,11 +284,9 @@
 		text-align: center;
 		overflow: hidden;
 	}
-
 	.navigationcontent3 {
 		display: none;
 	}
-
 	.contentbox1 {
 		display: none;
 	}
@@ -334,19 +304,16 @@
 
 		position: relative;
 	}
-
 	.avatar-picklist-container {
 		display: flex;
 		flex-direction: row;
 		position: relative;
 		left: 312px;
 	}
-
 	img {
 		max-width: 64px;
 		height: 64px;
 	}
-
 	.line {
 		display: block;
 		background-image: linear-gradient(
@@ -362,7 +329,6 @@
 		width: 377.5%;
 		right: 13%;
 	}
-
 	.contentboxmobile {
 		display: block;
 		color: rgba(64, 58, 96, 1);
@@ -371,11 +337,9 @@
 
 		font-family: "Eina-Regular";
 	}
-
 	.contentbox {
 		display: none;
 	}
-
 	.navigationcontentdot {
 		display: block;
 		background-color: #ecdca8;
@@ -387,7 +351,6 @@
 		height: 25px;
 		right: 5px;
 	}
-
 	.navigationcontentdot1 {
 		display: block;
 		background-color: #ecdca8;
@@ -400,7 +363,6 @@
 		width: 25px;
 		height: 25px;
 	}
-
 	.navigationcontentdot1sub1 {
 		display: block;
 		background-color: #ecdca8;
@@ -413,7 +375,6 @@
 		width: 25px;
 		height: 25px;
 	}
-
 	.navigationcontentdot1sub2 {
 		display: block;
 		background-color: #ecdca8;
@@ -427,35 +388,33 @@
 		width: 25px;
 		height: 25px;
 	}
-
 	.navigationcontent4 {
 		display: none;
 	}
-
 	.navigationcontent2 {
 		display: none;
 	}
-
 	.navigationcontent5 {
 		display: block;
 		margin-left: 54px;
 	}
-
 	.navigationcontent5sub {
 		display: block;
 		margin-left: 54px;
 	}
-
 	.summaryclass {
 		display: flex;
 	}
+	/* .navigationcontent4{
+		margin-top: 256px;
+	position: relative;
+	left: -288px;
+} */
 }
-
 @media only screen and (min-width: 1201px) and (max-width: 1500px) {
 	.navigationcontent3mobile {
 		display: none;
 	}
-
 	.navigationcontentdot {
 		display: none;
 		background-color: #ecdca8;
@@ -467,15 +426,12 @@
 		width: max-content;
 		height: max-content;
 	}
-
 	.closesum {
 		display: none;
 	}
-
 	.summary {
 		display: none;
 	}
-
 	.navigationcontent {
 		background-color: #ecdca8;
 		padding: 3px 25px 1px 4px;
@@ -487,12 +443,10 @@
 		height: max-content;
 		margin-left: 0px;
 	}
-
 	.avatar-picklist-container {
 		display: flex;
 		flex-direction: column;
 	}
-
 	.line {
 		display: none;
 	}
@@ -546,7 +500,6 @@
 		height: 64px;
 		margin-left: 20px;
 	}
-
 	.line {
 		display: block;
 		background-image: linear-gradient(
@@ -563,7 +516,6 @@
 		width: 104%;
 	}
 }
-
 @media only screen and (max-width: 450px) {
 	.avatar-picklist-container {
 		display: flex;
@@ -584,7 +536,6 @@
 		height: 64px;
 		margin-left: 20px;
 	}
-
 	.line {
 		display: block;
 		background-image: linear-gradient(
@@ -622,7 +573,6 @@
 		height: 64px;
 		margin-left: 20px;
 	}
-
 	.line {
 		display: block;
 		background-image: linear-gradient(
@@ -639,7 +589,6 @@
 		width: 280%;
 	}
 }
-
 @media only screen and (max-width: 768px) {
 	.avatar-picklist-container {
 		display: flex;
@@ -660,7 +609,6 @@
 		height: 64px;
 		margin-left: 20px;
 	}
-
 	.line {
 		display: block;
 		background-image: linear-gradient(
@@ -699,7 +647,6 @@
 		height: 64px;
 		margin-left: 20px;
 	}
-
 	.line {
 		display: block;
 		background-image: linear-gradient(
@@ -714,5 +661,7 @@
 		right: 20px;
 		left: -34px;
 		width: 220%;
+	}
+	.space {
 	}
 }

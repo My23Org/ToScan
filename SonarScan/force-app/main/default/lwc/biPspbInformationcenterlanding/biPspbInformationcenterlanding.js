@@ -6,6 +6,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import retrieveMediaFromCMSNews from '@salesforce/apex/BI_PSPB_CmsCtrl.retrieveMediaFromCMSNews';
 import showfilterresponse from '@salesforce/apex/BI_PSPB_PersonalizedMessagesCtrl.retrieveAssessmentRecordsForCurrentUser';
 import Patientstatus from '@salesforce/apex/BI_PSPB_treatmentvideocmd.patientStatus';
+import updatereaction from '@salesforce/apex/BI_PSPB_CmsCtrl.updatereaction';
 import { refreshApex } from '@salesforce/apex';
 // To import Static Resource
 import articlepic4 from '@salesforce/resourceUrl/BI_PSP_articlepic4';
@@ -97,6 +98,7 @@ import BI_PSPB_ArticleTwentySixRT from '@salesforce/label/c.BI_PSPB_ArticleTwent
 import BI_PSPB_ArticleTwentySevenRT from '@salesforce/label/c.BI_PSPB_ArticleTwentySevenRT';
 import BI_PSPB_ArticleTwentyEightRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyEightRT';
 import BI_PSPB_ArticleTwentyNineRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyNineRT';
+import viewlabel from '@salesforce/label/c.BI_PSPB_View';
 // To get Current UserId
 import Id from '@salesforce/user/Id';
 
@@ -142,7 +144,7 @@ export default class BiPspbInformationcenterlanding extends LightningElement {
 	urlSegments;
 	baseUrl;
 	siteUrlq;
-
+	titlear;
 	searchitems = [];
 	originalsearchitems = [];
 	// button labels
@@ -223,12 +225,6 @@ export default class BiPspbInformationcenterlanding extends LightningElement {
 		} catch (err) {
 			this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from Lwc
 		}
-	}
-
-	// Generate a random number between 2 and 4 (inclusive)
-	get dynamicProperty() {
-		const newRandomNumber = Math.floor(Math.random() * 3) + 2;
-		return newRandomNumber;
 	}
 
 	/*There's no need to check for null because in Apex, we're throwing an AuraHandledException. 
@@ -420,7 +416,16 @@ export default class BiPspbInformationcenterlanding extends LightningElement {
 		const finaltitle = event.currentTarget.dataset.name;
 
 		const articlename = finaltitle;
-
+		updatereaction({
+			articlename: articlename, reaction: viewlabel
+		})
+			.then(() => {
+				this.titlear = viewlabel+ ': ' + articlename;
+			})
+			.catch((error) => {
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
+				// Handle error, if needed
+			});
 		window.location.href =
 			this.baseUrl + this.siteUrlq + detailpage + articlename;
 	}

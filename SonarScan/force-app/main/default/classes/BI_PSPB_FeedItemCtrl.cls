@@ -181,9 +181,6 @@ public with sharing class BI_PSPB_FeedItemCtrl {
 								filteredResults.add(item);
 							}
 						}
-					} else {
-						// Throwing error when post is not found.
-						throw new AuraHandledException(errorWhileFetchingPost);
 					}
 				} else {
 					// Throwing error when account not found.

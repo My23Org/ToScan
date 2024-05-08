@@ -68,11 +68,10 @@ public class BI_PSPB_GetMethodSMSBatch implements Database.Batchable<sObject>, D
 		// Reuse your existing getMethodCallout logic here to process each record in scope
 		// This will include the callout and updating of records as previously defined in the @future method
 		// Prepare lists to collect updates
-		try {
-			String statusqueued = BI_PSPB_constantsClass.queued;
+		try {			
 			String accessToken = BI_PSPB_GetAccessToken.getAccessToken();
 			if (!String.isBlank(accessToken)) {
-				List<BI_PSPB_OmnichannelLog__c> logsToUpdate = new List<BI_PSPB_OmnichannelLog__c>();
+				
 				// Declare a list to store sms log record Ids for update
 				List<Id> smsLogsIdsToUpdate = new List<Id>();
 				// Retrieve setting from custom metadata type
@@ -232,9 +231,7 @@ public class BI_PSPB_GetMethodSMSBatch implements Database.Batchable<sObject>, D
 				if (!String.isBlank(errorMsg)) {
 					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_GetMethodSMSBatch.class.toString(),'',
 						System.now(),errorMsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
-					DmlException e = new DmlException();
-					e.setMessage(errorMsg);
-					throw e;
+					
 				}
 			} else {
 				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_GetMethodSMSBatch.class.toString(),

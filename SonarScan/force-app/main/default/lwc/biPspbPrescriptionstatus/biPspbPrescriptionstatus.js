@@ -21,6 +21,9 @@ export default class BiPspbPrescriptionstatus extends LightningElement {
 	@track userid = Id; // Track the current user's ID
 	@track cases; // Track cases
 	@track accname; // Track the account name
+	@track nopresription=false;
+	@track withPrescription=true;
+	@track Mobileprescrition=true;
 	Statusoptions = [ // Define options for status
 		{ label: Submitted, value: Submitted },
 		{ label: Prescriptionunderverification, value: Prescriptionunderverification },
@@ -56,6 +59,12 @@ export default class BiPspbPrescriptionstatus extends LightningElement {
 		try {
 			getCaseFiles({ patientId: acc, caseStatus: '' }) // Call Apex method to get cases
 				.then(result => {
+					if(result && result.length ===0){
+						this.nopresription = true;
+						this.withPrescription=false;
+						this.Mobileprescrition=false;					
+
+					}
 
 
 					this.cases = result.map(caseRecord => { // Map each case record

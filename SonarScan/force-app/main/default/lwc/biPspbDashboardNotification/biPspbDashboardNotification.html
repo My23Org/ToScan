@@ -4,7 +4,7 @@
 		<div class="header">
 		<div> <h2 class="Notify">Notifications</h2>
 		</div><!-- Header and View All Button -->	   
-		<div class='butnclass'><button class="view-all-button" onclick={handleNavigateAll}>View All</button>
+		<div  if:true={tasks} class='butnclass'><button class="view-all-button" onclick={handleNavigateAll}>View All</button>
 		</div>
 		</div>
 		<div class="slds-p-around_medium">
@@ -36,10 +36,11 @@
 							<p class="timeElapsed">{task.timeElapsed}</p> <!-- Display timeElapsed -->
 					</div>				   
 				</template>
-				<hr class="line">
+			
 			</template>
+				<hr  class="line">
 			<template if:false={tasks}>
-				<p class="no-notifications">No Notifications available</p>
+				<p class="no-notifications">You're all caught up! You have no new notifications at this time.</p>
 			</template>
 		</div>
 		<template if:true={showModal}>

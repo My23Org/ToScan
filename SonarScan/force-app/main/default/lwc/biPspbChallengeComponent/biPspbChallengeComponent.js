@@ -451,6 +451,8 @@ export default class BiPspbChallengeComponent extends LightningElement {
 	//This method is used to Update the Available Challenges.
 	simpleUpdateChallenge(updatingChallenge) {
 		this.updating = this.completedLabel;
+		console.log('updatingChallenge[0].challengeIdToUpdate-->', updatingChallenge[0].challengeIdToUpdate);
+		console.log('this.updating-->', this.updating);
 		updateChallenges({
 			challenge: updatingChallenge[0].challengeIdToUpdate,
 			activeAvailable: this.updating

@@ -34,9 +34,9 @@ public class BI_PSPB_PatientDetailsCtrlTest {
   /**
 @description  This test class ensures that the method accurately retrieves the caregiver's User ID during login and displays the list of associated patients. It validates proper functionality for different caregiver User IDs and verifies the correct return of patient accounts, enhancing reliability and error handling.
 **/
-  /*@isTest
+  @isTest
   static void testGetCaregiverAccounts() {
-    //System.runAs(testUserPatient) {
+    
       BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
         Name = 'ApplicationName',
         BI_SFCOE_LOG_Application__c = 'PSPB'
@@ -48,70 +48,99 @@ public class BI_PSPB_PatientDetailsCtrlTest {
         WHERE Name = 'Standard User'
         LIMIT 1
       ];
+      String currentUserName = 'Test User';
+		String currentUserEmail = 'testusernew@example.com';
       // Create a caregiver account
       // Create a caregiver user associated with the caregiver account
-      User caregiverUser = new User(
-        Username = 'johndeasds@acme.com',
-        Email = UserInfo.getUserEmail(),
-        LastName = UserInfo.getName(),
-        Alias = 'cg',
-        TimeZoneSidKey = 'America/New_York',
-        LocaleSidKey = 'en_US',
-        EmailEncodingKey = 'UTF-8',
-        ProfileId = standardUserProfile.Id,
-        LanguageLocaleKey = 'en_US'
-      );
-      insert caregiverUser;
-      Account testAccountRecord = new Account(Name = 'Test Account');
-      insert testAccountRecord;
-      CareProgram testCP = new CareProgram(Name = 'Test Enrollee');
-      insert testCP;
-      CareProgramEnrollee cpe = new CareProgramEnrollee(
-        AccountId = testAccountRecord.Id,
-        Name = 'Test Enrollee',
-        CareProgramId = testCP.Id
-      );
-      insert cpe;
+      User testUser = new User(
+			Email = 'testusernew@example.com',
+			BI_PSPB_Caregiver__c = false,
+			Username = 'testusernew@example.com',
+			FirstName = 'Test',
+			LastName = 'User',
+			Alias = 'tesn',
+			TimeZoneSidKey = 'America/New_York',
+			LocaleSidKey = 'en_US',
+			EmailEncodingKey = 'UTF-8',
+			ProfileId = standardUserProfile.Id,
+			LanguageLocaleKey = 'en_US'
+		);
+		insert testUser;
+		User testUser2 = new User(
+			Email = 'testuser2new@example.com',
+			BI_PSPB_Caregiver__c = true,
+			Username = 'testuser2new@example.com',
+			FirstName = 'Test',
+			LastName = 'User2',
+			Alias = 'tesn',
+			TimeZoneSidKey = 'America/New_York',
+			LocaleSidKey = 'en_US',
+			EmailEncodingKey = 'UTF-8',
+			ProfileId = standardUserProfile.Id,
+			LanguageLocaleKey = 'en_US'
+		);
+		insert testUser2;
+		Id personAccountRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName()
+			.get('PersonAccount')
+			.getRecordTypeId();
 
-      Contact testPatientContact = new Contact(
-        FirstName = 'Test Patient',
-        LastName = 'tes ds',
-        Email = 'testpatiensst@example.com'
-      );
-      insert testPatientContact;
+		Account testAccount1 = new Account(
+			Lastname = currentUserName,
+			PersonEmail = currentUserEmail,
+			RecordTypeId = personAccountRecordTypeId
+		);
+		insert testAccount1;
 
-      Id personAccountRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName()
-        .get('PersonAccount')
-        .getRecordTypeId();
+		String currentUserName2 = 'Test User2';
+		String currentUserEmail2 = 'testuser2new@example.com';
+		Account testAccount2 = new Account(
+			Lastname = currentUserName2,
+			PersonEmail = currentUserEmail2,
+			RecordTypeId = personAccountRecordTypeId,
+			BI_PSPB_Selected_Patient_ID__c = testAccount1.Id
+		);
+		insert testAccount2;
 
-      String currentUserName = caregiverUser.LastName;
-      String currentUserEmail = caregiverUser.Email;
-      Account testAccount1 = new Account(
-        Lastname = currentUserName,
-        PersonEmail = currentUserEmail,
-        RecordTypeId = personAccountRecordTypeId
+		CareProgram cp = new CareProgram(
+			Name = 'testcp',
+			StartDate = Date.valueOf('2024-02-28')
+		);
+
+		insert cp;
+
+		CareProgramEnrollee testCpa2 = new CareProgramEnrollee(
+			Name = 'TestCpa222',
+			AccountId = testAccount1.Id,
+			CareProgramId = cp.Id
+		);
+		insert testCpa2;
+      Contact testContact = new Contact(
+        FirstName = 'Test',
+        LastName = 'Contact',
+        Email = 'testcontact@example.com'
       );
-      insert testAccount1;
+      insert testContact;
+
       BI_PSPB_Enrollee_Caregiver__c enrollee = new BI_PSPB_Enrollee_Caregiver__c(
         Name = 'Test Enrollee Caregiver',
-        BI_PSPB_Caregiver__c = testAccount1.Id,
-        BI_PSPB_Status__c = 'Active',
-        BI_PSPB_Patient__c = testAccountRecord.Id,
-        BI_PSPB_Care_Program_Enrollee__c = cpe.Id,
-        BI_PSPB_Contact_Id__c = testPatientContact.Id
+        BI_PSPB_Caregiver__c = testAccount2.Id,
+        BI_PSPB_Status__c = 'active'
+          
+        
       );
       insert enrollee;
+      System.runAs(testUser2)
+          {
       try {
+          
         Test.startTest();
 
         // Call the method to be tested with the caregiver user Id
-         List<Map<String, String>> caregiverAccounts = BI_PSPB_PatientDetailsCtrl.getCaregiverAccounts(
-          caregiverUser.Id
-        );
-
-        BI_PSPB_PatientDetailsCtrl.getCaregiverAccounts(null);
+         List<Map<String, String>> caregiverAccounts =BI_PSPB_PatientDetailsCtrl.getCaregiverAccounts();
+              Assert.areEqual(null, caregiverAccounts, 'Caregiver accounts should not be null');
         Test.stopTest();
-        Assert.areEqual(null, caregiverAccounts, 'Caregiver accounts should not be null');
+        
+          
       } catch (Exception e) {
         // Assert that the exception message is as expected
         Assert.areEqual(
@@ -120,13 +149,13 @@ public class BI_PSPB_PatientDetailsCtrlTest {
           e.getMessage()
         );
       }
-    //}
+    }
 
-  }*/
+  }
 /**
  * @description Test method to validate exception handling scenario in getCaregiverAccounts() method.
  */
- /* @isTest
+  @isTest
   static void testGetCaregiverAccountsExceptionScenario() {
     BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
       Name = 'ApplicationName',
@@ -137,7 +166,7 @@ public class BI_PSPB_PatientDetailsCtrlTest {
     //assertion is not done because this is for negative scenario and it goes to catch
     Test.startTest();
  
-    BI_PSPB_PatientDetailsCtrl.getCaregiverAccounts('invalid_user_id');
+    BI_PSPB_PatientDetailsCtrl.getCaregiverAccounts();
     
     Test.stopTest();
   } catch (Exception e) {
@@ -148,7 +177,7 @@ public class BI_PSPB_PatientDetailsCtrlTest {
       e.getMessage()
     );
   }
-  }*/
+  }
 /*This test class ensures the accurate storage of selected patient record IDs in the database, validating functionality and error handling for various caregiver User IDs, thereby enhancing code reliability.*/
   @isTest
   static void testUpdateSelectedPatientID() {
@@ -214,7 +243,7 @@ public class BI_PSPB_PatientDetailsCtrlTest {
  */
   @isTest
   static void testUpdatelineSelectedPatientID() {
-    System.runAs(testUserPatient) {
+    
       Id personAccountRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName()
 			.get('PersonAccount')
 			.getRecordTypeId();
@@ -245,7 +274,7 @@ public class BI_PSPB_PatientDetailsCtrlTest {
           e.getMessage()
         );
       }
-   }
+   
   }
 /*This test class verifies the functionality of a method responsible for storing selected patient record IDs in the database, focusing on caregiver User IDs for accurate validation.*/
  /* @isTest
@@ -389,36 +418,8 @@ public class BI_PSPB_PatientDetailsCtrlTest {
       }
    // }
   }
+    
 
-  /*@isTest
-  static void testGetCaregiverContact() {
-   System.runAs(testUserPatient) {
-      Contact testContact = new Contact(
-        FirstName = 'Test',
-        LastName = 'Contact',
-        Email = 'testcontact@example.com'
-      );
-      insert testContact;
-      BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
-        Name = 'ApplicationName',
-        BI_SFCOE_LOG_Application__c = 'PSPB'
-      );
-      insert settings;
-      try {
-        Test.startTest();
-        //Contact result = BI_PSPB_PatientDetailsCtrl.getCaregiverContact(null);
-        Test.stopTest();
-        Assert.arenotequal(result, null,'selected_patient_id_value'  );
-      } catch (Exception e) {
-        // Assert that the exception message is as expected
-        Assert.areEqual(
-          e.getMessage(),
-          'Script-thrown exception',
-          e.getMessage()
-        );
-      }
-    }
-  }*/
   @isTest
   static void testGetCatchCall() {
     System.runAs(testUserPatient) {
@@ -468,14 +469,5 @@ public class BI_PSPB_PatientDetailsCtrlTest {
       }
     }
   }
- /* static void testGetCatchAcc() {
-    BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
-      Name = 'ApplicationName',
-      BI_SFCOE_LOG_Application__c = 'PSPB'
-    );
-    insert settings;
-    Test.startTest();
-    BI_PSPB_PatientDetailsCtrl.getCaregiverAccounts('');
-    Test.stopTest();
-  }*/
+ 
 }

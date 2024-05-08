@@ -72,8 +72,8 @@
 						onchange={handleConditionalfield3}></lightning-input>
 					<!-- if  input box is empty this custom label error will show  -->
 					<span class="slds-form-element__help" if:true={PrescriptionerrorMessage}>
-						<lightning-icon icon-name="utility:warning" alternative-text="warning" variant="error"
-							size="x-small" title="warning" class="error-icon"></lightning-icon>{label.pharmacylabel}
+					<img src={warningicons} width="12px" height="12px">
+					<div>{label.pharmacylabel}</div>
 					</span>
 				</div>
 			</div>
@@ -132,10 +132,9 @@
 					<!-- if user not selected the file this error meaasage will show  -->
 
 					<div class="slds-m-top_medium">
-						<template if:true={errorMessage}>
-							<lightning-icon icon-name="utility:warning" alternative-text="warning" variant="error"
-								size="x-small" title="warning" class="error-icon"></lightning-icon><span
-								class="slds-text-color_error">{errorMessage}</span>
+						<template if:true={errorMessage} class="slds-form-element__help">
+							<img  src={warningicons} width="12px" height="12px">
+							<div class="slds-text-color_error">{errorMessage}</div>
 						</template>
 					</div>
 				</div>

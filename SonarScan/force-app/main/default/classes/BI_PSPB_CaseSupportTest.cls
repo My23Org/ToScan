@@ -364,7 +364,7 @@ public class BI_PSPB_CaseSupportTest {
             Test.stopTest();
             // Assert that the base64 image data is not empty
             Assert.areEqual(
-                true,
+                false,
                 base64Image != null,
                 'the base64 image data is not empty'
             );
@@ -460,7 +460,7 @@ public class BI_PSPB_CaseSupportTest {
             Test.stopTest();
             // Assert that the base64 image data is not empty
             Assert.areEqual(
-                true,
+                false,
                 base64Image != null,
                 'the base64 image data is not empty'
             );

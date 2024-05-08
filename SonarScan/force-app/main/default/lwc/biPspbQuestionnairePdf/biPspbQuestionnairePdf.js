@@ -732,7 +732,7 @@ export default class BiPspbQuestionnairePdf extends LightningElement {
 			},
 
 		};
-		window.Chart(ctx, {
+		new window.Chart(ctx, {
 			type: this.BI_PSP_line_ShortDescription,
 			data: data,
 			options: options
@@ -777,7 +777,7 @@ export default class BiPspbQuestionnairePdf extends LightningElement {
 			},
 		};
 
-		window.Chart(ctx, {
+		new window.Chart(ctx, {
 			type: this.BI_PSP_line_ShortDescription,
 			data: data,
 			options: options

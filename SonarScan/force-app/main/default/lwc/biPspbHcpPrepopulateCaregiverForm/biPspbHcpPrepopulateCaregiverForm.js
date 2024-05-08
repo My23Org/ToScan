@@ -489,6 +489,7 @@ export default class biPspbHcpPrepopulateCaregiverForm extends NavigationMixin(
 		}
 		if (!this.checkbox) {
 			this.checkboxName = true;
+			isValid = false;
 		}
 		return isValid;
 	}

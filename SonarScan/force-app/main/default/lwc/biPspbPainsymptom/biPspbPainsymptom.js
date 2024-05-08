@@ -1,7 +1,7 @@
 //This components using user body parts and intencity itchiness values store this lwc
 // To import Libraries
 import { LightningElement, track, api, wire } from 'lwc';
-import { NavigationMixin } from 'lightning/navigation';
+import { NavigationMixin } from 'lightning/navigation'
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 // To import Apex Classes
 import getEnrolle from '@salesforce/apex/BI_PSP_ChallengeCtrl.getEnrolle';
@@ -11,13 +11,13 @@ import recordUpdateAllergyIntolerance from '@salesforce/apex/BI_PSP_SymptomTrack
 // To import current user ID
 import Id from '@salesforce/user/Id';
 // To import Custom Labels
-import zero from '@salesforce/label/c.BI_PSPB_null';
-import zerovalue from '@salesforce/label/c.BI_PSP_Slidervaluestwodigit';
-import removeall from '@salesforce/label/c.BI_PSP_bodypartsRemove';
-import blackvalue from '@salesforce/label/c.BI_PSP_Bodycolor';
 import painvalues from '@salesforce/label/c.BI_PSPB_Pain';
-import deselect from '@salesforce/label/c.BI_PSPB_deselect';
+import zero from '@salesforce/label/c.BI_PSPB_null';
 import select from '@salesforce/label/c.BI_PSP_Bodypartsselectall';
+import deselect from '@salesforce/label/c.BI_PSPB_deselect';
+import blackvalue from '@salesforce/label/c.BI_PSP_Bodycolor';
+import removeall from '@salesforce/label/c.BI_PSP_bodypartsRemove';
+import zerovalue from '@salesforce/label/c.BI_PSP_Slidervaluestwodigit';
 import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
 export default class biPspbPain extends NavigationMixin(LightningElement) {
@@ -25,6 +25,7 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 	// @api variable declaration
 	@api resultId;
 	// @track variable declaration
+	@track redness = false;
 	@track valoF;
 	@track buttonText = select;
 	@track clickCount = 0;
@@ -32,33 +33,31 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 	@track sliderValue = 0;
 	@track sliderValuetwo = zerovalue;
 	@track isCheckedselectall = false;
-	@track bodyparts = []; // Initialize the array
+	@track bodyparts = [] // Initialize the array
+	@track moodvalues = ''
 	@track painvalues = painvalues;
-	@track itchinesserrors = false;
+	@track insertcount;
 	@track lastsymptomid;
 	@track localStorageValueitchiness;
-	@track insertcount;
-	@track clickedElement
+	@track clickedElement;
 	@track isButtonDisabled = false;
 	@track Fatiqueerrors = true;
 	@track allergyIntoleranceData;
 	@track itchbody;
 	@track intensity
 	@track carePlanTemplateName;
-	@track moodvalues = ''
+	@track itchinesserrors = false;
 	// Variable declaration
-	recordInsertCount = 0;
 	accountId;
-	userId = Id;
-	// Process retrieved allergy intolerance data, updating UI and properties, particularly for fatigue symptoms detection.
+	userId = Id
+	recordInsertCount = 0;
+	//Process retrieved allergy intolerance data, updating UI and properties, particularly for fatigue symptoms detection.
 	@wire(getAllergyIntolerancedata, { symptomTrackerId: '$lastsymptomid' })
 	wiredAllergyIntoleranceData({ error, data }) {
 		if (data && data !== null){
 			try {
-				// Initialize variables
 				let itchbody = '';
 				for (let record of data) {
-					// Access values of each record
 					itchbody = record.BI_PSP_Bodyparts__c;
 					this.intensity = record.BI_PSP_Intensity__c;
 					let carePlanTempla = record?.BI_PSP_Symptoms__r?.HealthCloudGA__CarePlanTemplate__r?.Name;
@@ -66,16 +65,15 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 					if (carePlanTempla === painvalues) {
 						this.carePlanTemplateName = painvalues;
 					}
-					// Compare with the string 'Pain'
 					if (this.carePlanTemplateName === painvalues) {
 						this.sliderValue = this.intensity;
 						this.sliderValuetwo = this.intensity;
 						let bodyPartsArr = itchbody?.split(';');
-						//The setTimeout with a small delay ensures UI updates occur after the current rendering tasks, preventing glitches.
+						//Using this with a minimal delay ensures smooth UI updates by deferring DOM manipulation, preventing potential rendering issues.
 						setTimeout(() => {
 							try {
 								bodyPartsArr.forEach(i => {
-									let element = this.template.querySelector(`[data-name="${i}"]`);
+									let element = this.template.querySelector(`[data-name='${i}']`);
 									if (element) {
 										element.style.fill = '#8D89A5';
 									} else {
@@ -105,22 +103,21 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 			this.showToast(errormessage, error.body.message, errorvariant);
 		}
 	}
-	// To Fetch Enrolle Id and fatique data
+	//Upon component connection, retrieves stored session data to initialize UI elements and component state
 	connectedCallback() {
 		try {
-			//This code retrieves data labeled as 'countpain' from the session storage without altering custom labels.
+			//This code retrieves data labeled as 'countred' from the session storage without altering custom labels.
 			this.insertcount = sessionStorage.getItem('countpain');
-			// Store data labeled as 'Paindata' in the session storage without altering custom labels.
+				//This code retrieves data labeled as 'redness' from the session storage without altering custom labels.
 			let mybodyparts = sessionStorage.getItem('Paindata');
-			// Store data labeled as 'myDataintensity' in the session storage without altering custom labels.
+				//This code retrieves data labeled as 'myDataintensityredness' from the session storage without altering custom labels.
 			let mybodyinternsity = sessionStorage.getItem('myDataintensity');
 			if (mybodyparts && mybodyinternsity) {
 				let bodyPartsArr = mybodyparts?.split(',');
-				//The setTimeout with a small delay ensures UI updates occur after the current rendering tasks, preventing glitches.
 				setTimeout(() => {
 					try {
 						bodyPartsArr.forEach(i => {
-							let element = this.template.querySelector(`[data-name="${i}"]`);
+							let element = this.template.querySelector(`[data-name='${i}']`);
 							if (element) {
 								element.style.fill = '#8D89A5';
 							} else {
@@ -138,12 +135,11 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 						}
 					} catch (error) {
 						this.showToast(errormessage, error.message, errorvariant);
-						// Handle the error as needed
 					}
 				}, 0.111111);
 			}
-			// Store data labeled as 'symptomlastid' in the session storage without altering custom labels.
-			this.lastsymptomid = localStorage.getItem('symptomlastid')
+				//This code retrieves data labeled as 'symptomlastid' from the session storage without altering custom labels.
+			this.lastsymptomid = localStorage.getItem('symptomlastid');
 			getEnrolle({ userId: this.userId })
 			// Null data is checked and AuraHandledException is thrown from the Apex
 				.then(result => {
@@ -160,21 +156,18 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 					this.showToast(errormessage, error.message, errorvariant);
 				});
 			this.updateThumbLabelPosition(this.sliderValue);
-			// Store data labeled as 'Time' in the session storage without altering custom labels.
-			this.localStorageValueitchiness = localStorage.getItem('Time', this.resultId)
-			//Get the initial count of elements with class 'body-part' on component load
+				//This code retrieves data labeled as 'Time' from the session storage without altering custom labels.
+			this.localStorageValueitchiness = localStorage.getItem('Time', this.resultId);
 			this.updateElementCount();
-		} catch (err) {
-			// Handle any errors that occurred during the execution of the connectedCallback function
-			this.showToast(errormessage, err.message, errorvariant);
-			// Additional error handling if needed
+		} catch (error) {
+			this.showToast(errormessage, error.message, errorvariant);
 		}
 	}
-	// To get the count of bodyparts and select value
+	//Count the total number of elements and collect their data names
 	updateElementCount() {
 		const elements = this.template.querySelectorAll('.body-part');
 		this.totalElements = elements.length;
-		this.bodyparts = []; // Reset the bodyparts array
+		this.bodyparts = [];
 		elements.forEach((ele) => {
 			const dataNameValue = ele.getAttribute('data-name');
 			this.bodyparts.push(dataNameValue);
@@ -192,22 +185,16 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 		this.isButtonDisabled = this.totalElements < 1;
 		this.isButtonDisabled = this.sliderValue <= 0;
 	}
-	// To update the color of body parts
+	//Function to change color of body parts based on checkbox state
 	changeColor(event) {
 		const targetElements = this.template.querySelectorAll('.body-part');
 		const checkbox = event.target;
-		//Get the checked state of the checkbox
 		const isChecked = checkbox.checked;
 		if (isChecked) {
 			this.bodyparts = []
 			this.isCheckedselectall = true;
 			this.totalElements = 30;
 			this.itchinesserrors = false;
-			if (this.sliderValue !== 0) {
-				this.isButtonDisabled = false;
-			} else {
-				this.isButtonDisabled = true;
-			}
 			this.buttonText = removeall;
 			targetElements.forEach((element) => {
 				const dataNameValue = element.getAttribute('data-name');
@@ -217,6 +204,7 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 			});
 		} else {
 			this.totalElements = 0;
+			this.isCheckedselectall = false;
 			this.buttonText = select;
 			targetElements.forEach((element) => {
 				const dataNameValue = element.getAttribute('data-name');
@@ -228,22 +216,34 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 		this.clickCount++;
 	}
 	resetCount() {
-		//Reset the click count to zero
 		this.updateElementCount = 0;
 	}
-
+	// Disable button if any element is filled black or empty.
+	handleAccept() {
+		const elements = this.template.querySelectorAll('.body-part');
+		elements.forEach((element) => {
+			if (element.style.fill === blackvalue) {
+				this.isButtonDisabled = true;
+			} else if (element.style.fill === '') {
+				this.isButtonDisabled = true;
+			}
+		});
+	}
+	//Handle the remove button click here
+	handleRemove() {
+		this.sliderValue = 0;
+		this.sliderValuetwo = (zero + this.sliderValue).slice(-2)
+	}
 	//Some condition when you want to disable the button
 	handleEmojiClick(event) {
 		this.sliderValue = event.target.value
-		this.sliderValuetwo = (zero + this.sliderValue).slice(-2)
+		this.sliderValuetwo = (zero + this.sliderValue).slice(-2);
 		this.updateThumbLabelPosition(this.sliderValue);
 	}
-	//Handle click event on body part elements
+	//Function to handle click events based on body parts
 	handleclick(event) {
-		//Get the clicked element and its attributes
 		this.clickedElement = event.currentTarget;
 		const selectedValue = this.clickedElement.getAttribute('data-name');
-		//Toggle the fill color and update the selected values
 		const currentColor = this.clickedElement.style.fill;
 		if (currentColor === 'rgb(141, 137, 165)') {
 			this.clickedElement.style.fill = '';
@@ -268,7 +268,7 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 			this.isButtonDisabled = true;
 		}
 	}
-	//Accept user input for pain records, updating or inserting based on conditions, with error handling
+	//async function prepares data related to redness for insertion and update, while preserving the current state of body parts.
 	async handleClickForAccept() {
 		let itchinessallrecordinsert = {
 			SliderValue: parseFloat(this.sliderValue), // Convert to float if SliderValue is numeric
@@ -277,7 +277,7 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 			SymptomId: this.localStorageValueitchiness || this.lastsymptomid, // Use default value if lastsymptomid is null
 			Symptomname: this.painvalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.moodvalues || '', // Use default value if moodvalues is null
-		};
+	};this.bodyparts = this.bodyparts;
 		let itchinessallrecordupdate = {
 			SliderValue: parseFloat(this.sliderValue), // Convert to float if SliderValue is numeric
 			CareprogramId: this.accountId,
@@ -285,25 +285,26 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 			SymptomId: this.lastsymptomid || this.localStorageValueitchiness, // Use default value if lastsymptomid is null
 			Symptomname: this.painvalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.moodvalues || '', // Use default value if moodvalues is null
-		};
+		};this.bodyparts = this.bodyparts;
 		try {
 				if (this.bodyparts.length > 0 && parseInt(this.sliderValue) > 0) {
+				// If slider value is positive and insertcount is 1, update allergy intolerance records
 				if (this.insertcount == 1) {
-					//Perform update if insert count is 1              
 					await recordUpdateAllergyIntolerance({
 						itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.bodyparts
 					})
 					// Null data is checked and AuraHandledException is thrown from the Apex
 						.then(result => {
-							// Store data labeled as 'myData' in the session storage without altering custom labels.
-							if (result && result !== null)
+							if (result && result !== null) {
+								// Store data labeled as 'redness' in the session storage without altering custom labels.
 								sessionStorage.setItem('Paindata', this.bodyparts);
-							sessionStorage.setItem('myDataintensity', this.sliderValue);
-							//Dispatch event to update child component
-							const updateEvent = new CustomEvent('updatechildprop', {
-								detail: false
-							});
-							this.dispatchEvent(updateEvent);
+								// Store data labeled as 'myDataintensityredness' in the session storage without altering custom labels.
+								sessionStorage.setItem('myDataintensity', this.sliderValue);
+								const updateEvent = new CustomEvent('updatechildprop', {
+									detail: false
+								});
+								this.dispatchEvent(updateEvent);
+							}
 						})
 						.catch(error => {
 							this.showToast(errormessage, error.message, errorvariant);
@@ -311,15 +312,15 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 				}
 				else {
 					if (this.lastsymptomid && this.carePlanTemplateName === painvalues) {
-						//Perform update for specific conditions
 						await recordUpdateAllergyIntolerance({
 							itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.bodyparts
 						})
 						// Null data is checked and AuraHandledException is thrown from the Apex
 							.then(result => {
-								// Store data labeled as 'myData' in the session storage without altering custom labels.
 								if (result && result !== null) {
+									// Store data labeled as 'redness' in the session storage without altering custom labels.
 									sessionStorage.setItem('Paindata', this.bodyparts);
+									// Store data labeled as 'myDataintensityredness' in the session storage without altering custom labels.
 									sessionStorage.setItem('myDataintensity', this.sliderValue);
 									const updateEvent = new CustomEvent('updatechildprop', {
 										detail: false
@@ -329,25 +330,25 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 							})
 							.catch(error => {
 								this.showToast(errormessage, error.message, errorvariant);
-
 							});
 					}
 					else {
-						// Perform insert for other conditions
 						await recordInsertAllergyIntolerance({
 							itchinessallrecordinsert: itchinessallrecordinsert, bodyParts: this.bodyparts
 						})
 						// Null data is checked and AuraHandledException is thrown from the Apex
 							.then(result => {
-								// Store data labeled as 'myData' in the session storage without altering custom labels.
 								if (result && result !== null) {
+									// Store data labeled as 'redness' in the session storage without altering custom labels.
 									sessionStorage.setItem('Paindata', this.bodyparts);
+									// Store data labeled as 'myDataintensityredness' in the session storage without altering custom labels.
 									sessionStorage.setItem('myDataintensity', this.sliderValue);
 									const updateEvent = new CustomEvent('updatechildprop', {
 										detail: false
 									});
 									this.dispatchEvent(updateEvent);
 									this.recordInsertCount++;
+									// Store data labeled as 'countfati' in the session storage without altering custom labels.
 									sessionStorage.setItem('countpain', this.recordInsertCount);
 								}
 							})
@@ -356,18 +357,18 @@ export default class biPspbPain extends NavigationMixin(LightningElement) {
 							});
 					}
 				}
-			} else {
-				// Display error if body parts or slider value not selected
+			}
+			else {
 				this.itchinesserrors = true;
 			}
-		} catch (error) {
+		}
+		catch (error) {
 			this.showToast(errormessage, error.message, errorvariant);
 		}
 	}
-	//  It used to display slider values 
+	// It used to display slider values in scroll
 	updateThumbLabelPosition(sliderValue) {
 		//Use requestAnimationFrame to wait for the next rendering cycle
-		//The use of requestAnimationFrame ensures optimal timing for thumb label position updates, enhancing animation smoothness and performance 
 		requestAnimationFrame(() => {
 			const slider = this.template.querySelector('input');
 			const thumbLabel = this.template.querySelector('.thumb-label');

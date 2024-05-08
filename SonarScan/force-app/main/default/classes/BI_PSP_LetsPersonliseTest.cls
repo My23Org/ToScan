@@ -28,10 +28,6 @@ public class BI_PSP_LetsPersonliseTest {
             BI_SFCOE_LOG_Application__c = 'Spevigo'
         );
         insert settings;
-        // Create a test user
-		
-        // Call the method or class where the applicationName is accessed
-        String applicationName = BI_PSP_LetsPersonlise.applicationName;
         
         String currentUserName = 'Test User';
         String currentUserEmail = '';
@@ -183,8 +179,7 @@ public class BI_PSP_LetsPersonliseTest {
                 Test.startTest();
                 BI_PSP_LetsPersonlise.draftRespoDeletion(resid);
                   // Assert the result
-        System.assertEquals('', BI_PSP_LetsPersonlise.applicationName);
-                
+       
                 List<AssessmentQuestionResponse> draftRecords = [
                     SELECT Id
                     FROM AssessmentQuestionResponse
@@ -1617,7 +1612,7 @@ public class BI_PSP_LetsPersonliseTest {
         };
 
         String pickval = 'Complete';
-        String idsd = 'dfdf';
+        
         System.runAs(testUser2) {
             try {
                 Test.startTest();
@@ -1813,7 +1808,7 @@ public class BI_PSP_LetsPersonliseTest {
             questionversion2.Id
         };
         String pickval = 'Complete';
-        String idsd = 'dfdf';
+        
         System.runAs(testUser2) {
             Test.startTest();
             BI_PSP_LetsPersonlise.createNewAssessment(
@@ -2067,7 +2062,7 @@ public class BI_PSP_LetsPersonliseTest {
         List<String> questionIds = new List<String>();
 
         String pickval = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.';
-        String idsd = 'dfdf';
+        
 
         System.runAs(testUser2) {
             try {

@@ -98,12 +98,9 @@ export default class biPspbMyFollowing extends LightningElement {
 			this.isLoading = true;
 			displayFollowers({ userId: this.currentUserId })
 				.then(result => {
+					this.total = result.filter(follower => follower?.BI_PSP_Type__c === BI_PSP_Following).length;
 					if (result && result.length > 0) {
-						this.total = result.filter(follower => follower?.BI_PSP_Type__c === BI_PSP_Following).length;
-						this.followersCount = this.total > 0;
-						if (this.total === 0) {
-							this.isLoading = false;
-						}
+						this.followersCount = true;
 						if (this.total > 0) {
 							this.isLoading = false;
 							this.usernames = result.filter(follower => follower?.BI_PSP_Type__c === BI_PSP_Following);
@@ -115,6 +112,17 @@ export default class biPspbMyFollowing extends LightningElement {
 									pspBrValue: follower.BI_PSP_AccountUser__r.BI_PSP_AvatarUrl__c ? follower.BI_PSP_AccountUser__r.BI_PSP_AvatarUrl__c : this.loggedUserAvatar,
 								}));
 						}
+						if (this.total === 0) {
+							this.followersCount = false;
+							this.isLoading = false;
+						}
+					}
+					else if(result.length === 0 || result === null){
+							this.followersCount = false;
+							this.isLoading = false;
+					}
+					else {
+						this.showToast(errormessage, errormessage, errorVariant); // Catching Potential Error for Null/other
 					}
 				})
 				.catch(error => {
@@ -129,12 +137,11 @@ export default class biPspbMyFollowing extends LightningElement {
 	// To unfollow the user
 	UnFollowingyes() {
 		try {
-			this.isLoading = true;
-			console.log('userisss', this.acctuserid, this.currentUserId);
+			this.isLoading = false;
 			unFollowUser({ accountIdToUnFollow: this.acctuserid, userIdWhoUnFollows: this.currentUserId })
 				.then(() => {
 					this.retrieveFollowers();
-					this.isLoading = false;
+					this.isLoading = true;
 				})
 				.catch(error => {
 					this.showToast(errormessage, error.message, errorVariant); // Catching Potential Error

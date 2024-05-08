@@ -2,7 +2,7 @@
 * @Description    : Schedulable Apex class for updating assessment records based on expiration dates and 
                    scheduling questionnaires.
 * History:
-* Version	Author		Date			Detail			Description
+* Version	Author		Date			Detail			Description.
 * 1.0		Abinsha		05-Dec-2023		Created			Initial development.
 * 1.1		Abinsha 	01-Jan-2024		Updated			Updated for caregiver.
 * 1.2		Abinsha		04-Apr-2024		Updated			Catch log added.
@@ -132,7 +132,7 @@ public with sharing class BI_PSP_UpdateRollouts implements Schedulable {
                 }
             }
         } catch (Exception ex) {
-            // Handle any exceptions occurred during execution
+            // Handle any exceptions occurred during execution.
 
             BI_SFCOE_LOG_Util.handleException(
                 ex,

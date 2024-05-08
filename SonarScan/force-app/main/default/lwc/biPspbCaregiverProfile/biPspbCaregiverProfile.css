@@ -9,6 +9,13 @@
 .flexcard {
 	display: flex;
 }
+.input-labelemail{
+	color: #8D89A5;
+	font-weight: 600;
+	line-height: 24px;
+	font-style: normal;
+	font-family: "Eina-SemiBold";
+}
 
 .flexcone {
 	flex: 1;

@@ -98,6 +98,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	@track up;
 	// Declaration of variables
 	caseId;
+	ifNotCase=false;
 	columns = COLUMNS;
 	typeOptions = typeOptions;
 	statusOptions = statusOptions;
@@ -195,6 +196,15 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 		getCases({ cpeId: this.accname, type: typeFilter, status: statusFilter })
 			// Null data is checked and AuraHandledException is thrown from the Apex
 			.then((result) => {
+				console.log(result,'result')
+				console.log(result.length,'result233')
+				if(result.length>0)
+				{
+					this.ifNotCase = true;
+				}
+				else{
+					this.ifNotCase=false;
+				}
 				if (result[0].Type === lablePsp) {
 					this.hidesubtype = false;
 				}

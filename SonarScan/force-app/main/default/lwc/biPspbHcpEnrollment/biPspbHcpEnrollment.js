@@ -1068,6 +1068,8 @@ provide the caregiver's information as
 well.`;
 	}
 	goBackToStepThree() {
+		this.Matchcaregiveremail = false;
+	    this.Matchemail = false;
 		if (this.isAdult === true) {
 			this.handleClose();
 			this.currentStep = '2';
@@ -1180,7 +1182,7 @@ provide the caregiver's information as
 well.`;
 	}
 	goToStepThree() {
-		console.log('jj')
+		
 		this.handleClose();
 		getExistingAccounts({ email: this.leadFields.Email })
 			// Null data is checked and AuraHandledException is thrown from the Apex
@@ -1196,7 +1198,6 @@ well.`;
 
 				}
 				else {
-                     console.log('isi')
 					if (!this.patientvalidateForm()) {
 						// No need for a return here
 
@@ -1288,46 +1289,16 @@ well.`;
 					this.uniqueFName = result.map(item => item.FirstName);
 					this.uniqueLname = result.map(item => item.LastName);
 					this.uniqueDOB = result.map(item => item.BI_PSP_Birthdate__c);
+				  
 					if (!this.UniquecaregiverValidation()) {// to call the method
 						// No need for a return here
+					}else{
+						this.Caregivervalidation();
 					}
-
-				} else {
-					if (!this.carevalidateForm()) {
-						// No need for a return here
-					} else if (this.errors === true || this.minorerror === true) {
-						this.template.querySelector('lightning-input.cDob').className = 'inputred cDob';
-						this.template.querySelector('label.cDob').className = 'labelred cDob';
-						// No need for a return here
-					}
-					else {
-						// If none of the above conditions are met, execute the following code
-						this.handleClose();
-						this.currentStep = '4';
-						this.template.querySelector('div.stepThree').classList.add('slds-hide');
-						this.template.querySelector('div.stepFour').classList.remove('slds-hide');
-						// Progress indicator
-						this.template.querySelector('li.li-three').classList.remove('slds-is-active');
-						this.template.querySelector('li.li-three').classList.add('slds-is-completed');
-						this.template.querySelector('li.li-four').classList.add('slds-is-active');
-						//To achieve the mobile responsiveness, the following strings are hard coded. Custom Labels can't be used, since they truncate the strings.
-						//To achieve mobile responsiveness, we are using innerHTML. However, when attempting to use textContent, it does not meet the design requirements
-						const avatarcontent = this.template.querySelector('p.avatar-content');
-						avatarcontent.innerHTML = `Thank you for choosing Spevigo® for<br> your patients with GPP.
-<br>
-<br>
-To enroll your patients in the  Beyond<br>
-GPP: The Spevigo® <br>Patient Support
-Program, please<br> complete the form on
-this page.`;
-						this.mobilevalue2 = `Thank you for choosing Spevigo® for your patients with GPP.
-To enroll your patients in the Beyond
-GPP: The Spevigo® Patient Support
-Program, please complete the form on
-this page.`;
-					}
-
-
+		
+				} 
+				else {
+					this.Caregivervalidation();
 				}
 			})
 			.catch(error => {
@@ -2466,14 +2437,54 @@ this page.`;
 		}
 		return isValid;
 	}
-
+   
+//The Caregivervalidation() function likely validates caregiver data for uniqueness 
+//based on email and checks for existing caregiver records in the system.
+	Caregivervalidation(){
+			console.log('hh1')
+					if (!this.carevalidateForm()) {
+						// No need for a return here
+					} else if (this.errors === true || this.minorerror === true) {
+						this.template.querySelector('lightning-input.cDob').className = 'inputred cDob';
+						this.template.querySelector('label.cDob').className = 'labelred cDob';
+						// No need for a return here
+					}
+					else {
+						// If none of the above conditions are met, execute the following code
+						this.handleClose();
+						this.currentStep = '4';
+						this.template.querySelector('div.stepThree').classList.add('slds-hide');
+						this.template.querySelector('div.stepFour').classList.remove('slds-hide');
+						// Progress indicator
+						this.template.querySelector('li.li-three').classList.remove('slds-is-active');
+						this.template.querySelector('li.li-three').classList.add('slds-is-completed');
+						this.template.querySelector('li.li-four').classList.add('slds-is-active');
+						//To achieve the mobile responsiveness, the following strings are hard coded. Custom Labels can't be used, since they truncate the strings.
+						//To achieve mobile responsiveness, we are using innerHTML. However, when attempting to use textContent, it does not meet the design requirements
+						const avatarcontent = this.template.querySelector('p.avatar-content');
+						avatarcontent.innerHTML = `Thank you for choosing Spevigo® for<br> your patients with GPP.
+<br>
+<br>
+To enroll your patients in the  Beyond<br>
+GPP: The Spevigo® <br>Patient Support
+Program, please<br> complete the form on
+this page.`;
+						this.mobilevalue2 = `Thank you for choosing Spevigo® for your patients with GPP.
+To enroll your patients in the Beyond
+GPP: The Spevigo® Patient Support
+Program, please complete the form on
+this page.`;
+					}
+	}
+  
 	//This function is used to check for Caregiver Validation
 	UniquecaregiverValidation() {
 		let isValid = true;
-		if (this.uniqueEmail.includes(this.CaregiverFields.Email) &&
-			this.uniqueFName.includes(this.CaregiverFields.FirstName) &&
-			this.uniqueLname.includes(this.CaregiverFields.LastName)) {
+		if (this.uniqueEmail[0].includes(this.CaregiverFields.Email) &&
+			this.uniqueFName[0].includes(this.CaregiverFields.FirstName) &&
+			this.uniqueLname[0].includes(this.CaregiverFields.LastName)) {
 			// Assuming isValid is declared before this block
+			
 			isValid = true;
 		} else {
 			if (this.uniqueEmail.includes(this.CaregiverFields.Email)) {

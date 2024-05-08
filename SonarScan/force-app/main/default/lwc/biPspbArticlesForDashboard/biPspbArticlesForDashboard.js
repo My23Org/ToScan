@@ -5,6 +5,7 @@ import { LightningElement, wire, track } from 'lwc';
 import retrieveMediaFromCMSNews from '@salesforce/apex/BI_PSPB_CmsCtrl.retrieveMediaFromCMSNews';
 import Patientstatus from '@salesforce/apex/BI_PSPB_treatmentvideocmd.patientStatus';
 import getpersonalizedarticles from '@salesforce/apex/BI_PSPB_PersonalizedMessagesCtrl.getpersonalizedarticles';
+import updatereaction from '@salesforce/apex/BI_PSPB_CmsCtrl.updatereaction';
 //To import Static Resource
 import CLIcon from '@salesforce/resourceUrl/BI_PSP_ClockIcon';
 import CLNxIcon from '@salesforce/resourceUrl/BI_PSP_RoundNextIcon';
@@ -33,6 +34,7 @@ import unassignedsiteurlq from '@salesforce/label/c.BI_PSPB_UnassignedSiteURL';
 import detailpageinfocenter from '@salesforce/label/c.BI_PSPB_BRInfoCenterDetailPage';
 import landingpageinfocenter from '@salesforce/label/c.BI_PSPB_BRInfoCenterLandingPage';
 import articlestring from '@salesforce/label/c.BI_PSPB_ArticleString';
+import viewlabel from '@salesforce/label/c.BI_PSPB_View';
 
 export default class BiPspbArticlesForDashboard extends LightningElement {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
@@ -74,6 +76,7 @@ export default class BiPspbArticlesForDashboard extends LightningElement {
 	showarticle3 = true;
 	showarticle4 = true;
 	siteurl;
+	titlear;
 
 	// This renderedCallback function updates the dynamic images for backgrounds based on the articles being displayed.
 	renderedCallback() {
@@ -146,8 +149,18 @@ export default class BiPspbArticlesForDashboard extends LightningElement {
 
 	handleButtonClick(event) {
 		const finaltitle = event.currentTarget.dataset.name;
-
 		const articlename = finaltitle;
+		updatereaction({
+			articlename: articlename, reaction: viewlabel
+		})
+			.then(() => {
+				this.titlear = viewlabel+ ': ' + articlename;
+			})
+			.catch((error) => {
+				console.error(error.body.message);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
+				// Handle error, if needed
+			});
 		if (this.urlq === brandedurl) {
 			window.location.assign(
 				this.baseUrl + this.siteurl + detailpageinfocenter + articlename

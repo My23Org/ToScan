@@ -1,6 +1,6 @@
 //This LWC is designed for Account Manager which contains the profile details, avatar settings, notification settings and for logout functinality
 //To import Libraries
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 // Imports resourceUrl to reference external resources for proper rendering and functionality.
 import sitelogo from '@salesforce/resourceUrl/BI_PSPB_SiteLogo';
@@ -22,6 +22,7 @@ import checkCommunityUsername from '@salesforce/apex/BI_PSPB_CommunityUsername.c
 import updateSwitchSelectedPatientID from '@salesforce/apex/BI_PSPB_PatientDetailsCtrl.updateSwitchSelectedPatientID';
 import countAssessment from '@salesforce/apex/BI_PSP_Assessment.getAssessmentCountsByCurrentUserName';
 import getUnreadCases from '@salesforce/apex/BI_PSPB_LoginCtrl.getUnreadCases';
+import getPatientAfterThreemonthsAndFourteenWeeks from '@salesforce/apex/BI_PSP_QualitativeSatisfactions.getPatientAfterThreemonthsAndFourteenWeeks';
 // Imports labels for descriptive text or identifiers, enhancing accessibility and user understanding.
 import systemAdminProfile from '@salesforce/label/c.BI_PSP_SystemAdminProfile';
 import patientProfiles from '@salesforce/label/c.BI_PSP_PatientProfile';
@@ -66,6 +67,8 @@ import patientNotificationSiteUrl from '@salesforce/label/c.BI_PSPB_PatientNotif
 import caregiverPatientSiteUrl from '@salesforce/label/c.BI_PSPB_BRCaregiverPatient';
 import caregiverSelectAvatarSiteUrl from '@salesforce/label/c.BI_PSPB_BRCaregiverSelectAvatar';
 import caregiverNotificationSiteUrl from '@salesforce/label/c.BI_PSPB_BRCaregiverNotification';
+import completedLabel from '@salesforce/label/c.BI_PSP_Completed';
+import expired from '@salesforce/label/c.BI_PSP_Expired';
 export default class BiPspbHomeBanner extends LightningElement {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
 	@track showToLogin;
@@ -160,6 +163,22 @@ export default class BiPspbHomeBanner extends LightningElement {
 	showNotificationCentermenu;
 	notificationCount = 0;
 	showforNotLoggedIn;
+	//Qualitative Date for topbar navigation
+	@wire(getPatientAfterThreemonthsAndFourteenWeeks)
+	wiredResult({ error, data }) {
+		try {
+		if (error) {
+			this.showToast(consoleErrorMessage, error.body.message, errorvariant); // Catching Potential Error from Apex
+		} else if (data) {
+			this.threeMonthsVar = data.threeMonthsVar;
+			this.forteenWeeks = data.forteenWeeks;
+			this.target2monthsdate = data.target2monthsdate ?? null;
+			this.target14wksdate = data.target14wksdate ?? null;
+		}
+		} catch (err) {
+		this.showToast(consoleErrorMessage, err.message, errorvariant); // Catching Potential Error from LWC
+		}
+	}
 	//Used to get the notification count using task
 	taskInfo(id) {
 		getUnreadCases({ userId: id })
@@ -788,30 +807,25 @@ export default class BiPspbHomeBanner extends LightningElement {
 		this.showuserSubmenu = false;
 		this.showMenu = false;
 	}
-	//Navigation
 	openComQuestionnaires() {
 		if (this.stdlq > 0) {
-			window.location.assign(
-				this.baseUrl + this.siteUrlBranded + this.DLQICOMPLETEDQUESTIONURL
-			);
+		window.location.assign(this.urlq + dlqiCompletedUrl);
 		} else if (this.stpss > 0) {
-			window.location.assign(
-				this.baseUrl + this.siteUrlBranded + this.PSSCOMPLETEDQUESTIONURL
-			);
+		window.location.assign(this.urlq + pssCompletedUrl);
 		} else if (this.stwai > 0) {
-			window.location.assign(
-				this.baseUrl + this.siteUrlBranded + this.WAPICOMPLETEDQUESTIONURL
-			);
+		window.location.assign(this.urlq + wapiCompletedUrl);
 		} else if (this.stqsq > 0) {
-			if (this.targetDate14 != null) {
-				window.location.assign(
-					this.baseUrl + this.siteUrlBranded + this.QSQ2COMPLETEDQUESTIONURL
-				);
+		if (this.target14wksdate != null) {
+			if (this.status === completedLabel || this.status ===expired) {
+			window.location.assign(
+				this.urlq + qualitativeCompletedFourteenMonths
+			);
 			} else {
-				window.location.assign(
-					this.baseUrl + this.siteUrlBranded + this.QSQ1COMPLETEDQUESTIONURL
-				);
+			window.location.assign(this.urlq + qualitativeCompletedtwoMonths);
 			}
+		} else {
+			window.location.assign(this.urlq + qualitativeCompletedtwoMonths);
+		}
 		}
 	}
 	// showToast used for all the error messages caught

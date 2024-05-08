@@ -100,6 +100,24 @@ private class BI_PSPB_NotificationTaskRecordUATest {
 		Test.stopTest();
 		// You can add more test cases as needed
 	}
+    @isTest
+    static void testGetTaskRecordActionNegative() {
+        try{
+            	BI_PSPB_NotificationTaskRecordUA.getTaskRecordAction(
+				null,
+				null,
+				null
+			);
+            
+        }
+        catch (Exception e) {
+			Assert.areEqual(
+				'Script-thrown exception',
+				e.getMessage(),
+				'Method thrown exception'
+            );
+        }
+    }
     
 
 	/**

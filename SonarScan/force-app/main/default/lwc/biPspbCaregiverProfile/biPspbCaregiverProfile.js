@@ -896,7 +896,7 @@ export default class BiPspbCareGiverProfile extends LightningElement {
 
 				if (data.length > 0) {
 					this.caregiver = true;
-					this.name = data.length > 0 ? data[0]?.PSP_BR_Patient__r?.Name : '';
+					this.name = data.length > 0 ? data[0]?.Name : '';
 
 					if (data[0]?.PSP_BR_Patient__r?.PSP_BR_c__c) {
 						this.selectedAvatarSrc = data[0]?.PSP_BR_Patient__r?.PSP_BR_c__c;

@@ -1501,9 +1501,7 @@ export default class BiPspQSQuestionnaire2 extends LightningElement {
 		const nonEmptyResponses = this.realrespArray.filter(
 			(response) => response !== ''
 		);
-		console.log('nonEmptyResponses : ',nonEmptyResponses);
 		const nonEmptyIds = this.realAssesVerArra.filter((id) => id !== '');
-        console.log('nonEmptyIds : ',nonEmptyIds);
 		if (this.realrespArray.length > 0) {
 			draftResponseSubmition({
 				darftQuestionIds: nonEmptyIds,
@@ -1518,8 +1516,6 @@ export default class BiPspQSQuestionnaire2 extends LightningElement {
 				})
 				.catch((error) => {
 					this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error
-                console.error('the error defined',error);
-				console.log('the erro msg',error);
 				});
 		}
 	}

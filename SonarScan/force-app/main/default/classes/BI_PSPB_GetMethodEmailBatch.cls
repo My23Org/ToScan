@@ -64,7 +64,6 @@ public class BI_PSPB_GetMethodEmailBatch implements Database.Batchable<sObject>,
 		Database.BatchableContext context,
 		List<BI_PSPB_OmnichannelLog__c> scope
 	) {
-		// Reuse your existing getMethodCallout logic here to process each record in scope
 		// This will include the callout and updating of records as previously defined in the @future method
 		// Prepare lists to collect updates
 		try {
@@ -191,7 +190,7 @@ public class BI_PSPB_GetMethodEmailBatch implements Database.Batchable<sObject>,
 		try {
 			if (
                 !logIds.isEmpty() && 
-                !String.isBlank(emailBodyrespose)
+                String.isNotBlank(emailBodyrespose)
             ) {
 				List<BI_PSPB_OmnichannelLog__c> emailLogsToUpdate = new List<BI_PSPB_OmnichannelLog__c>();
 				// Retrieve the email log records using the provided Ids
@@ -235,9 +234,7 @@ public class BI_PSPB_GetMethodEmailBatch implements Database.Batchable<sObject>,
 					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_GetMethodEmailBatch.class.toString(),'',
 						System.now(),errorMsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
-					DmlException e = new DmlException();
-					e.setMessage(errorMsg);
-					throw e;
+					
 				}
 			} else {
 				BI_SFCOE_LOG_Util.logMessage(

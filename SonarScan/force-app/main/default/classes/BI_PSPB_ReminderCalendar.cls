@@ -57,7 +57,7 @@ public with sharing class BI_PSPB_ReminderCalendar {
                 );
                 String details = notificationMetadata.BI_PSPB_CalenderDescription__c;
                 if (
-                    String.isNotBlank(startDateTimeStr) &&
+                    
                     String.isNotBlank(startDateTimeStr) &&
                     String.isNotBlank(details) &&
                     String.isNotBlank(title)
@@ -148,7 +148,7 @@ public with sharing class BI_PSPB_ReminderCalendar {
 				);
 				String details = notificationMetadata.BI_PSPB_CalenderDescription__c;
 				if (
-					String.isNotBlank(startDateTimeStr) &&
+					
 					String.isNotBlank(startDateTimeStr) &&
 					String.isNotBlank(details) &&
 					String.isNotBlank(title)

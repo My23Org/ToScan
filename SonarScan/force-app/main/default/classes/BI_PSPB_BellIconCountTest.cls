@@ -195,18 +195,14 @@ private class BI_PSPB_BellIconCountTest {
 	@isTest
 	static void testGetTaskCountUANegativeScenario() {
 		// Create test data
-		 Account testAccount = new Account(Name = 'Test Account');
+		 
 
 		BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
 			Name = 'ApplicationName',
 			BI_SFCOE_LOG_Application__c = 'Spevigo'
 		);
 		insert settings;
-		CareProgramEnrollee testCPE = new CareProgramEnrollee(
-	    AccountId = testAccount.Id,
-	    Name= 'testcpeaccount'
-
-		 );
+		
 
 		//  Mock an exception by passing an invalid AccountId
 		try {

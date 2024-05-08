@@ -1,9 +1,9 @@
 /*
 * @description Test class validating CMS article, image, and news retrieval; includes methods for media,
  news, and exception handling. 
- In this test class (SeeAllData=true) is used. As per the Salesforce documentation, the 
- SeeAllData=true annotation does not work for retrieving data from the ConnectAPI. Therefore, we are using 
- SeeAllData=true in the test class test method.
+ In this test class, we're using SeeAllData=true. According to Salesforce documentation, the SeeAllData=false 
+ annotation doesn't function when retrieving data from the ConnectAPI for test class. Hence, we're opting for 
+ SeeAllData=true in the test method of the test class.
  [https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/connectAPI_TestingApex.htm]
  try catch is used to handle the negative scenarios in test methods.
 * History:
@@ -19,8 +19,9 @@
 @isTest
 private class BI_PSPB_CmsCtrlTest {
 	/*
-	 @description    : Test method used to check reterieve of cms media content from cms */
-
+	 @description    : Test method used to check reterieve of cms media content from cms 
+	 As per Salesforce docs, SeeAllData=false doesn't work for ConnectAPI data retrieval in test classes, 
+	 so we're opting for SeeAllData=true in the test method */
 	@isTest(SeeAllData=true)
 	static void testRetrieveMediaFromCMS() {
 		// Create test data
@@ -42,7 +43,9 @@ private class BI_PSPB_CmsCtrlTest {
 	}
 
 	/*
-	 @description    : Test method used to check reterieve of cms news content from cms */
+	 @description    : Test method used to check reterieve of cms news content from cms 
+	 As per Salesforce docs, SeeAllData=false doesn't work for ConnectAPI data retrieval in test classes, 
+	 so we're opting for SeeAllData=true in the test method */
 
 	@isTest(SeeAllData=true)
 	static void testRetrieveNewsFromCMS() {
@@ -64,7 +67,9 @@ private class BI_PSPB_CmsCtrlTest {
 	}
 
 	/*
-	 @description    : Test method used to test reterieve of cms news content from cms */
+	 @description    : Test method used to test reterieve of cms news content from cms 
+	  As per Salesforce docs, SeeAllData=false doesn't work for ConnectAPI data retrieval in test classes, 
+	  so we're opting for SeeAllData=true in the test method */
 
 	@isTest(SeeAllData=true)
 	static void testRetrieveMediaFromCMSNew() {
@@ -122,7 +127,7 @@ private class BI_PSPB_CmsCtrlTest {
 	/*
 	 @description    : Test method used to check reterieve of cms news content from cms with no channel */
 
-	@isTest(SeeAllData=false)
+	@isTest
 	static void testRetrieveNewsWithNoChannel() {
 		try {
 			// Create test data
@@ -155,7 +160,7 @@ private class BI_PSPB_CmsCtrlTest {
 	/*
 	 @description    : Test method used to check reterieve of cms media content from cms */
 
-	@isTest(SeeAllData=false)
+	@isTest
 	static void testRetrieveMediaWithNoChannel() {
 		try {
 			// Create test data
@@ -189,7 +194,7 @@ private class BI_PSPB_CmsCtrlTest {
 	 @description    : Test method used to check reterieve of cms news content from cms where channel name is
 	 blank */
 
-	@isTest(SeeAllData=false)
+	@isTest
 	static void testRetrieveNewsEmptyChannel() {
 		try {
 			// Create test data
@@ -223,7 +228,7 @@ private class BI_PSPB_CmsCtrlTest {
 	 @description    : Test method used to check reterieve of cms media content from cms where channel name is
 	 blank */
 
-	@isTest(SeeAllData=false)
+	@isTest
 	static void testRetrieveMediaEmptyChannel() {
 		try {
 			// Create test data
@@ -257,7 +262,7 @@ private class BI_PSPB_CmsCtrlTest {
 	 @description    : Test method used to check reterieve of cms media content from cms where channel name is
 	 not exist */
 
-	@isTest(SeeAllData=false)
+	@isTest
 	static void testRetrieveMediaNoneChannel() {
 		try {
 			// Create test data
@@ -287,7 +292,7 @@ private class BI_PSPB_CmsCtrlTest {
 		}
 	}
 
-	@isTest(SeeAllData=false)
+	@isTest
 	static void testReterieveLike() {
 		BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
 			Name = 'PSPB',
@@ -370,7 +375,7 @@ private class BI_PSPB_CmsCtrlTest {
    and ensures that the default response is 'Dislike'. Additionally, it tests the behavior when an exception 
    is thrown during the process.
  */
-	@isTest(SeeAllData=false)
+	@isTest
 	static void testReterieveLikeNullUser() {
 		BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
 			Name = 'PSPB',
@@ -466,7 +471,7 @@ private class BI_PSPB_CmsCtrlTest {
    It ensures that the default response is 'Dislike'. Additionally, it tests the behavior when an exception is 
    thrown during the process.
  */
-	@isTest(SeeAllData=false)
+	@isTest
 	static void testCheckReactionEmptyArticle() {
 		BI_SFCOE_LOG_App_Settings__c settings = new BI_SFCOE_LOG_App_Settings__c(
 			Name = 'PSPB',

@@ -27,7 +27,6 @@ import Beginner from '@salesforce/label/c.BI_PSP_Beginner';
 import Intermediate from '@salesforce/label/c.BI_PSP_Intermediate';
 import Proficient from '@salesforce/label/c.BI_PSP_Proficient';
 import Expert from '@salesforce/label/c.BI_PSP_Expert';
-import brandedurl from '@salesforce/label/c.BI_PSPB_siteUrl';
 import unassignedurl from '@salesforce/label/c.BI_PSPB_UnAssignedSiteUlr';
 import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
@@ -45,6 +44,9 @@ import chRankThree from '@salesforce/label/c.BI_PSP_RankThree';
 import chRankFour from '@salesforce/label/c.BI_PSP_RankFour';
 import chRankFive from '@salesforce/label/c.BI_PSP_RankFive';
 import lableAvailable from '@salesforce/label/c.BI_PSP_AvailableLabel';
+import brandedurl from '@salesforce/label/c.BI_PSPB_siteUrl';
+import brandedUrlNavi from '@salesforce/label/c.BI_PSPB_BrandedSiteURL';
+import unAssignedUrlNavi from '@salesforce/label/c.BI_PSPB_UnassignedSiteURL';
 
 export default class WidgetChallenges extends LightningElement {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
@@ -108,27 +110,21 @@ export default class WidgetChallenges extends LightningElement {
 				})
 
 
-			const currentURL = window.location.href;
-			// Create a URL object
-			const urlObject = new URL(currentURL);
+		const currentURL = window.location.href;
+		const urlObject = new URL(currentURL);
+		const path = urlObject.pathname;
+		const pathComponents = path.split('/');
+		const desiredComponent = pathComponents.find((component) =>
+			[brandedurl.toLowerCase(), unassignedurl.toLowerCase()].includes(
+			component.toLowerCase()
+			)
+		);
 
-			// Get the path
-			const path = urlObject.pathname;
-
-			// Split the path using '/' as a separator
-			const pathComponents = path.split(this.SLASHSITEURL);
-
-			// Find the component you need (in this case, 'Branded')
-			const desiredComponent = pathComponents.find(component =>
-				[brandedurl.toLowerCase(), unassignedurl.toLowerCase()].includes(component.toLowerCase())
-			);
-
-			if (desiredComponent.toLowerCase() === brandedurl.toLowerCase()) {
-				this.urlq = brandedurl;
-			}
-			else {
-				this.urlq = unassignedurl;
-			}
+		if (desiredComponent.toLowerCase() === brandedurl.toLowerCase()) {
+			this.urlq = brandedUrlNavi;
+		} else {
+			this.urlq = unAssignedUrlNavi;
+		}
 		}
 		catch (error) {
 			console.log('Connected Callback-->', JSON.stringify(error));

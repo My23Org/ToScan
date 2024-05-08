@@ -7,6 +7,7 @@ import retrieveMediaFromCMSNews from '@salesforce/apex/BI_PSPB_CmsCtrl.retrieveM
 import showfilterresponse from '@salesforce/apex/BI_PSPB_PersonalizedMessagesCtrl.retrieveAssessmentRecordsForCurrentUser';
 import Patientstatus from '@salesforce/apex/BI_PSPB_treatmentvideocmd.patientStatus';
 import getpersonalizedarticles from '@salesforce/apex/BI_PSPB_PersonalizedMessagesCtrl.getpersonalizedarticles';
+import updatereaction from '@salesforce/apex/BI_PSPB_CmsCtrl.updatereaction';
 import { refreshApex } from '@salesforce/apex';
 // To import Custom Labels
 import brandedurl from '@salesforce/label/c.BI_PSPB_siteUrl';
@@ -95,6 +96,7 @@ import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
 import testsitename from '@salesforce/label/c.BI_PSPB_TestsiteName';
 import evententer from '@salesforce/label/c.BI_PSP_EventEnter';
+import viewlabel from '@salesforce/label/c.BI_PSPB_View';
 // To get Current UserId
 import Id from '@salesforce/user/Id';
 
@@ -152,6 +154,7 @@ export default class BiPspcategoryarticlecmp extends LightningElement {
 	threeDifferentNumbers;
 	channelName = testsitename;
 	siteurlq;
+	titalar;
 	topics = {
     [articleone]: [BI_PSPB_ArticleOneRT],
     [articletwo]: [BI_PSPB_ArticleTwoRT],
@@ -909,6 +912,16 @@ export default class BiPspcategoryarticlecmp extends LightningElement {
 	}
 	handleButtonClick(event) {
 		const finaltitle = event.currentTarget.dataset.name;
+		updatereaction({
+			articlename: finaltitle, reaction: viewlabel
+		})
+			.then(() => {
+				this.titlear = viewlabel+ ': ' + finaltitle;
+			})
+			.catch((error) => {
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
+				// Handle error, if needed
+			});
 		window.location.href =
 			this.baseUrl + this.siteurlq + detailpage + finaltitle;
 	}

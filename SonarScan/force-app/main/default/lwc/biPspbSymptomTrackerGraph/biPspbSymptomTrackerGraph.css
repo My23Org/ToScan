@@ -37,7 +37,13 @@
 	font-family: 'Eina-semibold';
 	float: inline-end;
 }
-
+.Nosymptoms-errormsg{
+	margin-left: -157%;
+    font-size: 24px;
+    font-style: Eina04-Regular;
+    color: #403A60;
+    margin-top: 16px;
+}
 .downbtn {
 	position: relative;
 	height: 40px;
@@ -457,6 +463,15 @@ a {
 }
 
 @media only screen and (max-width:400px) {
+	.Nosymptoms-errormsg{
+	        margin-left: 0%;
+        font-size: 20px;
+        font-style: Eina04-Regular;
+        color: #403A60;
+        margin-bottom: 55px;
+        position: relative;
+        bottom: 25px;
+}
 	.grid-containerHeadingsSingle {
 		display: grid;
 		grid-template-columns: auto;
@@ -706,7 +721,7 @@ a {
 		display: flex;
 		grid-template-columns: auto auto;
 		padding: 12px;
-		gap: 0px;
+		gap: 6px;
 	}
 }
 

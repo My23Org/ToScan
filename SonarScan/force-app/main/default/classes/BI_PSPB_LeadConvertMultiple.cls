@@ -52,7 +52,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 		'PSPB'
 	);
 	// Application name of the System
-	private static String applicationName = settings != null ? settings.BI_SFCOE_LOG_Application__c
+	private static String appName = settings != null ? settings.BI_SFCOE_LOG_Application__c
 		: '';
 /*  
 @description		Used to convert the Lead record
@@ -98,7 +98,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 							err.getMessage() +'\n'; // Concatenate all error messages
 					}
 				
-				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
 					System.now(),convertError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 			}
@@ -131,14 +131,8 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					leadMap.put(l.convertedAccountId, l);
 				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_LeadConvertMultiple.class.toString(),
-					'',
-					System.now(),
-					leadNullError,
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					System.now(),leadNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 			// Query the converted Accounts and original Leads
 			//           Map<Id, Lead> leadMap = new Map<Id, Lead>();
@@ -179,14 +173,8 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					}
 				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_patientOnboarding.class.toString(),
-					'',
-					System.now(),
-					leadNullError,
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_patientOnboarding.class.toString(),'',
+					System.now(),leadNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 			// Perform the update
 
@@ -227,7 +215,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					);
 					lstCareProgEnrolleeInsert.add(cpe);
 				} else {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_patientOnboarding.class.toString(),
+					BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_patientOnboarding.class.toString(),
                      '',System.now(),leadNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
 				}
@@ -262,14 +250,8 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 						);
 					}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_LeadConvertMultiple.class.toString(),
-					'',
-					System.now(),
-					careprogramEnrolleeIdNull,
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					System.now(),careprogramEnrolleeIdNull,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 			if (!lstCareProgEnrolleeInsert.isEmpty()) {
 				for (
@@ -279,14 +261,8 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					mpPatientEnrollee.put(cpEnrollee.AccountId, cpEnrollee.Id);
 				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_LeadConvertMultiple.class.toString(),
-					'',
-					System.now(),
-					careprogramEnrolleeIdNull,
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					System.now(),careprogramEnrolleeIdNull,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 			// Collect Lead IDs from accountsToUpdate
 			Set<Id> leadIds = new Set<Id>();
@@ -324,7 +300,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				.getRecordTypeId();
 			// We verify that all contact email addresses match existing email addresses; we are unable to use limit checks.
 			//To create the contact for a caregiver of a minor patient.
-			List<Contact> cont = [SELECT id, Name, email FROM contact WHERE RecordType.Id = :recordTypeId];
+			List<Contact> cont = [SELECT id, Name, email FROM contact WHERE RecordType.Id = :recordTypeId AND Email IN :leadCaregiverMap.keySet()];
 			List<Contact> caregiverContactsToInsert = new List<Contact>();
 			List<BI_PSPB_Enrollee_Caregiver__c> enrolleeCaregiversToInsert = new List<BI_PSPB_Enrollee_Caregiver__c>();
 
@@ -342,7 +318,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 						//We are adding the nested if statement in accordance with the busness requirement.
 						if(!cont.isEmpty()) {
 						if (leadCaregiver != null &&
-							cont[0].email != leadCaregiver.BI_PSPB_E_mail_ID__c) {
+							cont[0].email != leadCaregiver.BI_PSPB_E_mail_ID__c) {  
 							Contact caregiverContact = new Contact(
 								FirstName = leadCaregiver.BI_PSPB_First_Name__c,
 								LastName = leadCaregiver.BI_PSPB_Last_Name__c,
@@ -359,7 +335,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					}
 					}
 				} else {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
 						System.now(),leadNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 			}
@@ -382,7 +358,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 							System.now());
 					}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),
 					'',System.now(),contactInsertError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 
@@ -395,7 +371,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				if (leadCaregiver.BI_PSPB_E_mail_ID__c != null) {
 					leadmaplist.add(leadCaregiver.BI_PSPB_E_mail_ID__c);
 				} else {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),
+					BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),
 						'',System.now(),leadCaregiverNull,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 			}
@@ -411,14 +387,8 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					contactMap.put(con.Email, con);
 				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_LeadConvertMultiple.class.toString(),
-					'',
-					System.now(),
-					contactInsertError,
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					System.now(),contactInsertError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 			// Now, perform the operations inside the loop
 			//To create the enrollee caregiver for a patient associated with the caregiver and care program program enrollee.
@@ -448,7 +418,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				);
 				enrolleeCaregiversToInsert.add(enrolleeCaregiver);
 				} else {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),
+					BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),
 						'',System.now(),contactInsertError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 				
@@ -479,14 +449,8 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					}
 				
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_LeadConvertMultiple.class.toString(),
-					'',
-					System.now(),
-					enrolleeCaregiverInsert,
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					System.now(),enrolleeCaregiverInsert,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 
 			List<CareProgramProvider> lstprovider = new List<CareProgramProvider>();
@@ -497,13 +461,15 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				Lead lead = leadMap.get(acc.Id);
 				if (lead != null) {
 					lstLeadPrescription = getleadPrescription(lead.Id);
-                    if (
-						!lstLeadPrescription.isEmpty()&&
-						lstLeadPrescription != null
-					) {
-					List<Contact> lstphysician = getContact(
+                    
+                    List<Contact> lstphysician = getContact(
 							lead.BI_PSPB_Physician_Name_c__c
 						);
+					
+                    if (
+						
+						!lstLeadPrescription.isEmpty() && !lstphysician.isEmpty()
+					) {
 					
 						
 						CareProgramProvider cpp = new CareProgramProvider(
@@ -522,7 +488,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 						lstprovider.add(cpp);
 					}
 				} else {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),
+					BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),
 						'',System.now(),leadNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 			}
@@ -551,14 +517,8 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					mpAccountProvider.put(cpp.AccountId, cpp.id);
 				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_LeadConvertMultiple.class.toString(),
-					'',
-					System.now(),
-					leadNullError,
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					System.now(),leadNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 			Map<Id, String> careprogramMap = new Map<Id, String>();
 			if (!lstConvertedLeads.isEmpty()) {
@@ -566,14 +526,8 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					careprogramMap.put(lead.Id, lead.BI_PSPB_Care_Program__c);
 				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_LeadConvertMultiple.class.toString(),
-					'',
-					System.now(),
-					leadNullError,
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					System.now(),leadNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 			List<Medication> medList = new List<Medication>();
 
@@ -584,7 +538,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					careProgrmIds.add(careProgramId);
 				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
 					System.now(),leadNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 			// Query Medication records based on all gathered BI_PSPB_Care_Program__c values
@@ -598,7 +552,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 			];
 			if (meds.isEmpty()) {
 				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
+					appName,
 					BI_PSPB_LeadConvertMultiple.class.toString(),
 					'',
 					System.now(),
@@ -632,7 +586,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 						for (
 							BI_PSPB_Lead_Prescription__c lp : lstLeadPrescription
 						) {
-							// Check if med is not null or empty before accessing med[0]
+							// Check if med is not null or empty before accessing med
 							//We are adding the nested if statement in accordance with the busness requirement.
 							if (!medList.isEmpty()) {
 								MedicationRequest mr = new MedicationRequest(
@@ -648,7 +602,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 							} else {
 								// Handle case where med is null or empty
 								BI_SFCOE_LOG_Util.logMessage(
-									applicationName,
+									appName,
 									BI_PSPB_LeadConvertMultiple.class
 										.toString(),
 									'',
@@ -662,14 +616,8 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				}
 			} else {
 				// Handle case where lstLeadPrescription is null or empty more gracefully
-				BI_SFCOE_LOG_Util.logMessage(
-					applicationName,
-					BI_PSPB_LeadConvertMultiple.class.toString(),
-					'',
-					System.now(),
-					accountNullError,
-					BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-				);
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					System.now(),accountNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 
 			Database.SaveResult[] saveMediRequest = Database.insert(
@@ -733,7 +681,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 							notificationSettings.add(ns);
 						}
 					} else {
-						BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+						BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
 							System.now(),accountNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 					}
 				}
@@ -755,7 +703,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 							BI_PSPB_LeadConvertMultiple.class.toString(),System.now());
 					}
 				} else {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
 						System.now(),notificationIdNull,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 			 
@@ -801,8 +749,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 			// Map to associate CareProgramId with corresponding CareProgramPlanTemplates
 			Map<Id, List<HealthCloudGA__CareProgramPlanTemplate__c>> templatesByCareProgramId = new Map<Id, List<HealthCloudGA__CareProgramPlanTemplate__c>>();
 			for (
-				HealthCloudGA__CareProgramPlanTemplate__c template : careProgramTemplates
-			) {
+				HealthCloudGA__CareProgramPlanTemplate__c template : careProgramTemplates) {
 				if (!templatesByCareProgramId.containsKey(template.HealthCloudGA__CareProgram__c)) {
 					templatesByCareProgramId.put(template.HealthCloudGA__CareProgram__c,
 						new List<HealthCloudGA__CareProgramPlanTemplate__c>());
@@ -815,7 +762,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				// Retrieve the corresponding Lead record from the leadMap
 				Lead lead = leadMap.get(acc.Id);
 				if (lead == null) {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+					BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
 						System.now(),leadNullError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 
@@ -823,7 +770,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				CareProgramEnrollee patientEnrollee = enrolleeMap.get(acc.Id);
 				if (patientEnrollee == null) {
 					BI_SFCOE_LOG_Util.logMessage(
-						applicationName,
+						appName,
 						BI_PSPB_LeadConvertMultiple.class.toString(),
 						'',
 						System.now(),
@@ -837,7 +784,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 					patientEnrollee.CareProgramId
 				);
 				if (relevantTemplates.isEmpty()) {
-					BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),
+					BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),
 						'',System.now(),careProgramPlanError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 				}
 
@@ -880,12 +827,12 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 						saveResulted,BI_PSPB_LeadConvertMultiple.class.toString(),System.now());
 				}
 			} else {
-				BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
+				BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'',
 					System.now(),awardInsertError,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			}
 		}else {
 			BI_SFCOE_LOG_Util.logMessage(
-				applicationName,
+				appName,
 				BI_PSPB_LeadConvertMultiple.class.toString(),
 				'',
 				System.now(),
@@ -895,7 +842,7 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 		}
 		} catch (Exception ex) {
 			// Handle exception
-			BI_SFCOE_LOG_Util.handleException(ex,applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),
+			BI_SFCOE_LOG_Util.handleException(ex,appName,BI_PSPB_LeadConvertMultiple.class.toString(),
 				null,System.now());
 		}
 	}
@@ -903,12 +850,12 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 	//@param leadId - converted leadId
 	//@return lstLeadPrescription list containing the queried prescription records.
 	private static List<BI_PSPB_Lead_Prescription__c> getleadPrescription(
-		Id leadId
+		String leadId
 	) {
 
         List<BI_PSPB_Lead_Prescription__c> lstLeadPrescription;
 	try {
-		if(leadId != null || leadId !=''){
+		if(!String.Isblank(leadId)){
 		// There is no need to use user mode because this class operates as a system administrator.
 		lstLeadPrescription = [
 			SELECT
@@ -929,16 +876,16 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 		];
 
 		if (lstLeadPrescription.isEmpty()) {
-			BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
+			BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
 	System.now(),medError + leadId,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 		} 
 	}
 	else{
-		BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
+		BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
 		System.now(),medError + leadId,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 	}
 	}catch (Exception ex) {
-			BI_SFCOE_LOG_Util.handleException(ex,applicationName,BI_PSPB_LeadConvertMultiple.class.getName(),
+			BI_SFCOE_LOG_Util.handleException(ex,appName,BI_PSPB_LeadConvertMultiple.class.getName(),
 				null,System.now());
 				
 		}
@@ -948,10 +895,10 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 	//@description This method is useful for fetching Contact records associated with a lead
 	//@param physicianname - converted leadId's physician name
 	//@return lstphysician list containing the queried Contact records.
-	private static List<Contact> getContact(Id physicianId) {
+	private static List<Contact> getContact(string physicianId) {
         List<Contact> lstPhysician;
 		try{
-			if(physicianId != null && physicianId != ''){
+			if(!String.isBlank(physicianId)){
 		// There is no need to use user mode because this class operates as a system administrator.
 		lstPhysician = [
 			SELECT Id, Name, BI_PSPB_Practice_Name__c
@@ -962,18 +909,18 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 
 		if (lstPhysician.isEmpty()) {
             // Logging an error message since the queried list is empty
-			BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
+			BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
 				System.now(),contact+ physicianId,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 			
 		} 
 	
     }else{
-		BI_SFCOE_LOG_Util.logMessage(applicationName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
+		BI_SFCOE_LOG_Util.logMessage(appName,BI_PSPB_LeadConvertMultiple.class.toString(),'', 
 				System.now(),contact+ physicianId,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR);
 	}
 	}
 	catch (Exception ex) {
-		BI_SFCOE_LOG_Util.handleException(ex,applicationName,BI_PSPB_LeadConvertMultiple.class.getName(),
+		BI_SFCOE_LOG_Util.handleException(ex,appName,BI_PSPB_LeadConvertMultiple.class.getName(),
 			null,System.now());
 			
 	}

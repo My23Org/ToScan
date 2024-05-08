@@ -39,19 +39,25 @@ public class BI_PSPB_SendEmailBatch implements Database.Batchable<SObject>, Data
 		String notificationDate,
 		String uname
 	) {
-		try {
+		if (
+			!contactIds.isEmpty() &&
+			!String.isBlank(notificationDeveloperName) &&
+			!String.isBlank(desturl) &&
+			notificationDate != null 
+		) {
 			this.contactIds = contactIds;
 			this.notificationDeveloperName = notificationDeveloperName;
 			this.desturl = desturl;
 			this.notificationDate = notificationDate;
 			this.uname = uname;
-		} catch (Exception ex) {
-			BI_SFCOE_LOG_Util.handleException(
-				ex,
+		} else {
+			BI_SFCOE_LOG_Util.logMessage(
 				app,
 				BI_PSPB_SendEmailBatch.class.toString(),
-				null,
-				System.now()
+				BI_PSPB_constantsClass.parameterError,
+				System.now(),
+				'',
+				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 			);
 		}
 	}

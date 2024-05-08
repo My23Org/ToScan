@@ -18,6 +18,17 @@
 
 	src: url('/s/sfsites/c/resource/WebEinaFonts/WebFonts/Eina04-Bold.woff') format('woff');
 }
+.msgforpre{
+
+font-family:'Eina-Regular';
+font-size: 24px;
+font-weight: 400;
+line-height: 32px;
+color:#403A60;
+margin-top: 10px;
+
+
+}
 
 .fulldiv1 {
 	display: none;

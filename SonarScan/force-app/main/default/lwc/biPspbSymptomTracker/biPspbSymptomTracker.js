@@ -93,7 +93,7 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 	@track isPopupOpendisable = true;
 	@track lastModifi = false;
 	@track entryDate;
-	@track chsngedVal;
+	 @track chsngedVal;
 	@track isDateUnique = false;
 	@track isGppExperiencing;
 	@track lastEntryDate;
@@ -193,6 +193,8 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 	@track intensity
 	@track carePlanTemplateNam;
 	@track whichsymptom;
+	@track fileTitle  = UploadedFile
+	@track filePath   = UploadedFilepng
 	dynamicValue = dynamicValue;
 	// Variable declaration
 	userId = Id;
@@ -867,7 +869,7 @@ handleFileInputChange(event) {
         if (newImageUrls.length + files.length > maxImagesAllowed) {
             // Trying to upload more than 5 images, show error message
             this.isLimitReached = true;
-            throw new Error('You can upload a maximum of 5 images.');
+
             
         }
 
@@ -879,7 +881,11 @@ handleFileInputChange(event) {
 				  console.log( this.totalSize,' this.totalSize',maxFileSize)
                 if (file.size <= maxFileSize) {
                   newtotalsizeimg.push(file.size);
-	             this.totalSize =[...newtotalsizeimg];
+	           if (totalSize > maxFileSize) {
+                        // Individual file size exceeds 5MB after adding, show error message
+                        newTotalSizeImg.pop();
+                        throw new Error('Total image size exceeds 5MB.');
+                    }
 				 let sum = 0;
 				 for(let j=0; j < this.totalSize.length; j++){
                     sum += this.totalSize[j];
@@ -921,9 +927,9 @@ handleFileInputChange(event) {
 }
 
 
-	@track fileTitle  = UploadedFile
-	@track filePath   = UploadedFilepng
+
 	handleClickpdf() {
+    //  this.imageUrls = [];
 		
 		console.log(this.imageUrls,'this.imageUrlsthis.imageUrls')
 		
@@ -932,8 +938,16 @@ handleFileInputChange(event) {
 		this.isDropdownOpen2 = false;
 		this.isDropdownOpen1 = false;
 		this.isDropdownOpen4 = false;
+		let newArray=[]
 		// Get the file contents from imageUrls and save them
-		const fileContents = this.imageUrls.map(imageUrl => imageUrl.split(',')[1]);
+		for(let i=0; i< this.imageUrls.length;i++){
+			if(!this.oldimageurl.includes(this.imageUrls[i])){
+				newArray.push(this.imageUrls[i])
+				this.oldimageurl=[...this.oldimageurl,this.imageUrls[i]]
+			}
+		}
+		console.log(newArray,"newArray")
+		const fileContents = newArray.map(imageUrl => imageUrl.split(',')[1]);
 		this.recentimages = true;
 		if (fileContents) {
 			this.filechnagecolour = 'card-header-accord';
@@ -1020,7 +1034,7 @@ handleFileInputChange(event) {
 	}
 
 	async handleSaveDate() {
-		try {
+	
 			let accForInsert = this.accountId;
 			let myBoolean = false;
 			// Ensure isDateUnique is resolved before proceeding
@@ -1039,10 +1053,7 @@ handleFileInputChange(event) {
 				sessionStorage.setItem('gppvalues', this.resultId);
 				this.datamantroy = true;
 			}
-		} catch (error) {
-			this.showToast(errormessage, error.message, errorvariant);
-			// Handle error, e.g., show an error message
-		}
+	
 	}
 	async checkDateUniqueness() {
 		try {
@@ -1081,8 +1092,11 @@ handleFileInputChange(event) {
 	handleRadioChange(event) {
 		this.chsngedVal = event.detail.value;
 		this.gpp = this.chsngedVal;
+		console.log(this.gpp,"gpp")
+		
 		// Assuming that this.chsngedVal is a string, use 'true' (string) instead of true (boolean)
 		this.showMessage = this.chsngedVal === yes;
+		console.log(this.showMessage,"ragav")
 	}
 	handleSavegpp() {
 		// Check if sessionStorage values are empty
@@ -1204,6 +1218,14 @@ handleFileInputChange(event) {
 				this.symptomdata = data[0].BI_PSP_EditEntrydates__c;
 				this.symptomgpp = data[0].BI_PSP_Are_you_currently_experiencing__c;
 				this.chsngedVal = this.symptomgpp;
+				if(this.chsngedVal == true){
+                      this.chsngedVal =yes
+				}
+				else{
+					this.chsngedVal =no
+
+				}
+				console.log(this.chsngedVal ,"ooooo",this.symptomgpp)
 				this.currentlygpp = true;
 				this.datedisable = true;
 
@@ -1244,7 +1266,12 @@ handleFileInputChange(event) {
 			 this.showToast(errormessage, error.body.message, errorvariant);
 		}
 	}
+
+
+	@track oldimageurl= [];
 	@wire(getCaseImageURL, { symptomTrackerId: '$lastsymptomid' })
+
+
 	wiredgetCaseImageURL({ data, error }) {
 		if (data && data !== null){
 			try {
@@ -1254,10 +1281,12 @@ handleFileInputChange(event) {
 				this.filechnagecolour = 'card-header-accord';
 
 				if (this.firsttime === false) {
-					let splitArray = data?.map((obj) => obj?.split('data:')[1]);
+					let splitArray = data?.map((obj) => obj.split('data:')[1]);
 					for (let record of splitArray) {
 						if (record !== '') {
 							this.imageUrls = [...this.imageUrls, 'data:' + record];
+							this.oldimageurl = [...this.oldimageurl, 'data:' + record];
+							
 						}
 					}
 					this.firsttime = true;

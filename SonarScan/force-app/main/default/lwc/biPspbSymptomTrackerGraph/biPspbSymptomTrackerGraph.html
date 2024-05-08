@@ -38,6 +38,9 @@
 							</select></div>
 						<div><template if:true={showChart}><button class="downbtn1"
 									onclick={openShowPopUp}>Download</button></template></div>
+
+
+						<div class="Nosymptoms-errormsg" if:false={throwerrormessage}>No symptoms logged for this month. </div>
 					</div>
 				</div>
 			</lightning-layout-item>

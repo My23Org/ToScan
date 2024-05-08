@@ -148,23 +148,27 @@
 	flex-direction: column;
 	align-items: center;
 	position: relative;
-	left: 8%;
+	left:33%;
 	padding-bottom: 170px;
 	top: 50px;
 }
 
 .postimage {
 	width: 140px;
-	height: 120px;
+    height: 120px;
+    position: relative;
+    right: 30%;
 }
 
 .allpostmsg {
 	font-family: 'Eina-SemiBold';
-	font-size: 16px;
-	line-height: 28px;
-	padding: 20px 0px;
-	text-align: center;
-	width: 500px;
+    font-size: 16px;
+    line-height: 28px;
+    padding: 20px 0px;
+    text-align: center;
+    width: 570px;
+    right: 30%;
+    position: relative;
 }
 
 .postcontainer {
@@ -1542,9 +1546,10 @@ span.slds-truncate {
 
 	.allpostmsg {
 		width: 81%;
-		font-size: 14px;
-		position: relative;
-		right: 2%;
+        font-size: 14px;
+        position: relative;
+        bottom: 20px;
+        right: 4%;
 	}
 
 	.unfollowFlexContainer {
@@ -1622,6 +1627,7 @@ span.slds-truncate {
 
 	.allpostNone {
 		display: block;
+        left: 8%;
 	}
 
 	.commentavttobody {
@@ -1827,11 +1833,11 @@ span.slds-truncate {
 
 	.postimage {
 		margin-left: 0%;
-		height: 91px;
-		position: relative;
-		top: 20px;
-		width: auto;
-		left: 25%;
+        height: 120px;
+        position: relative;
+        top: -20px;
+        width: 140px;
+        left: 15%;
 	}
 
 	.Following {
@@ -3058,22 +3064,23 @@ span.slds-truncate {
 
 	.postimage {
 		margin-left: 0%;
-		height: 91px;
-		position: relative;
-		top: 20px;
-		width: auto;
-		left: 31%;
+        height: 120px;
+        position: relative;
+        top: -10px;
+        width: 140px;
+        left: 24%;
 	}
 
 	.allpostmsg {
 		font-family: 'Eina-SemiBold' !important;
-		font-size: 14px;
-		line-height: 28px;
-		text-align: center;
-		color: #403a60;
-		margin-left: 5px;
-		position: relative;
-		width: 80%;
+        font-size: 14px;
+        line-height: 28px;
+        text-align: center;
+        color: #403a60;
+        margin-left: 37px;
+        position: relative;
+        width: 80%;
+        right: 10%;
 	}
 
 	.postcontainer {
@@ -3982,20 +3989,21 @@ span.slds-truncate {
 	}
 
 	.postimage {
-		height: 91px;
-
-		width: auto;
+		height: 120px;
+        width: 140px;
+        left: 7px;
 	}
 
 	.allpostmsg {
 		font-family: 'Eina-SemiBold' !important;
-		font-size: 14px;
-		line-height: 28px;
-		text-align: center;
-		color: #403a60;
-		margin-left: 0px;
-		position: relative;
-		width: -webkit-fill-available;
+        font-size: 14px;
+        line-height: 28px;
+        text-align: center;
+        color: #403a60;
+        margin-left: 0px;
+        left: 0%;
+        position: relative;
+        width: -webkit-fill-available;
 	}
 
 	.follow-popup-container {
@@ -4131,7 +4139,7 @@ span.slds-truncate {
 
 	.row {
 		padding: 30px 5% 5px 5%;
-		overflow-x: hidden;
+		overflow: hidden;
 	}
 
 	.post-header {
@@ -4171,7 +4179,7 @@ span.slds-truncate {
 	}
 
 	.allpostNone {
-		left: 18%;
+		left: 13%;
 	}
 
 	.Reactbtn {
@@ -4513,24 +4521,24 @@ span.slds-truncate {
 	}
 
 	.postimage {
-		margin-left: 0%;
-		height: 91px;
-		width: auto;
+		margin-left: 11%;
+        height: 120px;
+        width: 140px;
 	}
 
 	.allpostmsg {
 		font-family: 'Eina-SemiBold' !important;
-		font-size: 14px;
-		line-height: 28px;
-		text-align: center;
-		color: #403a60;
-		margin-left: 0px;
-		position: relative;
-		width: 97%;
+        font-size: 15px;
+        line-height: 28px;
+        text-align: center;
+        color: #403a60;
+        margin-left: 68px;
+        position: relative;
+        width: 97%;
 	}
 
 	.allpostNone {
-		left: 18%;
+		left: 30%;
 	}
 
 	.rightside {
@@ -4747,6 +4755,7 @@ span.slds-truncate {
 
 	.mypostemoji-buttons {
 		margin-left: 5%;
+		bottom: 70px;
 	}
 
 	.popupbgblur {
@@ -4892,11 +4901,16 @@ span.slds-truncate {
 	.showeditthecommentcompress {
 		margin-right: 18%;
 	}
+
+	.second-popup .popup-content{
+		left: 20%;
+	}
 }
 
 @media only screen and (min-width: 1281px) {
 	.allpostNone {
-		left: 130%;
+		left: 135%;
+        top: 30px;
 	}
 
 	.showeditthecommentcompress {

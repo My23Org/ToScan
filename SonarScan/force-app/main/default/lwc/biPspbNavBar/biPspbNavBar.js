@@ -12,6 +12,7 @@ import updateSwitchSelectedPatientID from '@salesforce/apex/BI_PSPB_PatientDetai
 import countAssessment from '@salesforce/apex/BI_PSP_Assessment.getAssessmentCountsByCurrentUserName';
 import Patientstatus from '@salesforce/apex/BI_PSPB_treatmentvideocmd.patientStatus';
 import getEnrolle from '@salesforce/apex/BI_PSP_ChallengeCtrl.getEnrolle';
+import getPatientAfterThreemonthsAndFourteenWeeks from '@salesforce/apex/BI_PSP_QualitativeSatisfactions.getPatientAfterThreemonthsAndFourteenWeeks';
 //To get Current UserId
 import Id from '@salesforce/user/Id';
 //To import Static Resource
@@ -85,6 +86,10 @@ import createpostSiteUrl from '@salesforce/label/c.BI_PSPB_createpostUrl';
 import BI_PSPB_Acute from '@salesforce/label/c.BI_PSPB_Acute';
 import BI_PSP_Unassigned from '@salesforce/label/c.BI_PSP_Unassigned';
 import BI_PSPB_SecureLogout from '@salesforce/label/c.BI_PSPB_SecureLogout';
+import completedLabel from '@salesforce/label/c.BI_PSP_Completed';
+import expired from '@salesforce/label/c.BI_PSP_Expired';
+import acuteVideoPage from '@salesforce/label/c.BI_PSPB_AcuteVideoPage';
+
 
 export default class BiPspbNavBar extends LightningElement {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
@@ -210,6 +215,7 @@ export default class BiPspbNavBar extends LightningElement {
 	PLATFORMSUPPORTPAGEURL = platformsupportSiteUrl;
 	CREATEPOSTPAGEURL = createpostSiteUrl;
 	SECURELOGOUT = BI_PSPB_SecureLogout;
+	ACUTEVIDEOPAGE = acuteVideoPage;
 
 	//This wire method is used to fetch the relative enrolle detials of the current user
 	@wire(getEnrolle, { userId: '$userId' })
@@ -246,7 +252,22 @@ export default class BiPspbNavBar extends LightningElement {
 			this.showToast(errormessage, error.body.message, errorvariant);
 		}
 	}
-
+	//Qualitative Date for topbar navigation
+	@wire(getPatientAfterThreemonthsAndFourteenWeeks)
+	wiredResult({ error, data }) {
+		try {
+		if (error) {
+			this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
+		} else if (data) {
+			this.threeMonthsVar = data.threeMonthsVar;
+			this.forteenWeeks = data.forteenWeeks;
+			this.target2monthsdate = data.target2monthsdate ?? null;
+			this.target14wksdate = data.target14wksdate ?? null;
+		}
+		} catch (err) {
+		this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from LWC
+		}
+	}
 	//Used to get information regarding the loggedin caregiver
 	patientInfo() {
 		getCaregiverAccounts({ userId: Id })
@@ -400,7 +421,7 @@ export default class BiPspbNavBar extends LightningElement {
 			if (this.lastSegment === this.siteChallengesUrlBranded || this.lastSegment === this.siteTrophyCaseUrlBranded) {
 				this.showChallenge = true;
 			}
-			else if (this.lastSegment === this.siteUrlinfoCenterLandingPage || this.lastSegment === this.ARTICLECATEGORUURL || this.lastSegment === this.SEARCHRESULTSURL || this.lastSegment === this.DETAILEDARTICLEURL) {
+			else if (this.lastSegment === this.CHRONICPATIENTURL || this.lastSegment === this.ACUTEVIDEOPAGE || this.lastSegment === this.siteUrlinfoCenterLandingPage || this.lastSegment === this.ARTICLECATEGORUURL || this.lastSegment === this.SEARCHRESULTSURL || this.lastSegment === this.DETAILEDARTICLEURL) {
 				this.showInformationCenter = true;
 			}
 			else if (this.lastSegment === this.sitesymptomTrackerLpBranded || this.lastSegment === this.SYMPTOMTRACKERGRAPHURL || this.lastSegment === this.SYMPTOMTRACKERMAINPAGEURL) {
@@ -787,21 +808,23 @@ export default class BiPspbNavBar extends LightningElement {
 	//Used to render the components
 	openComQuestionnaires() {
 		if (this.stdlq > 0) {
-			window.location.assign(this.baseUrl + this.siteUrlBranded + this.DLQICOMPLETEDQUESTIONURL);
-		}
-		else if (this.stpss > 0) {
-			window.location.assign(this.baseUrl + this.siteUrlBranded + this.PSSCOMPLETEDQUESTIONURL);
-		}
-		else if (this.stwai > 0) {
-			window.location.assign(this.baseUrl + this.siteUrlBranded + this.WAPICOMPLETEDQUESTIONURL);
-		}
-		else if (this.stqsq > 0) {
-			if (this.targetDate14 !== null) {
-				window.location.assign(this.baseUrl + this.siteUrlBranded + this.QSQ2COMPLETEDQUESTIONURL);
+		window.location.assign(this.urlq + dlqiCompletedUrl);
+		} else if (this.stpss > 0) {
+		window.location.assign(this.urlq + pssCompletedUrl);
+		} else if (this.stwai > 0) {
+		window.location.assign(this.urlq + wapiCompletedUrl);
+		} else if (this.stqsq > 0) {
+		if (this.target14wksdate != null) {
+			if (this.status === completedLabel || this.status ===expired) {
+			window.location.assign(
+				this.urlq + qualitativeCompletedFourteenMonths
+			);
+			} else {
+			window.location.assign(this.urlq + qualitativeCompletedtwoMonths);
 			}
-			else {
-				window.location.assign(this.baseUrl + this.siteUrlBranded + this.QSQ1COMPLETEDQUESTIONURL);
-			}
+		} else {
+			window.location.assign(this.urlq + qualitativeCompletedtwoMonths);
+		}
 		}
 	}
 	// showToast used for all the error messages caught

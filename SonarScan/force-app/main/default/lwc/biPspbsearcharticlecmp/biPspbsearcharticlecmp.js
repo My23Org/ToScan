@@ -7,6 +7,7 @@ import { CurrentPageReference } from 'lightning/navigation';
 import retrieveMediaFromCMSNews from '@salesforce/apex/BI_PSPB_CmsCtrl.retrieveMediaFromCMSNews';
 import showfilterresponse from '@salesforce/apex/BI_PSPB_PersonalizedMessagesCtrl.retrieveAssessmentRecordsForCurrentUser';
 import Patientstatus from '@salesforce/apex/BI_PSPB_treatmentvideocmd.patientStatus';
+import updatereaction from '@salesforce/apex/BI_PSPB_CmsCtrl.updatereaction';
 // To import Custom Labels
 import brandedurl from '@salesforce/label/c.BI_PSPB_siteUrl';
 import unassignedurl from '@salesforce/label/c.BI_PSPB_UnAssignedSiteUlr';
@@ -130,6 +131,7 @@ import livingwithgpp from '@salesforce/label/c.BI_PSPB_livingWithGpp';
 import tips from '@salesforce/label/c.BI_PSPB_tips';
 import feelingsetc from '@salesforce/label/c.BI_PSPB_manageFeelingsEtc';
 import evententer from '@salesforce/label/c.BI_PSP_EventEnter';
+import viewlabel from '@salesforce/label/c.BI_PSPB_View';
 // To get Current UserId
 import Id from '@salesforce/user/Id';
 
@@ -176,6 +178,7 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 	description2;
 	description3;
 	threeDifferentNumbers;
+	titlear;
 	// button labels
 	standarItemlink = [
 		{ id: 1, title: articlecategoryone, titleadb: articlecategoryvalone },
@@ -601,6 +604,17 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 	handleReloadAndNavigate(event) {
 		const finaltitle = event.currentTarget.dataset.name;
 		const articlename = finaltitle;
+		updatereaction({
+			articlename: articlename, reaction: viewlabel
+		})
+			.then(() => {
+				this.titlear = viewlabel+ ': ' + articlename;
+			})
+			.catch((error) => {
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
+				// Handle error, if needed
+			});
+
 		window.location.href =
 			this.baseUrl + this.siteUrlq + detailpage + articlename;
 	}

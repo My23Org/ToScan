@@ -1,12 +1,14 @@
-<!--This Lightning web component purpose is Avatar Prompt message for all the navigation pages.-->
+<!-- This component for Avatar Navigation or prompt message through Avatar -->
 <template>
 	<!-- Avatar image -->
+
 	<div class="avatar-picklist-container">
 		<div class="avatar-container">
 			<img src={selectedAvatarSrc} class="slds-m-right_large" />
 		</div>
+
 		<!-- prompt message -->
-		<div if:true={main} class="Dot">
+		<div class="Dot">
 			<div if:true={content} class="navigationcontent">
 				<div class="flex1">
 					<div>
@@ -16,10 +18,42 @@
 						</div>
 					</div>
 					<div class={closevalue} onclick={handleClose}>
-						<a><span class="crossicon">&times;</span></a>
+						<a><span style="font-size: 27px; color: grey">&times;</span></a>
 					</div>
 				</div>
 			</div>
+
+				<div if:true={qualitative} class="navigationcontent">
+				<div class="flex1">
+					<div>
+						<pre class="contentbox"><p class="qualtive">Qualitative Satisfaction Questionnaire</p>{selectedName1}</pre>
+						<div class="contentboxmobile">
+							<p>{mobilename}</p>
+						</div>
+					</div>
+					<div class={closevalue} onclick={handleClose}>
+						<a><span style="font-size: 27px; color: grey">&times;</span></a>
+					</div>
+				</div>
+			</div>
+
+			<!-- newly adde code for The QSQ header Bolding -->
+			<div if:true={qsqTextToAdd} class="navigationcontent">
+				<div class="flex1">
+					<div>
+						<pre
+							class="contentbox"
+						><p class="boldQsq">Qualitative Satisfaction Questionnaire</p>{selectedName1}</pre>
+						<div class="contentboxmobile">
+							<p>Qualitative Satisfaction Questionnaire{mobilename}</p>
+						</div>
+					</div>
+					<div class={closevalue} onclick={handleClose}>
+						<a><span style="font-size: 27px; color: grey">&times;</span></a>
+					</div>
+				</div>
+			</div>
+
 			<div if:true={twocontentmobile} class="navigationcontent2mobile">
 				<p class="contentboxmobile">{selectedName2}</p>
 			</div>
@@ -34,33 +68,23 @@
 		<div if:true={twocontent} class="navigationcontent2">
 			<pre class="contentbox">{selectedName2}</pre>
 		</div>
-		<div if:true={seperateChallenge} class="navigationcontentchallenge">
-			<p class="contentboxchallenge">{challengeName1}</p>
-			<br />
-			<p class="contentboxchallenge">{challengeName2}</p>
-		</div>
 		<div if:true={challangecontent} class="navigationcontent3">
-			<p class="contentboxchal">{selectedName3}</p>
+			<pre class="contentboxchal">{selectedName3}</pre>
 		</div>
 		<div class="summaryflex">
 			<div if:true={summary} class={navigationcontent5}>
 				<div class="flex1">
 					<div>
-						<div>
-							<p class="contentbox5">{selectedName6}</p>
-						</div>
+						<div><p class="contentbox5">{selectedName6}</p></div>
 						<div class="contentboxmobile">
 							<p>{mobilename}</p>
 						</div>
 						<pre class="contentbox1">{selectedName5}</pre>
 					</div>
 					<div class={closevalue} onclick={handleClose}>
-						<a><span class="crossicon">&times;</span></a>
+						<a><span style="font-size: 27px; color: grey">&times;</span></a>
 					</div>
 				</div>
-			</div>
-			<div if:true={twocontentmobile1} class="navigationcontent2mobile">
-				<p class="contentboxmobile">{selectedName4}</p>
 			</div>
 			<div if:true={contentdot1} class={navigationcontentdot1}>
 				<p onclick={mobileclick} class="contentboxdot2">...</p>

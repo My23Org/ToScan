@@ -184,7 +184,7 @@ import BI_PSP_ChatterSlash from '@salesforce/label/c.BI_PSP_ChatterSlash';
 import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
 import BI_PSPB_Error_For_Account from '@salesforce/label/c.BI_PSPB_Error_For_Account';
-import BI_PSPB_Error_For_Post_Creation from '@salesforce/label/c.BI_PSPB_Error_For_Post_Creation';
+import BI_PSPB_Error_For_Post_Selection from '@salesforce/label/c.BI_PSPB_Error_For_Post_Selection';
 export default class biPspbMyPost extends LightningElement {
 	//Proper naming conventions with camel case for all the variables will be followed in the future releases
 	// Declaration of variables with @track
@@ -281,13 +281,10 @@ export default class biPspbMyPost extends LightningElement {
 
 	// get all records for mypost
 	@wire(mypost, { userId: '$userId' })
-	recordssss({ data, error }) {
+	recordssss({ error, data }) {
 		try {
 			this.isLoading = true;
-			if (data && data.length === 0) {
-				this.isLoading = false;
-			}
-			else if (data && data.length > 0) {
+			if (data && data.length > 0) {
 				this.showPostDetails = true;
 				this.isLoading = false;
 				//this map is to display mypost page with specific conditions after got all list of raw data from apex
@@ -319,11 +316,16 @@ export default class biPspbMyPost extends LightningElement {
 				}
 			}
 			else if (error) {
+				this.isLoading = false;
 				this.showToast(errormessage, error.body.message, errorvariant);
+			}
+			else if (data && data.length === 0 || data === null) {
+				this.isLoading = false;
+				this.showPostDetails = false;
 			}
 			else {
 				this.isLoading = true;
-				this.showToast(errormessage, BI_PSPB_Error_For_Post_Creation, errorvariant);
+				this.showToast(errormessage, BI_PSPB_Error_For_Post_Selection, errorvariant);
 			}
 
 		}
@@ -1872,7 +1874,7 @@ export default class biPspbMyPost extends LightningElement {
 			if (counter === 5) {
 				clearInterval(intervalId);
 			}
-		}, 100);
+		}, 1000);
 	}
 
 	//scroll to the particular comment and open the commentBox
@@ -1905,7 +1907,7 @@ export default class biPspbMyPost extends LightningElement {
 			}
 		}, 100);
 		//show other user comments for a post after navigation from notification
-		viewComments({ feeditemid: postId })
+		viewComments({ feedItemId: postId })
 			.then(result => {
 				if (result && result.length > 0) {
 					this.displaycomment = result;
@@ -1924,12 +1926,11 @@ export default class biPspbMyPost extends LightningElement {
 				}
 			})
 			.catch(error => {
-
 				this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error
 				this.getComments = false;
 			});
 		// get title and phrases for navigation from notification to comments
-		getCommentOptions({ feedItemid: postId })
+		getCommentOptions({ feedItemId: postId })
 			.then(result => {
 				if (result && result.length > 0) {
 					this.navtitle = result[0].BI_PSP_Category__c;

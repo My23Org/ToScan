@@ -1789,8 +1789,8 @@ export default class BiPspbQSQuestionnaire1 extends LightningElement {
 					questionIds: nonEmptyIds,
 					responseTexts: nonEmptyResponses
 				})
-					.then((result) => {
-						console.log(result);
+					.then(() => {
+						window.location.assign(this.urlq + outStandingPage);
 					})
 					.catch((error) => {
 						this.showToast(consoleErrorMessage, error.message, errorvariant);// Catching Potential Error

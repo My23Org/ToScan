@@ -28,6 +28,8 @@
 	// Custom label for Like and Dislike reaction
 	private static string likeLabel = System.Label.BI_PSP_Like;
 	private static string dislikeLabel = System.Label.BI_PSP_Dislike;
+	private static String viewLabel = System.Label.BI_PSPB_View;
+
 	// Custom label for error messages
 	private static string errorCmsImageRetrieve = System.Label.BI_PSP_ErrorCmsImageRetrieve;
 	private static string errorCmsNewsRetrieve = System.Label.BI_PSP_ErrorCmsNewsRetrieve;
@@ -41,6 +43,7 @@
 	private static string errorMessage = '';
 	private static string errorMessageUpdate = '';
 	private static string errorMessageDelete = '';
+	private static string errorMessageView = '';
 
 	/*
 	 *@description     This method retrieves CMS images for a given channelName within a specified time range.
@@ -364,7 +367,7 @@
 				FROM BI_PSPB_Article_like__c
 				WHERE
 					BI_PSPB_CareProgramEnrollee__c = :careProgramEnrolleeId
-					AND BI_PSPB_Article_name__c = :articlename
+					AND BI_PSPB_Article_name__c = :articlename AND (BI_PSPB_Reaction__c = :likeLabel OR BI_PSPB_Reaction__c =:dislikeLabel)
 				LIMIT 1
 			];
 			if (!likereaction.isEmpty()) {
@@ -414,7 +417,8 @@
 				FROM BI_PSPB_Article_like__c
 				WHERE
 					BI_PSPB_CareProgramEnrollee__c = :careProgramEnrolleeId
-					AND BI_PSPB_Article_name__c = :articlename
+					AND BI_PSPB_Article_name__c = :articlename AND
+					(BI_PSPB_Reaction__c = :likeLabel OR BI_PSPB_Reaction__c =:dislikeLabel)
 				LIMIT 1
 			];
 			if (!likereaction.isEmpty()) {
@@ -483,6 +487,19 @@
 					}
 				}
 			} else {
+				List<BI_PSPB_Article_like__c> likereactionview = [
+					SELECT
+						id,
+						BI_PSPB_Article_name__c,
+						BI_PSPB_Reaction__c,
+						BI_PSPB_CareProgramEnrollee__c
+					FROM BI_PSPB_Article_like__c
+					WHERE
+						BI_PSPB_CareProgramEnrollee__c = :careProgramEnrolleeId
+						AND BI_PSPB_Article_name__c = :articlename AND
+						(BI_PSPB_Reaction__c = :viewLabel)
+					LIMIT 1
+				];
 				if (reaction == likeLabel) {
 					BI_PSPB_Article_like__c likereactionrec = new BI_PSPB_Article_like__c();
 
@@ -511,6 +528,41 @@
 					}
 					if (!String.isBlank(errorMessage)) {
 						BI_SFCOE_LOG_Util.handleDatabaseSaveResults(
+							insertResults,
+							BI_PSPB_CmsCtrl.class.toString(),
+							System.now()
+						);
+						throw new AuraHandledException(errorMessage);
+					}
+				}
+				else if (reaction == viewLabel && likereactionview.isEmpty()) {
+					BI_PSPB_Article_like__c viewRecord = new BI_PSPB_Article_like__c();
+
+					viewRecord.BI_PSPB_Article_name__c = articlename;
+					viewRecord.BI_PSPB_Reaction__c = reaction;
+					viewRecord.BI_PSPB_CareProgramEnrollee__c = careProgramEnrolleeId;
+					likereactionview.add(viewRecord);
+
+					Database.UpsertResult[] insertResults = Database.upsert(
+						likereactionview,
+						false
+					);
+					for (Database.UpsertResult insertResult : insertResults) {
+						if (!insertResult.isSuccess()) {
+							for (
+								Database.Error error : insertResult.getErrors()
+							) {
+								errorMessageView +=
+									'Error ' +
+									error.getFields() +
+									'--' +
+									error.getMessage() +
+									'\n';
+							}
+						}
+					}
+					if (!String.isBlank(errorMessageView)) {
+						BI_SFCOE_LOG_Util.handleDatabaseUpsertResults(
 							insertResults,
 							BI_PSPB_CmsCtrl.class.toString(),
 							System.now()

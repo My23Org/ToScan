@@ -12,6 +12,7 @@ import checkCommunityUsername from '@salesforce/apex/BI_PSPB_CommunityUsername.c
 import Patientstatus from "@salesforce/apex/BI_PSPB_treatmentvideocmd.patientStatus";
 import countAssessment from '@salesforce/apex/BI_PSP_Assessment.getAssessmentCountsByCurrentUserName';
 import getEnrolle from '@salesforce/apex/BI_PSP_ChallengeCtrl.getEnrolle';
+import getPatientAfterThreemonthsAndFourteenWeeks from '@salesforce/apex/BI_PSP_QualitativeSatisfactions.getPatientAfterThreemonthsAndFourteenWeeks';
 // To import Static Resource
 import sitelogo from '@salesforce/resourceUrl/BI_PSPB_SiteLogo';
 import HmeIcon from '@salesforce/resourceUrl/BI_PSPB_Home_Icon';
@@ -38,13 +39,13 @@ import MYPROFILE from '@salesforce/label/c.BI_PSPB_PatientMyProfileUrl';
 import MYCAREGIVER from '@salesforce/label/c.BI_PSPB_MyCaregiverUrl';
 import PATIENTAVATAR from '@salesforce/label/c.BI_PSPB_PatientSelectAvatarUrl';
 import PATIENTNOTIFICATION from '@salesforce/label/c.BI_PSPB_PatientNotificationUrl';
-import ALLPOST from '@salesforce/label/c.BI_PSPB_ChatterAllPost';
-import MYPOST from '@salesforce/label/c.BI_PSPB_myPostUrl';
+import ALLPOST from '@salesforce/label/c.BI_PSPB_AllPostUrl';
+import MYPOST from '@salesforce/label/c.BI_PSPB_ChatterMyPost';
 import FOLLOWER from '@salesforce/label/c.BI_PSPB_ChatterFollower';
 import FOLLOWING from '@salesforce/label/c.BI_PSPB_ChatterFollowing';
 import UNASSIGNED from '@salesforce/label/c.BI_PSPB_UnAssignedSiteUlr';
 import BI_PSP_UNASSIGNED from '@salesforce/label/c.BI_PSP_Unassigned';
-import CHATTERSIGNUP from '@salesforce/label/c.BI_PSP_chatterUsernameNavigation';
+import CHATTERSIGNUP from '@salesforce/label/c.BI_PSP_ChatterSignUpUrl';
 import INFOLAND from '@salesforce/label/c.BI_PSPB_BRInfoCenterLandingPage';
 import ACUTEDASHBOARD from '@salesforce/label/c.BI_PSPB_AcuteDashboard';
 import CHALLENGES from '@salesforce/label/c.BI_PSP_challengesURL';
@@ -81,6 +82,10 @@ import BI_PSPB_Acute from '@salesforce/label/c.BI_PSPB_Acute';
 import LOGINURL from '@salesforce/label/c.BI_PSP_loginUrl';
 import BRANDEDURL from '@salesforce/label/c.BI_PSPB_BrandedSiteURL';
 import BI_PSPB_SecureLogout from '@salesforce/label/c.BI_PSPB_SecureLogout';
+import UPDATERX from '@salesforce/label/c.BI_PSPB_UpdatePrescriptionUrl';
+import completedLabel from '@salesforce/label/c.BI_PSP_Completed';
+import expired from '@salesforce/label/c.BI_PSP_Expired';
+
 // To get Current UserId
 import Id from '@salesforce/user/Id';
 
@@ -132,6 +137,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 	showChallengesmenu;
 	showCommunitymenu;
 	showTabMenu;
+	targetDate14;
 	stwai;
 	stpss;
 	stdlq;
@@ -199,8 +205,27 @@ export default class BiPspbNavigationBar extends LightningElement {
 	loginUrl = LOGINURL;
 	brandedUrl = BRANDEDURL;
 	secureLogout = BI_PSPB_SecureLogout;
-	//Used to get information regarding the loggedin caregiver
+	updateRx = UPDATERX;
 
+    //Qualitative Date for topbar navigation
+	@wire(getPatientAfterThreemonthsAndFourteenWeeks)
+	wiredResult({ error, data }) {
+		try {
+		if (error) {
+			this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
+		} else if (data) {
+			this.threeMonthsVar = data.threeMonthsVar;
+			this.forteenWeeks = data.forteenWeeks;
+			this.target2monthsdate = data.target2monthsdate ?? null;
+			this.target14wksdate = data.target14wksdate ?? null;
+		}
+		} catch (err) {
+		this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from LWC
+		}
+	}
+
+
+	//Used to get information regarding the loggedin caregiver
 	patientInfo() {
 		getCaregiverAccounts({ userId: Id })
 			.then(patient => {
@@ -210,7 +235,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 				}
 			})
 			.catch(error => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 			})
 	}
 	//Used to get the notification count using task
@@ -222,7 +247,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 				}
 			})
 			.catch(error => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 			})
 	}
 	//Navigation
@@ -245,8 +270,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 			this.showHomeLine = true;
 		}
 		if (Id != null || Id !== undefined) {
-			this.taskInfo(Id);
-			this.fetchAssessmentCount();
+			
 			userDetails({ userId: Id })
 				.then(user => {
 					this.currentUserIfo = user;
@@ -276,12 +300,12 @@ export default class BiPspbNavigationBar extends LightningElement {
 
 						})
 						.catch(error => {
-							this.showToast(errormessage, error.message, errorvariant);
+							this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 
 						})
 				})
 				.catch(error => {
-					this.showToast(errormessage, error.message, errorvariant);
+					this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from LWC
 				})
 		} else {
 			this.showMenu = false;
@@ -294,7 +318,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 			this.baseUrl = `${this.urlSegments[0]}//${this.urlSegments[2]}`;
 		}
 		catch (error) {
-			this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error
+			this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error from LWC
 		}
 
 
@@ -319,7 +343,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 				}
 			})
 			.catch(error => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 				this.showTabMenu = false;
 			});
 	}
@@ -338,7 +362,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 				}
 			})
 			.catch(error => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 			})
 	}
 
@@ -349,7 +373,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 				this.taskCount = result;
 			})
 			.catch(error => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 			});
 	}
 	//This method is used to identify the current page and renders the highliged bar for menus
@@ -395,7 +419,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 					this.showtreatvideo = true;
 				}
 			} else if (error) {
-				this.showToast(errormessage, error.message, errorvariant);// Catching Potential Error from Apex
+				this.showToast(errormessage, error.body.message, errorvariant);// Catching Potential Error from Apex
 
 			}
 		}
@@ -412,20 +436,20 @@ export default class BiPspbNavigationBar extends LightningElement {
 
 				}
 				if (result === false) {
-					window.location.assign(this.baseUrl + this.unAssigned + this.chatterSignUp);
+					window.location.assign(this.baseUrl + this.unAssignedUrl + this.chatterSignUp);
 
 				}
 			})
 			.catch((error) => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 			})
 	}
 	//Navigation for Caregiver/Patient
 	userNavigation() {
 		if (this.currentUserIfo.BI_PSPB_Caregiver__c === false) {
-			window.location.assign(this.baseUrl + this.baseUrl + this.unAssignedUrl + this.myProfile);
+			window.location.assign(this.baseUrl + this.unAssignedUrl + this.myProfile);
 		} else {
-			window.location.assign(this.baseUrl + this.baseUrl + this.unAssignedUrl + this.caregiverProfile);
+			window.location.assign(this.baseUrl + this.unAssignedUrl + this.caregiverProfile);
 		}
 	}
 	userNavigationMyprofile() {
@@ -603,25 +627,25 @@ export default class BiPspbNavigationBar extends LightningElement {
 					window.location.assign(this.baseUrl + this.unAssignedUrl + this.allPost);
 				}
 				if (result === false) {
-					window.location.assign(this.baseUrl + this.unAssigned + this.chatterSignUp);
+					window.location.assign(this.baseUrl + this.unAssignedUrl + this.chatterSignUp);
 				}
 			})
 			.catch((error) => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 			});
 	}
 	openMyPosts() {
 		checkCommunityUsername({ userId: this.userId })
 			.then((result) => {
 				if (result === true) {
-					window.location.assign(this.baseUrl + this.unAssigned + this.myPost);
+					window.location.assign(this.baseUrl + this.unAssignedUrl + this.myPost);
 				}
 				if (result === false) {
-					window.location.assign(this.baseUrl + this.unAssigned + this.chatterSignUp);
+					window.location.assign(this.baseUrl + this.unAssignedUrl + this.chatterSignUp);
 				}
 			})
 			.catch((error) => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 			});
 	}
 	openMyFollowers() {
@@ -631,11 +655,11 @@ export default class BiPspbNavigationBar extends LightningElement {
 					window.location.assign(this.baseUrl + this.unAssigned + this.follower);
 				}
 				if (result === false) {
-					window.location.assign(this.baseUrl + this.unAssigned + this.chatterSignUp);
+					window.location.assign(this.baseUrl + this.unAssignedUrl + this.chatterSignUp);
 				}
 			})
 			.catch((error) => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 			});
 	}
 	openFollowing() {
@@ -645,11 +669,11 @@ export default class BiPspbNavigationBar extends LightningElement {
 					window.location.assign(this.baseUrl + this.unAssigned + this.following);
 				}
 				if (result === false) {
-					window.location.assign(this.baseUrl + this.unAssigned + this.chatterSignUp);
+					window.location.assign(this.baseUrl + this.unAssignedUrl + this.chatterSignUp);
 				}
 			})
 			.catch((error) => {
-				this.showToast(errormessage, error.message, errorvariant);
+				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 			});
 	}
 	handlebackCommunity() {
@@ -767,12 +791,16 @@ export default class BiPspbNavigationBar extends LightningElement {
 			window.location.assign(this.baseUrl + this.unAssignedUrl + this.wapiCompleted);
 		}
 		else if (this.stqsq > 0) {
-			if (this.targetDate14 != null) {
+			if (this.target14wksdate != null) {
+				if (this.status === completedLabel || this.status ===expired) {
 				window.location.assign(this.baseUrl + this.unAssignedUrl + this.qsqTwoCompleted);
 			}
 			else {
 				window.location.assign(this.baseUrl + this.unAssignedUrl + this.qsqOneCompleted);
-
+			}
+		}
+		else{
+				window.location.assign(this.baseUrl + this.unAssignedUrl + this.qsqOneCompleted);
 			}
 		}
 	}

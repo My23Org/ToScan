@@ -615,7 +615,7 @@ p.Intensity {
 	}
 
 	.thumb-label[data-name='1'] {
-		margin-left: 20%;
+		margin-left: 10%;
 	}
 
 	.thumb-label[data-name='2'] {
@@ -962,7 +962,7 @@ p.Intensity {
 @media only screen and (min-width: 1200px) {
 	.thumb-label[data-name='1'] {
 		left: 0px;
-		margin-left: 13%;
+		margin-left: 15%;
 	}
 
 	.slidervalue-intersity {

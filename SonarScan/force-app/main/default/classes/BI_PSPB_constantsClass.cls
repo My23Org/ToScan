@@ -170,4 +170,5 @@ public static string twentyfourHours = System.Label.BI_PSPB_24hr;
 public static string seventytwoHours = System.Label.BI_PSPB_72hr;
 public static string daysCountofTreatment = 'BI_PSPB_DaysCountofTreatment';
 public static string InsiteNotificationName = System.Label.BI_PSPB_InsiteNotification;
+public static String getAccessToken = System.Label.BI_PSPB_GetAccessToken;
 }

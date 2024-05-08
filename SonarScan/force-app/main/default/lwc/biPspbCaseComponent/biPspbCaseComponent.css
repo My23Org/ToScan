@@ -11,7 +11,15 @@
 .caseimg {
 	width: 64px;
 }
+.nocase{
+    font-size: 24px;
+    font-weight: 400;
+    font-family: "Eina-Regular";
+    position: relative;
+    top: 50px;
+    right: 38%;
 
+}
 .Noneclass {
 	font-size: 12px;
 	line-height: 20px;
@@ -251,7 +259,7 @@
 .heading {
 	color: #403a60;
 	font-size: 32px;
-	margin-left: 1.5cm;
+	margin-left: 1.6cm;
 	line-height: 0px;
 	font-family: "Eina-Bold";
 }

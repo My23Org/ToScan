@@ -280,7 +280,7 @@ public with sharing class BI_PSPB_SendSmsBatch implements Database.Batchable<SOb
 			'',
 			System.now(),
 			'Batch Finished',
-			BI_SFCOE_LOG_Util.LOG_SEVERITY_INFO
+			BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 		);
 	}
 }

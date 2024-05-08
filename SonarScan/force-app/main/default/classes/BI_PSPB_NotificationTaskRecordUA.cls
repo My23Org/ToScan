@@ -39,6 +39,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 		List<Task> relatedTasks = new List<Task>();
 		try {
 			// Retrieving tasks based on notification type and category
+			// The values in the category may or may not be null.Hence null check is not done.
 			if (
 				String.isNotBlank(enroleeId) &&
 				String.isNotBlank(notificatonType)
@@ -159,7 +160,7 @@ public without sharing class BI_PSPB_NotificationTaskRecordUA {
 		List<Task> relatedTasks = new List<Task>();
 		try {
 			String account;
-			if (String.isNotBlank(enroleeId)) {
+			if (String.isNotBlank(enroleeId) && String.isNotBlank(notificatonType)) {
 				List<CareProgramEnrollee> accid = new List<CareProgramEnrollee>();
 				accid = [
 					SELECT Id, AccountId

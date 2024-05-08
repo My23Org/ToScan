@@ -10,8 +10,14 @@ import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
 import chBookworm from '@salesforce/label/c.BI_PSP_ChallengeBookworm';
 import chLevelOne from '@salesforce/label/c.BI_PSP_Challenge_Level1';
 import chLevelTwo from '@salesforce/label/c.BI_PSP_Challenge_Level2';
-import IClandingPage from '@salesforce/label/c.BI_PSPB_BRInfoCenterLandingPage';
 import brSiteUrl from '@salesforce/label/c.BI_PSPB_BrandedSiteURL';
+import slashURL from '@salesforce/label/c.BI_PSP_ChatterSlash';
+import IClandingPage from '@salesforce/label/c.BI_PSP_GppArticle';
+import whyBeingActive from '@salesforce/label/c.BI_PSP_ActiveArticle';
+import brandedurl from '@salesforce/label/c.BI_PSPB_siteUrl';
+import unassignedurl from '@salesforce/label/c.BI_PSPB_UnAssignedSiteUlr';
+import brandedUrlNavi from '@salesforce/label/c.BI_PSPB_BrandedSiteURL';
+import unAssignedUrlNavi from '@salesforce/label/c.BI_PSPB_UnassignedSiteURL';
 
 export default class BiPspbCompletedChallengeComponent extends LightningElement {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
@@ -20,7 +26,9 @@ export default class BiPspbCompletedChallengeComponent extends LightningElement 
 	challengeLevelOne = chLevelOne;
 	challengeLevelTwo = chLevelTwo;
 	siteUrlBranded = brSiteUrl;
-	informationCenterLandingPage = IClandingPage;
+	gppArticle = IClandingPage;
+	beingActive = whyBeingActive;
+	SLASHSITEURL = slashURL;
 	Title;
 	Description;
 	RewardPoints;
@@ -29,6 +37,7 @@ export default class BiPspbCompletedChallengeComponent extends LightningElement 
 	WhyBeingActive;
 	Level;
 	Image;
+	urlq;
 
 	//This method is used for getting the individuals records.
 	@wire(getIndividualChallenges, { challengeId: "$completechallengeid" })
@@ -81,10 +90,36 @@ export default class BiPspbCompletedChallengeComponent extends LightningElement 
 			this.showToast(errormessage, error.body.message, errorvariant);
 		}
 	}
+	connectedCallback() {
+		try {
+		const currentURL = window.location.href;
+		const urlObject = new URL(currentURL);
+		const path = urlObject.pathname;
+		const pathComponents = path.split('/');
+		const desiredComponent = pathComponents.find((component) =>
+			[brandedurl, unassignedurl].includes(
+			component
+			)
+		);
+
+		if (desiredComponent === brandedurl) {
+			this.urlq = brandedUrlNavi;
+		} else {
+			this.urlq = unAssignedUrlNavi;
+		}
+		} catch (error) {
+		this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error
+		}
+	}
 	//Navigation for articles
 	openArticles() {
 		window.location.assign(
-			this.siteUrlBranded + this.informationCenterLandingPage
+			this.urlq + this.gppArticle
+		);
+	}
+	openArticlesActive() {
+		window.location.assign(
+			this.urlq + this.beingActive
 		);
 	}
 	// showToast used for all the error messages caught

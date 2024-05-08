@@ -45,6 +45,11 @@ import replaceHapy from '@salesforce/resourceUrl/BI_PSP_HappyColouredReal';
 import replaceJoyful from '@salesforce/resourceUrl/BI_PSP_Joyful';
 import replaceSpeechless from '@salesforce/resourceUrl/BI_PSP_Speechless';
 import replaceSWorried from '@salesforce/resourceUrl/BI_PSP_Worried';
+import sadmood from '@salesforce/label/c.BI_PSPB_Sad';
+import happymood from '@salesforce/label/c.BI_PSPB_Happy';
+import joyfullmood from '@salesforce/label/c.BI_PSPB_Joyfull';
+import speechlessmood from '@salesforce/label/c.BI_PSPB_Speechless';
+import wooriedmood from '@salesforce/label/c.BI_PSPB_Worried';
 export default class symptomPrimarypage extends NavigationMixin(LightningElement) {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
 	//@api variable declaration
@@ -113,7 +118,7 @@ export default class symptomPrimarypage extends NavigationMixin(LightningElement
 				for (let record of data) {
 					this.moodreaction = record.BI_PSP_Mood__c;
 					console.log(this.moodreaction,'this.moodreaction',record)
-						  if (this.moodreaction === 'sad') {
+						  if (this.moodreaction === sadmood) {
                           this.Sadimage = this.Sadimagecolor;
 	                      this.Speechless = '';
 					      this.worried= '';
@@ -121,13 +126,36 @@ export default class symptomPrimarypage extends NavigationMixin(LightningElement
 					      this.joyfull=''
 				
                 }
-				if(this.moodreaction === 'happy'){
+				if(this.moodreaction === happymood){
 				          this.Sadimage ='';
 	                      this.Speechless = '';
 					      this.worried= '';
 					      this.happy = this.happycolor;
 					      this.joyfull=''
 				}
+				if(this.moodreaction === speechlessmood){
+				          this.Sadimage ='';
+	                      this.Speechless = this.Speechlesscolor;
+					      this.worried= '';
+					      this.happy = '';
+					      this.joyfull=''
+				}
+				  
+				if(this.moodreaction === wooriedmood){
+				          this.Sadimage ='';
+	                      this.Speechless = '';
+					      this.worried= this.worriedcolor;
+					      this.happy = '';
+					      this.joyfull=''
+				}
+				  if (this.moodreaction === joyfullmood) {
+                          this.Sadimage = '';
+	                      this.Speechless = '';
+					      this.worried= '';
+					      this.happy='';
+					      this.joyfull=this.joyfullcolor;
+				
+                }
 				}
 			} catch (err) {
 				this.showToast(errormessage, err.message, errorvariant);
@@ -280,10 +308,13 @@ export default class symptomPrimarypage extends NavigationMixin(LightningElement
 	//This function deletes symptom tracker records and it disables a delete button.
 	lastrecorddelete() {
 		deleteSymptomTrackerRecords({ symptomTrackerId: this.symptomrecord })
+			window.location.reload();
+			console.log(result,"result")
 			.then(result => {
 				if(result){
+					console.log(result,"result")
 					//Handle success
-					location.reload();
+					window.location.reload();
 				}
 			})
 			.catch(error => {

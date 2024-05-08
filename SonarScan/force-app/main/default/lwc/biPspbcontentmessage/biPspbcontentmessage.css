@@ -1,12 +1,12 @@
 .para {
 	background-color: #ecdca8;
-	padding: 10px 20px;
+	padding: 10px 17px;
 	border-radius: 8px;
 	display: inline-block;
 	position: absolute;
 	margin-left: -32px;
 	width: 286px;
-	height: 110px;
+	height: fit-content;
 	top: 366px;
 	left: 110px;
 }

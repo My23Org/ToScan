@@ -3,7 +3,10 @@
 	<!-- Component template starts here -->
 	<div data-it-uid={userid}>
 		<p class="headingclass">Prescription Validation Status</p>
-
+			<template if:true={nopresription}>
+			<p class="msgforpre">You have not updated any prescriptions yet.</p>
+			</template>
+		<template if:true={withPrescription} >
 		<!-- Lightning combobox component for case staus picklist field -->
 		<lightning-combobox value={statusvalue} placeholder="Status type" options={Statusoptions}
 			onchange={handleChange} class="classforcimbobox"></lightning-combobox>
@@ -47,8 +50,9 @@
 				</template>
 			</div>
 		</div>
+		</template>
 
-
+         <template if:true={Mobileprescrition}>
 		<!-- Mobile view content -->
 		<div class="fulldiv1">
 			<!-- Header row for mobile view  of date and type  -->
@@ -103,5 +107,6 @@
 				</div>
 			</template>
 		</div>
+		</template>
 	</div>
 </template>

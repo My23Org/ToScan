@@ -728,6 +728,7 @@ Please continue by verifying your information. Click 'next' to proceed if the pr
 						this.mobilevalue2 = `Hello! Welcome to Beyond GPP: The Spevigo® Patient....`;
 					});
 			} catch (err) {
+				console.log('dddddd')
 				this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from Apex
 			}
 		} else {

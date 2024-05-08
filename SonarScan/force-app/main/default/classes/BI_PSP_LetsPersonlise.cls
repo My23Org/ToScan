@@ -149,7 +149,7 @@ public with sharing class BI_PSP_LetsPersonlise {
 				];
                  /*A user will only have one Account therefore using list for a single record can be negotiable and there may be a
             use for this in the future.*/
-				if (!caregiverAccount.isEmpty() ) {
+				if (!caregiverAccount.isEmpty()) {
 					caregvrAccountid = [
 						SELECT id, Name, PersonEmail
 						FROM account
@@ -183,8 +183,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						System.now(),caregiversSelectedpatienterrmsg,BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
 				}
-				   /*A user will only have one CareProgramEnrollee therefore using list for a single record can be negotiable and there may be a
-            use for this in the future.*/
+				   /*A user will only have one CareProgramEnrollee therefore using list for a single record
+				    *  can be negotiable and there may be a use for this in the future.*/
 				if (!enrolleeRecord.isEmpty()) {
 					enrolleeId = enrolleeRecord[0].id;
 				} else {
@@ -221,8 +221,8 @@ public with sharing class BI_PSP_LetsPersonlise {
 						BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 					);
 				}
-				   /*A user will only have one CareProgramEnrollee therefore using list for a single record can be negotiable and there may be a
-            use for this in the future.*/
+				   /*A user will only have one CareProgramEnrollee therefore using list for a single record can be
+	              negotiable and there may be a  use for this in the future.*/
 				if (!enrolledPatient.isEmpty()) {
 					enrolleeId = enrolledPatient[0].Id;
 				} else {

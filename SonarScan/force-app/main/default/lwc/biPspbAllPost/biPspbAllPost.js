@@ -180,7 +180,7 @@ import BI_PSP_ChatterSlash from '@salesforce/label/c.BI_PSP_ChatterSlash';
 import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
 import BI_PSPB_Error_For_Account from '@salesforce/label/c.BI_PSPB_Error_For_Account';
-import BI_PSPB_Error_For_Post_Creation from '@salesforce/label/c.BI_PSPB_Error_For_Post_Creation';
+import BI_PSPB_Error_For_Post_Selection from '@salesforce/label/c.BI_PSPB_Error_For_Post_Selection';
 // To import current user ID
 import Id from '@salesforce/user/Id';
 export default class biPspbAllPost extends (LightningElement) {
@@ -292,9 +292,9 @@ export default class biPspbAllPost extends (LightningElement) {
 	wiredFeedItems({ error, data }) {
 		try {
 			this.isLoading = true;
-			if (data && data.length === 0) {
+			if (data && data.length === 0 || data === null) {
 				this.isLoading = false;
-				console.log('error in if');
+				this.showallpost = false;
 			}
 			else if (data && data.length > 0) {
 				this.showallpost = true;
@@ -325,14 +325,12 @@ export default class biPspbAllPost extends (LightningElement) {
 				this.commentbox = true;
 			}
 			else if (error) {
-				console.log('error in elseif');
 				this.isLoading = true;
 				this.showToast(errormessage, error.body.message, errorvariant);//data null exception
 			}
 			else {
-				console.log('error ');
 				this.isLoading = true;
-				this.showToast(errormessage, BI_PSPB_Error_For_Post_Creation, errorvariant); // catch Exception
+				this.showToast(errormessage, BI_PSPB_Error_For_Post_Selection, errorvariant); // catch Exception
 			}
 		}
 		catch (err) {
@@ -1318,7 +1316,6 @@ export default class biPspbAllPost extends (LightningElement) {
 			this.username = event.target.dataset.username;
 			this.avt = event.currentTarget.dataset.accid;
 			this.avtvarfor = event.currentTarget.dataset.avat;
-			console.log('values', this.UserAccId, this.avt);
 			emojifollow({ loggedAccountId: this.UserAccId, otherAccountId: this.avt })
 				.then((result) => {
 					if (this.UserAccId === this.avt) {

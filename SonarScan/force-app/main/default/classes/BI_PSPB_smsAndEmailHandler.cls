@@ -1,4 +1,12 @@
-public class BI_PSPB_smsAndEmailHandler {
+/*
+ * @description This class used for filter the SMS and Email notification for patient or caregiver.
+ * History
+ * Version	Author			Date		Detail		Description
+ * 59		Niyas		06-01-2024		Created		Initial Version
+ * 59		Niyas		18-04-2024		Updated		Code review changes
+ * 59		Niyas		08-05-2024		Updated		Code review changes
+ */
+public with sharing class BI_PSPB_smsAndEmailHandler {
 	private static BI_SFCOE_LOG_App_Settings__c settings = BI_SFCOE_LOG_App_Settings__c.getValues(
 		'PSPB'
 	);
@@ -26,15 +34,11 @@ public class BI_PSPB_smsAndEmailHandler {
 				BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
 			);
 		}
-		String enroid;
-		String accID;
 		String notificationSubject;
 		String emailSubject;
 		String bDestUrl = '';
 		String uDestUrl;
 		String urlPage;
-		Datetime treatmentDate;
-		Date dateOnly;
 		String notificationType;
 		String userType;
 		String url = '';
@@ -44,14 +48,13 @@ public class BI_PSPB_smsAndEmailHandler {
 		List<Id> contactIdsToSendEmail = new List<Id>();
 		List<Id> enrolIds = new List<Id>();
 		List<Id> accountRec = new List<Id>();
-		List<Id> notificationAcc = new List<Id>();
 		List<Id> notificationCare = new List<Id>();
 		List<Id> notificationCareAcc = new List<Id>();
 		try {
 			BI_PSPB_Notification__mdt filteredNotifications = BI_PSPB_Notification__mdt.getInstance(
 				BI_PSPB_constantsClass.siteUrl
 			);
-			bDestUrl = filteredNotifications.BI_PSPB_BrandedUrl__c;
+			url = filteredNotifications.BI_PSPB_BrandedUrl__c;
 			uDestUrl = filteredNotifications.BI_PSPB_UnAssignedUrl__c;
 			//General Notification
 			if (
@@ -59,10 +62,10 @@ public class BI_PSPB_smsAndEmailHandler {
 				BI_PSPB_constantsClass.generalSymptomTracker
 			) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
-					BI_PSPB_constantsClass.generalChallengesSms
+					BI_PSPB_constantsClass.generalSymptomSms
 				);
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
-					BI_PSPB_constantsClass.generalChallengesEmail
+					BI_PSPB_constantsClass.generalSymptomEmail
 				);
 				urlPage = BI_PSPB_constantsClass.urlSymptomTracker;
 				notificationSubject = notificationSms.developername;
@@ -103,7 +106,7 @@ public class BI_PSPB_smsAndEmailHandler {
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
 				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralContent;
-			} else if (NotificationTypes == BI_PSPB_constantsClass.createPost) {
+			} else if (NotificationTypes == BI_PSPB_constantsClass.generalCreatePost) {
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalPostEmail
 				);
@@ -111,7 +114,7 @@ public class BI_PSPB_smsAndEmailHandler {
 				emailSubject = notificationsEmail.developername;
 				followName = communityUserName;
 				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
-			} else if (NotificationTypes == BI_PSPB_constantsClass.comment) {
+			} else if (NotificationTypes == BI_PSPB_constantsClass.generalComment) {
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalCommentEmail
 				);
@@ -119,7 +122,7 @@ public class BI_PSPB_smsAndEmailHandler {
 				emailSubject = notificationsEmail.developername;
 				followName = communityUserName;
 				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
-			} else if (NotificationTypes == BI_PSPB_constantsClass.reaction) {
+			} else if (NotificationTypes == BI_PSPB_constantsClass.generalReaction) {
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalReactionEmail
 				);
@@ -127,7 +130,7 @@ public class BI_PSPB_smsAndEmailHandler {
 				emailSubject = notificationsEmail.developername;
 				followName = communityUserName;
 				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralCommunity;
-			} else if (NotificationTypes == BI_PSPB_constantsClass.follow) {
+			} else if (NotificationTypes == BI_PSPB_constantsClass.generalFollow) {
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalFollowEmail
 				);
@@ -293,6 +296,7 @@ public class BI_PSPB_smsAndEmailHandler {
 				);
 			}
 			//This condition is working for the patient is major i will be send a email and sms.
+			//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
 			for (CareProgramEnrollee enrollee : [
 				SELECT
 					Id,
@@ -307,7 +311,7 @@ public class BI_PSPB_smsAndEmailHandler {
 				accountRec.add(enrollee.AccountId);
 			}
 			Map<Id, List<BI_PSP_Notification_Setting__c>> accountToNotificationsMap = new Map<Id, List<BI_PSP_Notification_Setting__c>>();
-
+			//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
 			for (BI_PSP_Notification_Setting__c enrolleId : [
 				SELECT
 					Id,
@@ -334,6 +338,7 @@ public class BI_PSPB_smsAndEmailHandler {
 				}
 			}
 			Set<Id> notificationAccs = new Set<Id>();
+			//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
 			for (CareProgramEnrollee enrollee : [
 				SELECT
 					Id,
@@ -346,6 +351,7 @@ public class BI_PSPB_smsAndEmailHandler {
 			]) {
 				notificationAccs.add(enrollee.AccountId);
 			}
+			//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
 			for (CareProgramEnrollee enrollee : [
 				SELECT
 					Id,
@@ -359,7 +365,6 @@ public class BI_PSPB_smsAndEmailHandler {
 				List<BI_PSP_Notification_Setting__c> notificationss = accountToNotificationsMap.get(
 					enrollee.AccountId
 				);
-				Id personContactId;
 				Date birthdate = enrollee.Account.BI_PSP_Birthdate__c;
 				if (birthdate != null) {
 					Integer age = Date.today().year() - birthdate.year();
@@ -391,6 +396,7 @@ public class BI_PSPB_smsAndEmailHandler {
 			//This condition is working for the patient is minor i will be send a email and sms.
 			Map<Id, List<BI_PSP_Notification_Setting__c>> accountToNotificationsMaps = new Map<Id, List<BI_PSP_Notification_Setting__c>>();
 			// Populate the map with Account Ids and notification settings
+			//CareProgramEnrollee is a Healthcloud object. Hence we have not used USER_MODE.
 			for (CareProgramEnrollee enrollee : [
 				SELECT
 					Id,
@@ -408,6 +414,7 @@ public class BI_PSPB_smsAndEmailHandler {
 			}
 
 			// Iterate through BI_PSPB_Enrollee_Caregiver__c records
+			//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
 			for (BI_PSPB_Enrollee_Caregiver__c enrolleCaregiverId : [
 				SELECT
 					Id,
@@ -438,22 +445,21 @@ public class BI_PSPB_smsAndEmailHandler {
 			// Process caregiver notifications and associate them with notification settings
 			for (Id acccId : notificationCareAcc) {
 				// Get notification settings for this Account Id
-				List<BI_PSP_Notification_Setting__c> notificationSettings = accountToNotificationsMap.get(
+				List<BI_PSP_Notification_Setting__c> notificationSettings = accountToNotificationsMaps.get(
 					acccId
 				);
-
 				// Add caregiver notifications to the corresponding notification settings
 				if (notificationSettings != null) {
 					for (
 						BI_PSP_Notification_Setting__c notificationSetting : notificationSettings
 					) {
-						if (notificationSetting.BI_PSP_Email__c == true) {
-							for (Id contactId : notificationCare) {
+						for (Id contactId : notificationCare) {
+							if (notificationSetting.BI_PSP_Email__c == true) {
 								contactIdsToSendEmail.add(contactId);
 							}
 						}
-						if (notificationSetting.BI_PSP_SMS__c == true) {
-							for (Id contactId : notificationCare) {
+						for (Id contactId : notificationCare) {
+							if (notificationSetting.BI_PSP_SMS__c == true) {
 								contactIdsToSendSMS.add(contactId);
 							}
 						}

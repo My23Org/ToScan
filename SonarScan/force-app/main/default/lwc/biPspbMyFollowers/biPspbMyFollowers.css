@@ -124,7 +124,7 @@
 	width: 100%;
 	display: flex;
 	background-color: #fbfaf5;
-	padding: 75px 5% 20px 5%;
+	padding: 45px 5% 20px 5%;
 	gap: 75px;
 	padding-bottom: 70px;
 	min-height: 66vh;
@@ -248,7 +248,7 @@
 
 .postimage {
 	margin-left: 36%;
-	margin-top: 6%;
+	margin-top: 7%;
 	width: 140px;
 	height: 120px;
 }
@@ -263,6 +263,7 @@
 	top: 25px;
 	height: 210px;
 	width: 70%;
+	margin-bottom: -40px;
 	padding-right: 0px;
 	font-family: 'Eina-SemiBold';
 }
@@ -644,14 +645,14 @@
 
 	.backgroundtop {
 		background-color: #F6EFD9;
-		height: 150px;
-		position: relative;
-		bottom: 75px;
-		width: 124%;
-		right: 46px;
-		overflow-y: hidden;
-		overflow-x: hidden;
-		padding-top: 33px;
+        height: 150px;
+        position: relative;
+        bottom: 45px;
+        width: 124%;
+        right: 46px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        padding-top: 33px;
 	}
 
 	.avatar {
@@ -739,7 +740,7 @@
 		line-height: 44px;
 		position: relative;
 		right: 16px;
-		bottom: 76px;
+		bottom: 45px;
 	}
 
 	.divclass {
@@ -789,10 +790,11 @@
 
 	.postimage {
 		margin-left: 31%;
-		position: relative;
-		bottom: 45px;
-		width: 140px;
-		height: 120px;
+        position: relative;
+        bottom: 45px;
+        width: 140px;
+        margin-top: 40px;
+        height: 120px;
 	}
 
 	.text {
@@ -1643,11 +1645,11 @@
 
 	.backgroundtop {
 		width: 138%;
-		position: relative;
-		background-color: #F6EFD9;
-		height: 158px;
-		bottom: 75px;
-		right: 18px;
+        position: relative;
+        background-color: #F6EFD9;
+        height: 158px;
+        bottom: 45px;
+        right: 18px;
 	}
 
 	.avatar {
@@ -1736,19 +1738,20 @@
 	}
 
 	.rightSide {
-		right: 0px;
-		padding: 25px;
+		top: 20px;
+        right: 0px;
+        padding: 25px;
 	}
 
 	.title {
 		color: #403a60;
-		font-size: 30px;
-		font-family: 'Eina-Bold';
-		line-height: 44px;
-		position: relative;
-		bottom: 180px;
-		margin-top: 84px;
-		right: 10px;
+        font-size: 30px;
+        font-family: 'Eina-Bold';
+        line-height: 44px;
+        position: relative;
+        bottom: 167px;
+        margin-top: 84px;
+        right: 10px;
 	}
 
 	.divclass {

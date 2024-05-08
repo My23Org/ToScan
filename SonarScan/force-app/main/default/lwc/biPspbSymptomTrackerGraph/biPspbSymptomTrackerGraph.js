@@ -149,6 +149,7 @@ export default class BiPspbSymptomTrackerGraph extends LightningElement{
 	}
 	// Determines the current URL and sets a navigation URL based on certain path components.
 	connectedCallback(){
+		this.throwerrormessage=false;
 		const queryParams = new URLSearchParams(window.location.search);
 				// Get the value of the 'value' parameter
 				this.receivedValue = queryParams.get(valuess);
@@ -307,6 +308,7 @@ parsedDat(dateToFormat){
 			return inputDate;
 		}   
 	}
+	@track throwerrormessage=false;
 	//Fetches symptom and allergy data for the specified enrollee and date range using the fetchSymptomErolle method.
 	getsymptomdatewithallergy(erolles, firstDate, lastDate){
 		fetchSymptomErolle({ erolleId: erolles, firstDate: firstDate, lastDate: lastDate })
@@ -342,15 +344,20 @@ parsedDat(dateToFormat){
 					this.dateWithAllery4 = this.dateWithAllery;
 					this.dateWithAllery = this.dateWithAllery.slice(0, 7);
 					if(this.dateWithAllery.length > 0){
+						this.throwerrormessage = true;
 						this.showLine = true;
 						this.showChart = true;
+						
 					}else{
 						this.showLine = false;
 						this.showChart = false;
+						this.throwerrormessage =false;
+						
 					}
 				}else{
 					this.showChart = false;
 					this.checkvalue = false;
+					this.throwerrormessage =false;
 				}			
 					this.dateWithAllery = this.dateWithAllery.filter(item => {
 						// Check if the item's date is included in the selectedDates array                        

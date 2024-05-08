@@ -13,7 +13,7 @@ public with sharing class BI_PSPB_GetAccessToken {
 	//A variable That holds the name of our application to be used in catch exception handler.
 	private static String applicationName = settings != null? settings.BI_SFCOE_LOG_Application__c
 		: '';
-	public static String GetAccessToken = System.Label.BI_PSPB_GetAccessToken;
+	
 	/**
 	 * @description 	This method is used to generate the Access token for  Omnichannel API.
 	 * 					It queries the custom metadata type to fetch the required API settings, constructs
@@ -28,7 +28,7 @@ public with sharing class BI_PSPB_GetAccessToken {
 	public static String getAccessToken() {
 		try {			
 			BI_PSPB_Omnichannel_API_Setting__mdt filteredSettings = BI_PSPB_Omnichannel_API_Setting__mdt.getInstance(
-				GetAccessToken
+				BI_PSPB_constantsClass.getAccessToken
 			);
        		String endpoint = filteredSettings.BI_PSPB_EndPoint__c;
 			String clientId = filteredSettings.BI_PSPB_ClientId__c;

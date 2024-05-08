@@ -120,7 +120,7 @@
 	width: 100%;
 	display: flex;
 	background-color: #fbfaf5;
-	padding: 45px 5% 20px 5%;
+	padding: 25px 5% 20px 5%;
 	gap: 75px;
 	padding-bottom: 80px;
 	min-height: 66vh;
@@ -152,6 +152,7 @@
 .avatarno {
 	position: relative;
 	left: 90px;
+	margin-top: 20px;
 }
 
 .avatarcontentno {
@@ -637,7 +638,7 @@
 
 	.backgroundtop {
 		background-color: #F6EFD9;
-		height: 150px;
+		height: 170px;
 		position: relative;
 		bottom: 45px;
 		width: 124%;
@@ -681,11 +682,11 @@
 	}
 
 	.avatarno {
-		width: 59.2px;
-		position: relative;
-		height: 97.2px;
-		left: 27px;
-		top: 7px;
+		width: 63.2px;
+        position: relative;
+        height: 97.2px;
+        left: 22px;
+        top: 7px;
 	}
 
 	.avatarcontentno {
@@ -1160,7 +1161,7 @@
 		width: 128%;
 		right: 42px;
 		bottom: 43px;
-		height: 140px;
+		height: 160px;
 		position: relative;
 	}
 
@@ -1601,8 +1602,8 @@
 		width: 138%;
 		position: relative;
 		background-color: #F6EFD9;
-		height: 158px;
-		bottom: 75px;
+		height: 178px;
+		bottom: 45px;
 		right: 18px;
 	}
 
@@ -1702,7 +1703,7 @@
 		font-family: 'Eina-Bold';
 		line-height: 44px;
 		position: relative;
-		bottom: 180px;
+		bottom: 160px;
 		margin-top: 84px;
 		right: 10px;
 	}

@@ -10,8 +10,14 @@ import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
 import challengeLevel1 from '@salesforce/label/c.BI_PSP_Challenge_Level1';
 import challengeLevel2 from '@salesforce/label/c.BI_PSP_Challenge_Level2';
 import chBookWorm from '@salesforce/label/c.BI_PSP_ChallengeBookworm';
-import IClandingPage from '@salesforce/label/c.BI_PSPB_BRInfoCenterLandingPage';
+import IClandingPage from '@salesforce/label/c.BI_PSP_GppArticle';
+import whyBeingActive from '@salesforce/label/c.BI_PSP_ActiveArticle';
 import brSiteUrl from '@salesforce/label/c.BI_PSPB_BrandedSiteURL';
+import slashURL from '@salesforce/label/c.BI_PSP_ChatterSlash';
+import brandedurl from '@salesforce/label/c.BI_PSPB_siteUrl';
+import unassignedurl from '@salesforce/label/c.BI_PSPB_UnAssignedSiteUlr';
+import brandedUrlNavi from '@salesforce/label/c.BI_PSPB_BrandedSiteURL';
+import unAssignedUrlNavi from '@salesforce/label/c.BI_PSPB_UnassignedSiteURL';
 
 export default class BiPspbActiveChallenges extends LightningElement {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
@@ -21,7 +27,9 @@ export default class BiPspbActiveChallenges extends LightningElement {
 	level2 = challengeLevel2;
 	challengeBookworm = chBookWorm;
 	siteUrlBranded = brSiteUrl;
-	informationCenterLandingPage = IClandingPage;
+	gppArticle = IClandingPage;
+	beingActive = whyBeingActive;
+	SLASHSITEURL = slashURL;
 	Title;
 	Level;
 	Description;
@@ -29,6 +37,7 @@ export default class BiPspbActiveChallenges extends LightningElement {
 	LinktoArticle;
 	WhyBeingActive;
 	Image;
+	urlq;
 
 	//This wire method is used to get the individual challenges with the help of active challenges id
 	@wire(getIndividualChallenges, { challengeId: "$activechallengeid" })
@@ -83,6 +92,27 @@ export default class BiPspbActiveChallenges extends LightningElement {
 			this.showToast(errormessage, error.body.message, errorvariant);
 		}
 	}
+	connectedCallback() {
+		try {
+		const currentURL = window.location.href;
+		const urlObject = new URL(currentURL);
+		const path = urlObject.pathname;
+		const pathComponents = path.split('/');
+		const desiredComponent = pathComponents.find((component) =>
+			[brandedurl, unassignedurl].includes(
+			component
+			)
+		);
+
+		if (desiredComponent === brandedurl) {
+			this.urlq = brandedUrlNavi;
+		} else {
+			this.urlq = unAssignedUrlNavi;
+		}
+		} catch (error) {
+		this.showToast(consoleErrorMessage, error.message, errorvariant); // Catching Potential Error
+		}
+	}
 	//Used for challenge cancel functionality
 	aftercancel() {
 		const messageEvent = new CustomEvent('cancelchallenge', {
@@ -106,7 +136,12 @@ export default class BiPspbActiveChallenges extends LightningElement {
 	//Used for navigating to articles
 	openArticles() {
 		window.location.assign(
-			this.siteUrlBranded + this.informationCenterLandingPage
+			this.urlq + this.gppArticle
+		);
+	}
+	openArticlesActive() {
+		window.location.assign(
+			this.urlq + this.beingActive
 		);
 	}
 	// showToast used for all the error messages caught

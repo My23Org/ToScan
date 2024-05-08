@@ -7,7 +7,7 @@
 				<div class="avatar-img-div">
 					<img src={selectedAvatarSrc} alt="..." class="avatar-image" />
 					<div class="text-content avatar-content">
-						Hello! Welcome to Beyond GPP: The Spevigo® Patient Support Program.
+						Hello! Welcome to Beyond GPP: The Spevigo® Patient Support Program
 						<p class="text"> We're excited to help you manage your generalized pustular psoriasis (GPP) and
 							make the most of your Spevigo® therapy.<br>
 							You need to be 18 or above for self enrollment.</p>
@@ -197,6 +197,10 @@
 						<img src={warningicons} width="12px" height="12px">
 						<span class="slds-form-element__helps">Unable to find the physician</span>
 					</div>
+					<div class="slds-form-element__help" if:true={physicianrequireMessage}>
+						<img src={warningicons} width="12px" height="12px">
+						<span class="slds-form-element__helps">Physician information is required</span>
+					</div>
 
 				</div>
 				<div if:true={showAccessCode}>
@@ -310,7 +314,7 @@
 						</lightning-textarea>
 						<div class="slds-form-element__help" if:true={haddresslineerrorMessage}>
 							<img src={warningicons} width="12px" height="12px">
-							<span class="slds-form-element__helps">Address line field is required.</span>
+							<span class="slds-form-element__helps">Address line field is required</span>
 						</div>
 					</div>
 				</div>
@@ -615,13 +619,13 @@
 		<div class="modal-background">
 			<div class="modal-content">
 				<div class="AccExit">
-					<div class="modal-header">Account exists</div>
+					<div class="modal-header">Account Exists</div>
 					<div class="close" onclick={closeItchinessModal}>&times;</div>
 				</div>
 				<div class="youraccfont">Your account already exists. Please log in to continue.</div>
 				<div class="clsebtndiv">
-					<button class="prev-button" onclick={closeItchinessModal}>Close</button>
-					<button class="next-button" onclick={goToHome}>Go To Login</button>
+					<button class="cancel-button" onclick={closeItchinessModal}>Cancel</button>
+					<button class="GoTo-button" onclick={goToHome}>Go To Login</button>
 				</div>
 			</div>
 		</div>

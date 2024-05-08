@@ -227,8 +227,8 @@ public without sharing class BI_PSPB_TreatmentReminder {
 					if (!remaindersToInsert.isEmpty()) {
 						Database.SaveResult[] insertResults = Database.insert(
 							remaindersToInsert,
-							false,
-							AccessLevel.USER_MODE
+							false
+							
 						);
 
 						for (Database.SaveResult saveResult : insertResults) {

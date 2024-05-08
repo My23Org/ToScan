@@ -33,6 +33,7 @@ import BI_PSPB_BRDlqiQuestionnaireUrl from '@salesforce/label/c.BI_PSPB_BRDlqiQu
 import BI_PSPB_BRPsoriasisQuesUrl from '@salesforce/label/c.BI_PSPB_BRPsoriasisQuesUrl';
 import BI_PSPB_BRWapiQuestionnaire from '@salesforce/label/c.BI_PSPB_BRWapiQuestionnaire';
 import BI_PSPB_BRQualitativeTwoMonths from '@salesforce/label/c.BI_PSPB_BRQualitativeTwoMonths';
+import BI_PSPB_FourteenWeeks from '@salesforce/label/c.BI_PSPB_FourteenWeeks';
 import BI_PSPB_BRWapiCompletedQuestionnaire from '@salesforce/label/c.BI_PSPB_BRWapiCompletedQuestionnaire';
 import BI_PSPB_BRPsoriasisCompletedQuesUrl from '@salesforce/label/c.BI_PSPB_BRPsoriasisCompletedQuesUrl';
 import BI_PSPB_BRDlqiCompletedUrl from '@salesforce/label/c.BI_PSPB_BRDlqiCompletedUrl';
@@ -60,6 +61,7 @@ import BI_PSPB_BRSummaryUrl from '@salesforce/label/c.BI_PSPB_BRSummaryUrl'
 export default class BiPspbAvatarNavigationQuestionnaires extends LightningElement {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
 	// Declaration of variables with @api
+	@track qualitative=false;
 	@api
 	get receivedxpvalue() {
 		return this.xpvalue;
@@ -640,16 +642,20 @@ Questions on this page ask about how
 your GPP affects your ability to work
 and perform regular activities. `
 				}
-				if (currentTabName === BI_PSPB_BRQualitativeTwoMonths) {
+				if (currentTabName === BI_PSPB_BRQualitativeTwoMonths || currentTabName === BI_PSPB_FourteenWeeks ) {
 					this.mobilename = `Qualitative Satisfaction Questionnaire
 	The aim of this questionnaire..`;
-					this.selectedName1 = `Qualitative Satisfaction Questionnaire
-
-The aim of this questionnaire is to
+	this.content=false;
+	this.qualitative=true;
+	this.twocontent = true;
+					this.selectedName1 = `The aim of this questionnaire is to
 capture your feedback on the
 experience you had in the last fourteen
 weeks of interactions with the GPP&ME
 program. `
+
+this.selectedName2 = ` You can save as draft and come back     
+later to submit .  `;
 				}
 				if (currentTabName === BI_PSPB_messagecenterUrl) {
 					this.mobilename = `Welcome!
@@ -791,7 +797,10 @@ Qualitative Satisfaction Questionnaire
 here.`
 				}
 				if (data?.length > 0) {
-					this.content = true;
+					if(this.qualitative ===false)
+					{
+					  this.content = true;
+					}
 					this.contentdot = true;
 					this.caregiver = true;
 					this.selectedAvatarSrc = data[0]?.BI_PSP_AvatarUrl__c ? data[0]?.BI_PSP_AvatarUrl__c : Default_avatar_JPEG_URL;
@@ -845,7 +854,11 @@ actions on their behalf. `
 			try {
 				this.userAccounts = data;
 				if (this.caregiver === false) {
-					this.content = true;
+					if(this.qualitative ===false)
+					{
+					  this.content = true;
+					}
+					
 					this.name = this.userAccounts.length > 0 ? this.userAccounts[0]?.Name : '';
 					this.selectedAvatarSrc = this.userAccounts[0]?.BI_PSP_AvatarUrl__c ? this.userAccounts[0]?.BI_PSP_AvatarUrl__c : Default_avatar_JPEG_URL;
 					const currentTabName = window.location.pathname.split('/').pop();
@@ -1034,11 +1047,11 @@ yourself. `
 					} else if (currentTabName === BI_PSPB_BRDlqiQuestionnaireUrl) {
 						this.mobilename = `The DLQI is a specifically designed
 	questionnaire. The aim ..`
-						this.selectedName1 = `The DLQI is a specifically designed
-questionnaire. The aim of this
-questionnaire is to measure how much
-your skin problem has affected your life 
-OVER THE LAST WEEK. Please tick  one
+						this.selectedName1 = `The aim of Dermatology Life Quality 
+Index (DLQI) questionnaire is to 
+measure how much your skin problem 
+has affected your life 
+OVER THE LAST WEEK.Please tick one 
 box for each question. `
 					} else if (currentTabName === BI_PSPB_BRPsoriasisQuesUrl) {
 						this.mobilename = `On this page, are a set of problems that
@@ -1066,18 +1079,21 @@ impairment.
 Questions on this page ask about how
 your GPP affects your ability to work
 and perform regular activities. `
-					} else if (currentTabName === BI_PSPB_BRQualitativeTwoMonths) {
+					} else if (currentTabName === BI_PSPB_BRQualitativeTwoMonths || currentTabName === BI_PSPB_FourteenWeeks) {
 						this.mobilename = `Qualitative Satisfaction Questionnaire
-
-	The aim of this questionnaire is to
+    The aim of this questionnaire is to
 	capture your feedback..`
-						this.selectedName1 = `Qualitative Satisfaction Questionnaire
-
-The aim of this questionnaire is to
+	this.content=false;
+	this.qualitative=true;
+	this.twocontent = true;
+						this.selectedName1 = `The aim of this questionnaire is to
 capture your feedback on the
 experience you had in the last fourteen
 weeks of interactions with the GPP&ME
 program. `
+this.selectedName2 = ` You can save as draft and come back     
+later to submit .  `;
+
 					} else if (currentTabName === BI_PSPB_messagecenterUrl) {
 						this.mobilename = `Welcome!
 	You will find all your general

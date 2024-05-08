@@ -150,11 +150,12 @@ export default class BiPspbReminderSetup extends LightningElement
 			{
 				try 
 				{
-					this.userAccounts = data;				
+					this.userAccounts = data;
+					console.log('data',data);				
 					if (!this.caregiver) 
 					{
 						this.name = this.userAccounts.length > 0 ? this.userAccounts[0]?.Name : '';
-						this.selectedAvatarSrc = this.userAccounts[0]?.BI_PSPB_AvatarUrl__c ? this.userAccounts[0]?.BI_PSPB_AvatarUrl__c : Default_avatar_JPEG_URL;              
+						this.selectedAvatarSrc = this.userAccounts[0]?.BI_PSP_AvatarUrl__c ? this.userAccounts[0]?.BI_PSP_AvatarUrl__c : Default_avatar_JPEG_URL;  	            
 					}
 				} catch (err) 
 				{

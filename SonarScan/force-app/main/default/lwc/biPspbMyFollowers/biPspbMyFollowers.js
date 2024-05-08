@@ -96,15 +96,11 @@ export default class biPspbMyFollowers extends LightningElement {
 	// To retrieve all followers list
 	retrieveFollowers() {
 		try {
-			this.isLoading = true;
 			displayFollowers({ userId: this.currentUserId })
 				.then(result => {
+					this.total = result.filter(follower => follower?.BI_PSP_Type__c === BI_PSP_Follower).length;
 					if (result && result.length > 0) {
-						this.total = result.filter(follower => follower?.BI_PSP_Type__c === BI_PSP_Follower).length;
 						this.followersCount = this.total > 0;
-						if (this.total === 0) {
-							this.isLoading = false;
-						}
 						if (this.total > 0) {
 							this.isLoading = false;
 							this.usernames = result.filter(follower => follower?.BI_PSP_Type__c === BI_PSP_Follower);
@@ -116,6 +112,14 @@ export default class biPspbMyFollowers extends LightningElement {
 									pspBrValue: follower.BI_PSP_AccountUser__r.BI_PSP_AvatarUrl__c ? follower.BI_PSP_AccountUser__r.BI_PSP_AvatarUrl__c : this.loggedUserAvatar,
 								}));
 						}
+						if(this.total === 0){
+							this.isLoading = false;
+							this.followersCount = false;
+						}
+					}
+					else if(result.length === 0 || result === null){
+							this.isLoading = false;
+							this.followersCount = false;
 					}
 					else {
 						this.showToast(errormessage, errormessage, errorVariant); // Catching Potential Error for Null/other

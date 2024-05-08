@@ -938,6 +938,8 @@ sup {
 	color: #403A60;
 	border: 0px solid;
 	font-size: 20px;
+	position: relative;
+    right: 80px;
 }
 
 .closebtn {
@@ -1212,6 +1214,7 @@ sup {
 		font-size: 20px;
 		margin-left: 63px;
 		position: relative;
+        left: 50px;
 	}
 
 	.para {
@@ -1476,7 +1479,7 @@ sup {
 	}
 
 	.navigationcontent {
-		width: 95%;
+		width: 80%;
 	}
 
 	.main {
@@ -1510,6 +1513,11 @@ sup {
 	}
 
 	.navigationcontent {
-		width: 70%;
+		width: 65%;
+	}
+}
+@media only screen and (min-width :1700px) {
+	.navigationcontent {
+		width: 60%;
 	}
 }

@@ -12,6 +12,7 @@ import MY_ICON from "@salesforce/resourceUrl/BI_PSPB_uploadIocn";
 import MY_ICON1 from "@salesforce/resourceUrl/BI_PSPB_RedUploadIcon";
 import tic from "@salesforce/resourceUrl/BI_PSP_Deletetoastmsg";
 import uploadfilecss from "@salesforce/resourceUrl/BI_PSPB_UploadfileSupport";
+import Warningicon from '@salesforce/resourceUrl/BI_PSP_WarningIcon';
 // To Import Custom Labels
 import pharmacylabel from "@salesforce/label/c.BI_PSPB_ERROR_Message_For_Prescription";
 import Uploadlabel from "@salesforce/label/c.BI_PSPB_Update_Latest_Prescription_Error";
@@ -66,6 +67,7 @@ export default class BiPspbCaseSupport extends LightningElement {
 	uploadedNotes = [];
 	myIconUrl = MY_ICON;
 	myIconUrl1 = MY_ICON1;
+	warningicons = Warningicon;
 	value = "";
 	options1 = [
 		{ label: Yes, value: Yes },
