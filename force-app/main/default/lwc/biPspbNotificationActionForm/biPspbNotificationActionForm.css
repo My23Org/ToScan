@@ -1,0 +1,845 @@
+.toastmsg {
+	background: #DCF9D3;
+	height: 6px;
+	padding: 7px 75px 32px 75px;
+	position: relative;
+	bottom: 8%;
+	right: 58%;
+	width: 169%;
+	border-radius: 4px 4px 0px 0px;
+	border: 0px 0px 4px 0px;
+	display: flex;
+}
+
+.toastmsg1 {
+	background: #DCF9D3;
+	height: 58px;
+	padding: 7px 75px 32px 75px;
+	position: relative;
+	bottom: 29%;
+	right: 65%;
+	width: 187%;
+	border-radius: 4px 4px 0px 0px;
+	border: 0px 0px 4px 0px;
+	display: flex;
+	gap: 28px;
+
+}
+.tstmsg{
+	font-size: 18px;
+	color:#403A60;
+	font-weight:700;
+}
+
+.tstmsg2 {
+	position: relative;
+	top: 21px;
+	right: 35%;
+	font-size: 16px;
+	color:#403A60;
+	font-weight:400;
+}
+
+.getstart {
+	background-color: #403a60;
+	color: white;
+	border-radius: 8px;
+	height: 30px;
+
+}
+
+.deletetoastimg {
+	width: 24px;
+	height: 24px;
+
+}
+
+.toastmsgclose {
+	margin-left: 340px;
+	width: 24px;
+	height: 24px;
+	font-size: 42px;
+	border-style: none;
+	background: none;
+	position: relative;
+	bottom: 25px;
+	left: 51%;
+	opacity: 0.7;
+}
+
+.toastmsgclose1 {
+	width: 24px;
+	height: 24px;
+	font-size: 42px;
+	border-style: none;
+	background: none;
+	position: relative;
+	bottom: 25px;
+	left: 30%;
+	opacity: 0.7;
+}
+
+
+
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: white;
+	border-bottom: 1px solid #403a60;
+}
+
+.div1 {
+	margin-top: 3cm;
+	width: 607px;
+	height: 368px;
+	margin-left: 32%;
+	background-color: white;
+}
+
+.heading {
+	color: black;
+	font-size: 32px;
+	width: 527px;
+	margin-left: 49px;
+}
+
+.pclass {
+	margin-left: 53px;
+	font-size: 20px;
+	color: #2C333A;
+}
+
+.inputdate {
+	width: 394px;
+	height: 48px;
+	border: 1px solid;
+	border-color: #403A60;
+	border-radius: 4px;
+	margin-left: 53px;
+	line-height: normal;
+}
+
+.datehead {
+	margin-left: 53px;
+	font-size: 16px;
+	color: #403A60;
+	font-weight: 700;
+	margin-top: 14px;
+}
+
+.cancel {
+
+	background-color: white;
+	color: #403A60;
+	border: 1px solid;
+	border-color: #403A60;
+	width: 96px;
+	height: 40px;
+	border-radius: 12px;
+	margin-left: 2pc;
+}
+
+.submit {
+	background-color: #403A60;
+	color: white;
+	border-radius: 12px;
+	width: 96px;
+	height: 40px;
+	margin-left: 53px;
+	margin-top: 20px;
+}
+
+.li {
+	float: left;
+	display: block;
+	color: black;
+	text-align: center;
+	padding: 14px 16px;
+}
+
+li:after {
+	content: '';
+	display: block;
+	height: 2px;
+	width: 0%;
+	background-color: transparent;
+	transition: all 0.5s ease;
+}
+
+li:hover:after {
+	width: 100%;
+	background-color: black;
+	color: black;
+	font-weight: bold;
+}
+
+.notify {
+	width: 39cm;
+	display: none;
+	background-color: white;
+}
+
+.notify p {
+	padding-left: 80px;
+	padding-top: 20px;
+	font-weight: bold;
+	font-size: larger;
+}
+
+.notify ul {
+	padding-left: 70px;
+	padding-top: 10px;
+	background-color: white;
+}
+
+.notify li {
+	background-color: white;
+}
+
+.combobox1 {
+	width: 200px;
+}
+
+.combobox2 {
+	width: 200px;
+	-webkit-text-fill-color: #403a60;
+	--slds-c-input-color-border: #423a66;
+	--slds-c-textarea-color-border: #423a66;
+	--lwc-heightInput: 33px;
+
+}
+
+.notifyImage {
+	width: 11cm;
+	height: 20cm;
+	background-color: #FBFAF5;
+}
+
+.notifyImage figure {
+	padding-left: 100px;
+	padding-top: 150px;
+}
+
+.main {
+	width: 100%;
+	height: auto;
+}
+
+.symptom {
+	background-color: #D8D8D8;
+	margin-top: 30px;
+	margin-left: 70px;
+	margin-right: 50px;
+	height: 100px;
+}
+
+.symptom p {
+	padding-left: 10px;
+}
+
+.voilet {
+	border-left: 2px solid #403A60;
+	/* Adjust the color and thickness as needed */
+	height: 132px;
+	/* Adjust the height as needed */
+	margin: 0 auto;
+}
+
+.green {
+	border-left: 2px solid green;
+	/* Adjust the color and thickness as needed */
+	height: 132px;
+	/* Adjust the height as needed */
+	margin: 0 auto;
+}
+
+.amber {
+	border-left: 2px solid #F09540;
+	/* Adjust the color and thickness as needed */
+	height: 132px;
+	/* Adjust the height as needed */
+	margin: 0 auto;
+}
+
+.red {
+	border-left: 2px solid red;
+	/* Adjust the color and thickness as needed */
+	height: 132px;
+	/* Adjust the height as needed */
+	margin: 0 auto;
+}
+
+.generalnotify {
+	display: flex;
+	flex-direction: column;
+
+	margin-top: 30px;
+	width: 108%;
+	height: 135px;
+	font-size: small;
+	background-color: white;
+}
+
+.imgclass {
+	width: 35px;
+	height: 29px;
+}
+
+div.Not {
+	display: flex;
+	gap: 1cm;
+	margin-top: 30px;
+	margin-left: 40px;
+	border-left: 2px solid red;
+	height: 1.5cm;
+	width: 803px;
+	background-color: white;
+}
+
+.figure {
+	margin-top: 17px;
+	padding-left: 20px;
+	background-color: #ECDCA8;
+	border-radius: 8px;
+	width: 203px;
+}
+
+div.Read {
+	display: flex;
+	gap: 1cm;
+	margin-top: 30px;
+	margin-left: 40px;
+	border-left: 2px solid rgb(241, 193, 106);
+	height: 1.5cm;
+	width: 803px;
+	background-color: white;
+}
+
+div.Read p {
+	padding-top: 3px;
+	padding-left: 10px;
+	font-size: small;
+}
+
+div.Not p {
+	padding-top: 3px;
+	padding-left: 10px;
+	font-size: small;
+}
+
+.actionclass {
+	display: flex;
+	position: absolute;
+	gap: 1cm;
+}
+
+div.Completed {
+	display: flex;
+	gap: 1cm;
+	margin-top: 30px;
+	width: 803px;
+	margin-left: 40px;
+	border-left: 2px solid green;
+	height: 1.5cm;
+	background-color: white;
+}
+
+div.Completed p {
+	padding-top: 4px;
+	padding-left: 10px;
+	font-size: small;
+}
+
+.secondMain {
+	display: flex;
+	flex-direction: row;
+	row-gap: 2cm;
+	width: 100%;
+	margin-top: -50px;
+}
+
+p.recordclass {
+	margin-top: 9%;
+	margin-left: 10%;
+	font-size: 26px;
+	color: #403A60;
+}
+
+.notification {
+	padding-left: 50px;
+	padding-top: 50px;
+	width: 100%;
+	background-color: #FBFAF5;
+}
+
+.notification h3 {
+	color: #403a60;
+	font-weight: bold;
+
+}
+
+.ActionCombo {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+}
+
+.pclass p {
+	margin-top: 50px;
+	color: #403a60;
+	font-weight: bolder;
+	font-size: medium;
+	margin-right: 2px;
+}
+
+.pclass hr {
+	margin-top: -15px;
+	margin-left: 100px;
+	color: #403a60;
+	border: 1px solid #403a60;
+
+}
+
+.dotclass {
+	font-weight: bolder;
+	font-size: x-large;
+}
+
+.classimg {
+	padding-left: 16px;
+	padding-top: 14px;
+	width: 45px;
+}
+
+.classSubject {
+	padding-top: 14px;
+	width: 60%;
+	font-size: 15px;
+}
+
+.actionbtn {
+
+	margin-left: 9%;
+	margin-top: 0px;
+	position: relative;
+	bottom: 95px;
+	right: 3px;
+}
+
+.buttonclass {
+	width: 150px;
+	height: 35px;
+	margin-top: 20px;
+	margin-left: 74%;
+	border-radius: 12px;
+	border: 2px solid #403A60;
+	background-color: white;
+	font-family: 'eina-bold';
+}
+
+.buttonclass2 {
+	margin-top: 20px;
+	margin-left: 87%;
+	border-radius: 12px;
+	border: none;
+	font-size: 20px;
+	width: 49px;
+	background-color: white;
+}
+
+.actionbtn {
+	margin: 20px 84px;
+	border-radius: 8px;
+	width: 190px;
+	height: 30px;
+}
+
+.actionbtn .Yesbtn {
+	width: 44px;
+	height: 26px;
+	border-radius: 8px;
+	background-color: #403A60;
+	border: 1px solid #403A60;
+	color: white;
+}
+
+.actionbtn .Nobtn {
+	width: 44px;
+	height: 26px;
+	border-radius: 8px;
+	margin-left: 20px;
+	background-color: white;
+	border: 1px solid #403A60;
+	color: #403A60;
+}
+
+.actionbtn .btnclass {
+	background-color: #403a60;
+	color: white;
+	border-radius: 8px;
+	height: 30px;
+}
+
+.classdate {
+	margin-left: 87%;
+	margin-top: 11px;
+	position: relative;
+	bottom: 130px;
+	font-size: 14px;
+	font-family: 'eina-regular';
+}
+
+@media only screen and (max-width:400px) {
+	.cat {
+		margin-top: 0px;
+		width: 120%;
+
+	}
+
+	.getstart {
+		background-color: #403a60;
+		color: white;
+		border-radius: 8px;
+		height: 30px;
+		width: 120%;
+	}
+
+	.actionbtn .Yesbtn {
+		position: relative;
+		top: 95px;
+		left: 13px;
+	}
+
+	.actionbtn .Nobtn {
+		position: relative;
+		top: 95px;
+		left: 13px;
+	}
+
+	.notification h3 {
+		font-size: 18px;
+	}
+
+	.voilet {
+		height: 165px;
+	}
+
+	.notification h3 {
+		margin-top: -30px;
+	}
+
+	.notification {
+		margin-top: 30px;
+		margin-left: -6px;
+	}
+
+	.classSubject {
+		width: 65%;
+		font-size: 13px;
+	}
+
+	.voilet {
+		height: 180px;
+	}
+
+	.actionbtn .btnclass {
+		width: 90%;
+	}
+
+	.combobox2 {
+		width: 125%;
+		-webkit-text-fill-color: #403a60;
+		--slds-c-input-color-border: #423a66;
+		--slds-c-textarea-color-border: #423a66;
+		margin: 8px 0px 0px 0px;
+		--lwc-heightInput: 40px;
+		align-items: center;
+	}
+
+	.slds-combobox_container {
+		border-color: #403A60;
+	}
+
+	.actionbtn {
+		width: 50%;
+		margin-left: 70px;
+		position: relative;
+		bottom: 148px;
+	}
+
+	.ActionCombo {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.generalnotify {
+		width: 127%;
+		height: 185px;
+	}
+
+	.actionbtn button {
+		position: relative;
+		top: 57px;
+		left: 13px;
+	}
+
+	.classdate {
+		font-family: Eina-regular;
+		margin-left: 82%;
+		margin-top: 11px;
+		position: relative;
+		bottom: 180px;
+		width: 20%;
+		font-size: 12px;
+	}
+
+	.buttonclass {
+		width: 38%;
+		height: 4%;
+		margin-left: 88%;
+	}
+}
+
+@media only screen and (min-width:401px) and (max-width:600px) {
+	.cat {
+		margin-top: 0px;
+		width: 108%;
+	}
+
+	.voilet {
+		height: 180px;
+	}
+
+	.classSubject {
+		font-size: 14px;
+	}
+
+	.notification h3 {
+		margin-top: -30px;
+		font-size: 20px;
+	}
+
+	.notification {
+		margin-top: 30px;
+		position: relative;
+		right: 6px;
+	}
+
+	.combobox2 {
+		width: 115%;
+		-webkit-text-fill-color: #403a60;
+		--slds-c-input-color-border: #423a66;
+		--slds-c-textarea-color-border: #423a66;
+		margin: 8px 0px 0px 0px;
+		--lwc-heightInput: 40px;
+		align-items: center;
+	}
+
+	/* Target the placeholder text in the Lightning Combobox */
+	.slds-combobox_container .slds-combobox .slds-combobox__input[aria-haspopup="listbox"]::placeholder {
+		/* Your alignment properties */
+		text-align: center;
+		/* Adjust this value as needed */
+	}
+
+	.ActionCombo {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.generalnotify {
+		width: 114%;
+		height: 180px;
+	}
+
+	.actionbtn button {
+		position: relative;
+		left: 18px;
+		top: 15px;
+	}
+
+	.buttonclass {
+		margin-top: 20px;
+		margin-left: 89%;
+		border-radius: 12px;
+		border: 2px solid #403A60;
+		background-color: white;
+		width: 100px;
+		height: 35px;
+	}
+
+	.classdate {
+		font-family: Eina-regular;
+		width: 20%;
+		margin-left: 82%;
+		position: relative;
+		bottom: 162px;
+	}
+
+	.actionbtn {
+		width: 85%;
+		margin-left: 63px;
+		margin-top: 0px;
+	}
+}
+
+@media only screen and (min-width:601px) and (max-width:767px) {
+	.generalnotify {
+		width: 106%;
+	}
+
+	.actionbtn button {
+		position: relative;
+		left: 4%;
+
+	}
+
+	.notification h3 {
+		font-size: 24px;
+	}
+
+	.actionbtn {
+		margin-top: 30px;
+		margin-left: 75px;
+	}
+
+	.notification {
+		position: relative;
+		right: 3%;
+		bottom: 25px;
+	}
+
+	.buttonclass {
+		width: 25%;
+		height: 7%;
+		margin-left: 81%;
+	}
+}
+
+@media only screen and (min-width:768px) and (max-width:992px) {
+	.generalnotify {
+		width: 110%;
+		height: 160px;
+	}
+
+	.actionbtn .Nobtn {
+		margin-top: 15px;
+	}
+
+	.actionbtn .Yesbtn {
+		margin-top: 15px;
+	}
+
+	.voilet {
+		height: 160px;
+	}
+
+	.notification h3 {
+		font-size: 24px;
+	}
+
+	.combobox2 {
+		width: 375px;
+	}
+
+	.actionbtn {
+		margin-left: 82px;
+		margin-top: 24px;
+	}
+
+	.ActionCombo {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.buttonclass {
+		width: 25%;
+		height: 5%;
+		margin-left: 85%;
+	}
+
+	.notification {
+		padding-left: 50px;
+		padding-top: 50px;
+		width: 92%;
+		background-color: #FBFAF5;
+		margin-left: 14%;
+	}
+
+	.main {
+		width: 90%;
+	}
+
+	.classdate {
+		margin-left: 84%;
+		margin-top: 11px;
+		position: relative;
+		bottom: 160px;
+		width: 20%;
+		font-size: 13px;
+	}
+
+	.classSubject {
+		font-size: 14px;
+	}
+}
+
+@media only screen and (min-width:992px) and (max-width:1200px) {
+	.generalnotify {
+		width: 101%;
+	}
+
+	.notification h3 {
+		font-size: 27px;
+	}
+
+	.buttonclass {
+		margin-left: 80%;
+		width: 21%;
+		height: 35px;
+	}
+
+	.notification {
+		margin-left: 3%;
+	}
+}
+
+@media only screen and (min-width:1400px) {
+	.buttonclass {
+		margin-left: 87%;
+	}
+}
+
+@media only screen and (min-width:1200px) {
+	.buttonclass {
+		margin-left: 87%;
+	}
+
+	.notification h3 {
+		font-size: 32px;
+	}
+}
+
+@media only screen and (min-width:1500px) {
+	.buttonclass {
+		margin-left: 88%;
+	}
+}
+
+@media only screen and (min-width:1700px) {
+	.buttonclass {
+		margin-left: 88%;
+	}
+}
+
+@media only screen and (min-width:1900px) {
+	.buttonclass {
+		margin-left: 90%;
+	}
+}

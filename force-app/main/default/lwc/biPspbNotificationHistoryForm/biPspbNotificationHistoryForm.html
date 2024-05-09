@@ -1,0 +1,59 @@
+<!--This component is used to Display the Read,Complete,Expired notification based on  both General and Action Notification-->
+<template>
+	<div class="main">
+		<div class="secondMain">
+			<div class="notification">
+				<h3>Notifications:History</h3>
+				<br />
+				<div class="ActionCombo">
+					<div>
+						<lightning-combobox class="combobox2" placeholder="Notification Type" value={notifyType}
+							options={notifyTypeOptions} onchange={handletypeChange}></lightning-combobox>
+					</div>
+					<div>
+						<lightning-combobox class="combobox1" placeholder="Select a Category" value={categorytype}
+							options={historysoption} onchange={handleCatChange}></lightning-combobox>
+					</div>
+
+					<div>
+						<lightning-combobox class="combobox2 cat" value={statusvalue} placeholder="Status Type"
+							options={statusoptions} onchange={handleStatusChange}></lightning-combobox>
+					</div>
+				</div>
+				<img class="dot" src={dotimg} />
+				<p class="para">All</p>
+				<hr class="line" />
+				<div if:true={norecords}>
+					<p class="recordclass">You currently don’t have any notifications!</p>
+				</div>
+				<template if:true={displayedHistoryValue}>
+					<template for:each={displayedHistoryValue} for:item="HistoryValue">
+						<h2 key={HistoryValue.Id}>
+							<div class="generalnotify">
+								<div class="classdate">
+									<p>{HistoryValue.FormattedDate}</p>
+								</div>
+								<div class="actionclass">
+									<div class="classimg">
+										<img if:true={HistoryValue.sympimg} class="imgclass" src={symptomimg} />
+										<img if:true={HistoryValue.contentsimg} class="imgclass" src={contentimg} />
+										<img if:true={HistoryValue.treatimg} class="imgclass" src={treatmentimg} />
+										<img if:true={HistoryValue.challimg} class="imgclass" src={challengeimg} />
+										<img if:true={HistoryValue.chatterimg} class="imgclass" src={chatterimg} />
+									</div>
+									<div class="classSubject">
+										<p>{HistoryValue.Subject}</p>
+									</div>
+								</div>
+								<br /><br />
+							</div>
+						</h2>
+					</template>
+				</template>
+				<button class="buttonclass" if:true={showLoadMoreButton} onclick={loadMore}>
+					Load More
+				</button>
+			</div>
+		</div>
+	</div>
+</template>

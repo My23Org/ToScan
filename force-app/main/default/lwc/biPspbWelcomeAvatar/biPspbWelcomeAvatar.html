@@ -1,0 +1,31 @@
+<!--This component is utilized for displaying a personalized message and patient's name-->
+<template>
+	<div class="background">
+		<div class="welcome">
+			<h1 class="head">{welcomestr} {name}!</h1>
+		</div>
+		<!--personalized message content-->
+		<div class="content">
+			<div class="popup-container">
+				<div class="box" if:true={personalizemessage}>
+					<div>{finalmessage}</div>
+
+					<div class="closebtn" onclick={handleclick}>
+						<a><span class="close">&times;</span></a>
+					</div>
+
+				</div>
+
+				<div class="box" if:false={personalizemessage}>{finalmessage}</div>
+			</div>
+			<div class="text-content-for-mobile" onclick={handledotclick}>...</div>
+		</div>
+		<!--Display the Selected avatar -->
+		<div class="avatar-picklist-container">
+			<div class="avatar-container">
+				<img src={selectedAvatarSrc} class="slds-m-right_large" />
+			</div>
+		</div>
+	</div>
+	<hr class="line" />
+</template>

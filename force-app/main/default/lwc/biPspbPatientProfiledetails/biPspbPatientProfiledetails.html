@@ -1,0 +1,387 @@
+<!-- This component is used for prepopulating patient information, updating it, and creating cases based on the account settings. -->
+<template>
+	<template if:true={showDiv}>
+		<div class="toast">
+			<p class="para"><img class="img4" src={rightimg}>&nbsp;&nbsp;Just one more step. We'll be in touch soon to
+				help you delete your account </p>
+			<div class="notify">
+				<button class="buttonclass btncls" type="button" onclick={handleclose}>&#x2715; </button>
+			</div>
+		</div>
+	</template>
+	<template if:true={updatePopup}>
+		<div class="toast">
+			<p class="para"><img class="img4" src={rightimg}>&nbsp;&nbsp;Your profile has been updated successfully.
+			</p>
+			<div class="notify">
+				<button class="buttonclass btncls" type="button" onclick={handleclose}>&#x2715; </button>
+			</div>
+		</div>
+	</template>
+	<template if:true={showDiv1}>
+		<div class="toast">
+			<div>
+				<p class="para"><img class="img4" src={rightimg}>&nbsp;&nbsp;Almost there… We'll be in touch soon to
+					help you access your personal information.</p>
+			</div>
+			<div class="notify">
+				<button class="buttonclass btncls" type="button" onclick={handleclose1}>&#x2715;</button>
+			</div>
+		</div>
+	</template>
+	<div class="container">
+
+
+		<div class="main" data-scroll-target data-it-uid={userId}>
+			<div class="wholepatientPD">
+				<h2 class="size">My Profile</h2>
+				<div class="QuickLinks1">
+					<div class="display">
+						<h3 class="Qllinks">QuickLink</h3>
+						<div> <lightning-icon if:true={down} icon-name="utility:chevrondown"
+								alternative-text="Connected" size="xx-small" title="xx-small size"
+								onclick={click}></lightning-icon>
+							<lightning-icon if:true={up} icon-name="utility:chevronup" alternative-text="Connected"
+								size="xx-small" onclick={notclick} title="xx-small size"></lightning-icon>
+						</div>
+					</div>
+					<span if:true={touch}>
+						<ul class="quick-links-list">
+							<li class="li active">
+								<div class="bullet bullet-active"></div>
+								<a href="#1" class="a-tag">Personal Information</a>
+							</li>
+							<li class="li">
+								<div class="bullet"></div>
+								<a href="#2" class="a-tag">Communication Details</a>
+							</li>
+							<li class="li">
+								<div class="bullet"></div>
+								<a href="#3" class="a-tag">Address</a>
+							</li>
+							<li class="li">
+								<div class="bullet"></div>
+								<a href="#4" class="a-tag">Account Settings</a>
+							</li>
+						</ul>
+
+					</span>
+				</div>
+				<div class="slds-p-around_medium">
+
+					<div class="slds-col">
+						<div class="fieldwidth" id="1">
+							<br>
+							<h1 class="h1 color">Personal Information</h1>
+
+
+							<br>
+
+							<div class="input-div">
+								<label for="FirstName" data-field="FirstName" class="input-label">First Name*</label>
+								<lightning-input class="textInput" field-name="FirstName" data-field="FirstName"
+									value={patientFirstName} onpaste={handlePaste} onkeydown={handleKeyDown1} onchange={handleFieldChange}
+									placeholder="Enter last name" variant="label-hidden">
+								</lightning-input>
+								<span class="slds-form-element__help" if:true={firstNameerrorMessag}>
+									<lightning-icon icon-name='utility:warning' alternative-text='warning'
+										variant='error' size='x-small' title='warning'
+										class="error-icon"></lightning-icon>{label.firstname}
+								</span>
+
+							</div>
+
+
+
+
+
+							<div class="input-div">
+								<label for="LastName" data-field="LastName" class="input-label">Last Name*</label>
+								<lightning-input field-name="LastName" data-field="LastName" onkeydown={handleKeyDown1}
+									value={patientLastName} id="LastName" variant="label-hidden" class="textInput"
+									onchange={handlelastname} onpaste={handlePaste} placeholder="Enter last name"></lightning-input>
+								<span class="slds-form-element__help" if:true={lastnameerrorMessage}>
+									<lightning-icon icon-name='utility:warning' alternative-text='warning'
+										variant='error' size='x-small' title='warning'
+										class="error-icon"></lightning-icon>
+									{label.lastname}
+								</span>
+							</div>
+
+
+
+
+							<div class="input-div">
+								<label for="Birthdate" data-field="Birthdate" class="input-label">Date of Birth*</label>
+								<lightning-input field-name="BI_PSP_Birthdate__c" label="Date of Birth" type="date"
+									onchange={agecalculationEvent} value={patientDOB} disabled={isDOBDisabled}
+									data-field="Birthdate" class="textInput" variant="label-hidden"
+									placeholder="DD/MM/YYYY"></lightning-input>
+								<span if:true={minorerror} class="slds-form-element__help"><lightning-icon
+										icon-name='utility:warning' alternative-text='warning' variant='error'
+										size='x-small' title='warning'
+										class="error-icon"></lightning-icon>{label.minor}</span>
+								<span if:true={minorerror2} class="slds-form-element__help"><lightning-icon
+										icon-name='utility:warning' alternative-text='warning' variant='error'
+										size='x-small' title='warning'
+										class="error-icon"></lightning-icon>{label.abovedate}</span>
+								<span if:true={minorerror3} class="slds-form-element__help"><lightning-icon
+										icon-name='utility:warning' alternative-text='warning' variant='error'
+										size='x-small' title='warning'
+										class="error-icon"></lightning-icon>{label.futuredate}</span>
+								<span if:true={doberrorMessage} class="slds-form-element__help">
+									<lightning-icon icon-name='utility:warning' alternative-text='warning'
+										variant='error' size='x-small' title='warning'
+										class="error-icon"></lightning-icon> {label.dob}
+								</span>
+
+
+
+							</div>
+							<div class="input-div">
+								<label class="input-label" for="relationship" data-field="relationship">Gender*</label>
+								<lightning-combobox name="CaregiverRelationship" placeholder="Select"
+									data-field="relationship" value={relations} options={leadPmc}
+									onchange={relationshipEvent} class="textInput check">
+								</lightning-combobox>
+								<div class="slds-form-element__help" if:true={relationshiperrorMessage}>
+									<lightning-icon icon-name='utility:warning' alternative-text='warning'
+										variant='error' size='x-small' title='warning'
+										class="error-icon"></lightning-icon>
+									<span class="slds-form-element__helps">{label.gender}</span>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="fieldwidth" id="2">
+							<br>
+							<h1 class="h1 color">Communication Details</h1>
+							<br>
+							<div class="input-div">
+								<label for="email" data-field="email" class="input-label">E-mail*</label>
+
+								<span><lightning-input variant="label-hidden" class="textInput" field-name="PersonEmail"
+										data-field="email" value={patientEmail} onchange={handleEmail}
+										disabled={isMobilePhoneDisabled}> </lightning-input></span>
+								<div class="slds-form-element__help" if:true={emailerrorMessage}><img
+										src={Warningicon}>{label.email}</div>
+
+							</div>
+							<div class="input-div">
+								<label for="phone" data-field="phone" class="input-label">Phone number*</label>
+								<span><lightning-input class="textInput" variant="label-hidden" field-name="Phone"
+										data-field="phone" maxlength="16" onkeydown={handleKeyDown}
+										onkeypress={validatePhoneInput} onpaste={handlePaste} value={patientMobilePhone}
+										onchange={handleFielphone}
+										placeholder="Enter Phone number"></lightning-input></span>
+
+								<div class="slds-form-element__help" if:true={MobileerrorMessage}><img
+										src={Warningicon}>{label.phone}</div>
+
+							</div>
+
+							<div class="input-div">
+								<label class="input-label" data-field="preefer">Preferred mode of communication*</label>
+								<lightning-combobox options={preffer} value={preferredCommunication}
+									onchange={handlePmcChange} variant="label-hidden" class="textInput"
+									data-field="preefer"
+									placeholder="Enter Preferred mode of communication"></lightning-combobox>
+								<div class="slds-form-element__help" if:true={conPmcErrorMessage}>
+									<lightning-icon icon-name='utility:warning' alternative-text='warning'
+										variant='error' size='x-small' title='warning'
+										class="error-icon"></lightning-icon>
+
+									{label.preferredcontactmethod}
+
+								</div>
+							</div>
+						</div>
+
+
+						<div class="fieldwidth" id="3">
+							<br>
+							<h1 class="h1 color">Address</h1>
+							<br>
+
+							<div class="input-div">
+								<label data-field="country" class="input-label">Country*</label>
+								<lightning-combobox class="textInput" name="Country" label="Country"
+									data-field="country" value={country} placeholder="Select a Country"
+									variant="label-hidden" options={countryCode} onchange={handleFielcountry}>
+								</lightning-combobox>
+								<div class="slds-form-element__help" if:true={countrycodeMessage}>
+									<img src={Warningicon}>{label.country}
+								</div>
+							</div>
+							<div class="input-div">
+								<label data-field="state" class="input-label">State*</label>
+								<lightning-combobox class="textInput" data-field="state" value={state}
+									placeholder="Select a state" variant="label-hidden" options={StateCode}
+									onchange={handleFieldstate}>
+								</lightning-combobox>
+								<div class="slds-form-element__help" if:true={statecodeMessage}>
+									<img src={Warningicon}>{label.state}
+								</div>
+							</div>
+
+
+
+							<div class="input-div">
+								<label for="c" data-field="city" class="input-label">City*</label>
+								<span><lightning-input class="textInput" variant="label-hidden"
+										field-name="PersonMailingCity" data-field="city" value={patientCity}
+										onchange={handleFieldCity}> </lightning-input> </span>
+								<div class="slds-form-element__help" if:true={cityMessage}><img
+										src={Warningicon}>{label.city}</div>
+							</div>
+
+							<div class="input-div">
+								<label for="s" data-field="street" class="input-label">Street Address*</label>
+								<span><lightning-input class="textInput" variant="label-hidden"
+										field-name="PersonMailingStreet" data-field="street" value={patientStreet}
+										onchange={handleFieldstreet}> </lightning-input></span>
+								<div class="slds-form-element__help" if:true={streetMessage}><img
+										src={Warningicon}>{label.street}</div>
+							</div>
+							<div class="input-div">
+								<label for="pc" data-field="pincode" class="input-label">Zip Code*</label>
+								<span><lightning-input class="textInput" variant="label-hidden"
+										field-name="PersonMailingPostalCode" data-field="pincode" value={patientZipCode}
+										onchange={handleFieldcode}> </lightning-input></span>
+								<div class="slds-form-element__help" if:true={postalCodeMessage}><img
+										src={Warningicon}>{label.pincode}</div>
+								<div class="slds-form-element__help" if:true={validerrorMessage}><img
+										src={Warningicon}>{label.validPincode}</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="slds-m-top_medium">
+						<div>
+							<div>
+								<button class="slds-button" onclick={handle_Success}
+									data-it-button="My Profile: Save Changes">Save Changes</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="input-div">
+					<div class="acc" id="4">
+						<br />
+						<!-- Account setting in my profile page -->
+						<h1 class="h1 color">Account Settings</h1>
+						<br />
+						<div class="msg">
+							<b> If you wish to delete this account, click on the following link.</b>
+						</div>
+						<div class="message" if:true={DeleteMessage}>
+							<img src={Boxedicon} class="imgsize">
+							<p>Your request for deleting the account is under process.We'll get in touch with you soon
+							</p>
+
+						</div>
+
+						<!-- Used for creating a case for delete access for patient -->
+						<button class={colorchanage} onclick={handleDeletPopup} disabled={isButtonDeleteDisabled}
+							data-it-button="My Profile: Delete Account">
+							<b> Delete Account</b>
+						</button>
+						<br />
+						<div class="msg"><b>If you want to access personal information, click on the following link.</b>
+						</div>
+						<div class="message" if:true={accessmessage}>
+							<img src={Boxedicon} class="imgsize">
+							<p>Your request to access personal information is under process. We'll get in touch with you
+								soon</p>
+						</div>
+						<button class={colorchnage} onclick={handleAccessPopup} disabled={isAccessButtonDisabled}
+							data-it-button="My Profile: Request Access">
+
+							<!-- Used for creating a case for  access request for patient -->
+							<b>Request Access</b>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="Ql">
+				<h3 class="h1">Quick Links</h3>
+				<ul>
+					<li class="li active">
+						<div class="bullet bullet-active"></div>
+						<div class="PIinfo">
+							<a href="#1" class="a-tag">Personal Information</a>
+						</div>
+					</li>
+					<li class="li">
+						<div class="bullet"></div>
+						<div class="PIinfo">
+							<a href="#2" class="a-tag">Communication Details</a>
+						</div>
+					</li>
+					<li class="li">
+						<div class="bullet"></div>
+						<div class="PIinfo">
+							<a href="#3" class="a-tag">Address</a>
+						</div>
+					</li>
+					<li class="li">
+
+						<div class="bullet"></div>
+						<div class="PIinfo">
+							<a href="#4" class="a-tag">Account Settings</a>
+
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<template if:true={isDeletePopupOpen}>
+			<div class="popup">
+				<div class="popup-content">
+					<lightning-button-icon class="close-icon" icon-name="utility:close" alternative-text="Close"
+						onclick={handleDeletPopup}>
+					</lightning-button-icon>
+					<div class="PopupDiv">
+						<div class="popup-heading">Request account to be deleted</div>
+						<div class="popup-confirmation">
+							Are you sure you want to request access to delete this
+							<br />
+							account?
+						</div>
+						<div class="btn">
+							<button data-value="No" class="outlined-button" onclick={handleDeletPopup}>No</button>
+							&nbsp;&nbsp;
+							<button data-value="Yes" class="save-button" onclick={handleYesButtonClick}>Yes</button>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+		<template if:true={isAccessPopupOpen}>
+			<div class="popup">
+				<div>
+					<div class="popup-content">
+						<lightning-button-icon class="close-icon" icon-name="utility:close" alternative-text="Close"
+							onclick={handleAccessPopup}>
+						</lightning-button-icon>
+						<div class="PopupDiv">
+							<div class="popup-heading">Request access to personal<br /> information</div>
+							<div class="popup-confirmation">
+								Do you want to send a request to access personal<br /> information?
+							</div>
+							<div class="btn">
+								<button data-value="No" class="outlined-button" onclick={handleAccessPopup}>No</button>
+								&nbsp;&nbsp;
+								<button data-value="Yes" class="save-button"
+									onclick={handleYesButtonClick2}>Yes</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+	</div>
+</template>

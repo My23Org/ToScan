@@ -1,0 +1,55 @@
+<!--This Card displays information related to the Qualitative satisfaction questionnaire,aiding in the presentation and understanding 
+of its contents.-->
+<template>
+	<template if:true={shouldShowComponent}>
+		<div class={flexCard}>
+			<div class="content">
+				<div>
+					<p class="dlqi">Qualitative Satisfaction <br />Questionnaire</p>
+				</div>
+				<br />
+				<!--To display RollOut and Completed Date-->
+				<div if:true={showRolloutDate1}>
+					<p class={dlqi2}>{rollout}</p>
+					<p class={dlqi3}>{rolloutDate}</p>
+					<br />
+
+					<p class="dlqi2">{expirelabel}</p>
+					<p class="dlqi3">{expiresIn} days</p>
+					<img src={cardimage} alt="Your Image" class={image} />
+		</div>
+					<div if:true={showAnswerQuestionsText}>
+						<p class="dlqi1">
+							<img src={cardimage} alt="Your Image" class="image" />
+		</p>
+					</div>
+				</div>
+				<div class={bottomBar}>
+					<!-- Total Number of answered Question and Total number of Questions-->
+					<p class={ans}>
+						<span class="ansq">{answeredQuestions}</span>/{totalquestioncount}
+						<span class="smalltxt"> {answeredlabel}</span>
+					</p>
+
+					<div class="right">
+						<!--To Display button with Dynamic label-->
+						<template if:false={isStartLabel}>
+							<button
+			label={buttonLabel}
+			onclick={handleButtonClick}
+			class="button"
+			data-it-button="QSQ: Resume"
+			>
+			{buttonLabel}
+			</button>
+						</template>
+						<template if:true={isStartLabel}>
+							<div class="circular-icon" onclick={handleButtonClick} data-it-button="QSQ: Start">
+								<img src={arrowimage} alt="Custom Image" class="circular-image" />
+			</div>
+						</template>
+					</div>
+				</div>
+			</div>
+	</template>
+</template>

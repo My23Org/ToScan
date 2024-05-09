@@ -1,0 +1,56 @@
+<!--This Card displays information related to the Psoriasis Symptom Scale (PSS), aiding in the presentation and understanding of its 
+contents.-->
+<template>
+<div class={flexCard}>
+	<div class="content">
+	<br />
+	<div>
+		<p class="dlqi">{psshead}<br />{psshead1}</p>
+	</div>
+	<!--To display RollOut and Completed Date-->
+	<br />
+	<p class={dlqi2}>{rollout}</p>
+	<p class={dlqi3}>{rolloutDate}</p>
+	<br />
+	<div if:false={showcompleteddate}>
+		<p class={dlqi2}>{expirelabel}</p>
+		<p class={dlqi3}>{expiresIn} days</p>
+	</div>
+	<div if:true={showcompleteddate}>
+		<p class={dlqi2}>{completedon}</p>
+		<p class={dlqi3}>{completedondate}</p>
+	</div>
+	<img src={cardimage} alt="Your Image" class={image} />
+	</div>
+	<div class={bottomBar}>
+	<!-- Total Number of answered Question and Total number of Questions-->
+	<p class={ans}>
+		<span class="ansq">{answeredQuestions}</span>/{totalquestioncount}
+		<span class="smalltxt"> {anstext}</span>
+	</p>
+
+	<div class="right">
+		<template if:false={isStartLabel}>
+		<button
+			label={buttonLabel}
+			onclick={handleButtonClick}
+			class="button"
+			data-it-button="PSS: Resume"
+		>
+			{buttonLabel}
+		</button>
+		</template>
+		<!--To Display button with Dynamic label-->
+		<template if:true={isStartLabel}>
+		<div
+			class="circular-icon"
+			onclick={handleButtonClick}
+			data-it-button="PSS: Start"
+		>
+			<img src={arrowimage} alt="Custom Image" class="circular-image" />
+		</div>
+		</template>
+	</div>
+	</div>
+</div>
+</template>

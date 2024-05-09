@@ -1,0 +1,51 @@
+<!--This Card displays information related to the Dermatology Life Quality Index (DLQI) questionnaire, aiding in the presentation and understanding of its contents.-->
+<template>
+	<div class={flexCard}>
+		<div class="content">
+			<div>
+				<p class="dlqi">{dlqiheading} <br />{dlqiindexheading}</p>
+			</div>
+			<!--To show the rollout and Completed Date-->
+			<br />
+			<p class={dlqi2}>{rollout}</p>
+			<p class={dlqi3}>{rolloutDate}</p>
+			<br />
+			<div if:false={showcompleteddate}>
+				<p class={dlqi2}>{expirelabel}</p>
+				<p class={dlqi3}>{expiresIn} days</p>
+			</div>
+			<div if:true={showcompleteddate}>
+				<p class={dlqi2}>{completedon}</p>
+				<p class={dlqi3}>{completedondate}</p>
+			</div>
+
+			<img src={cardimage} alt="Your Image" class={image} />
+		</div>
+		<div class={bottomBar}>
+			<!--To show the Total number of Questions and Number of answered Questions-->
+			<div>
+				<p class={ans}>
+					<span class="ansq">{answeredQuestions}</span>/{totalquestioncount}
+					<span class="smalltxt"> {answeredlabel}</span>
+				</p>
+			</div>
+			<div if:true={error}>
+				<p>Error fetching category status: {error}</p>
+			</div>
+			<!-- Dynamic button component that allows users to perform Start, Resume, and Complete actions based on the current state. -->
+			<div class="right">
+				<template if:false={isStartLabel}>
+					<button label={buttonLabel} onclick={handleButtonClick} class="button"
+						data-it-button="DLQI: Resume">
+						{buttonLabel}
+					</button>
+				</template>
+				<template if:true={isStartLabel}>
+					<div class="circular-icon" onclick={handleButtonClick} data-it-button="DLQI: Start">
+						<img src={arrowimage} alt="Custom Image" class="circular-image" />
+					</div>
+				</template>
+			</div>
+		</div>
+	</div>
+</template>

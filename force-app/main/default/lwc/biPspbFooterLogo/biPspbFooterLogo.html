@@ -1,0 +1,26 @@
+<!--This component is used as Footer for all branded pages -->
+<!-- Strings are hardcoded to display it in UI -->
+<template>
+	<div class="bg pad">
+		<div class="mobilediv">
+			<div class="footer">
+				<!-- Link for ContactUs -->
+				<a class="contact" href={linkForContactUs}>Contact us</a>
+				<!-- Link for TermsOfUse -->
+				<a class="contact" href={linkForTermsOfUse}>Terms of use</a>
+				<!-- Link for PrivacyNotice -->
+				<a class="contact" href={linkForPrivacyNotie}>Privacy notice</a>
+			</div>
+			<!-- Used to display the logo in the footer -->
+			<div class="background">
+				<img src={imageOfLogo} class="imgsize">
+			</div>
+		</div>
+		<hr class="linecode">
+		<!-- Used to display the copyrights message in the footer -->
+		<div class="copyrights">
+			<p class="para">Copyright © 2024 Boehringer Ingelheim Pharmaceuticals, Inc. All rights reserved. (01/24) /
+				PC-CRP-104646/49/69/70/71/72/73/74/104725</p>
+		</div>
+	</div>
+</template>

@@ -1,0 +1,287 @@
+.st-date-btn{
+	height: 40px;
+	width: 200px;
+	border-radius: 12px;
+	background-color: #403a60;
+	font-weight: bold;
+	margin-left: 25px;
+	color: #FFFFFF;
+	border: #403a60;
+	font-family: 'Eina-SemiBold';
+	font-size: 14px;
+}.Createnewentry{
+		position: relative;
+	left: 7%;
+		top: 30px;
+}
+.center {
+	/* margin: 0 auto; */
+	display: flex;
+	justify-content: center;
+}
+.Symptom-head {
+display: flex;
+	align-content: space-around;
+	justify-content: center;
+	position: relative;
+	top: 40%;
+	right: 1rem;
+}
+/* img{
+	position: relative;
+	left: 10%;
+	height: 275px;
+	bottom: 36px;
+} */
+.Createnewentry p {
+	color: #000000;
+	font-size: 16px;
+	font-weight: 800;
+	position: relative;
+	right: 36px;
+	padding: 20px 3px;
+	font-family: 'Eina-Bold';
+}
+h1 {
+	position: absolute;  
+	font-size: 32px;
+	color: #403A60;
+	font-weight: bold;
+}
+@media only screen and (max-width:400px){
+img{
+	left: -3%;
+	width: 97%;
+	height: 276px;
+	}
+	.head{
+	position: relative;
+	bottom: 0px;
+	left: 1rem;
+	top: 2rem;
+	font-size: 18px;
+	font-family: 'Eina-Bold';
+	}
+	.Createnewentry p{
+	position: relative;
+	right: 100px;
+	width: 262px;
+	text-align: center;
+	top: 20px;
+	}
+	.st-date-btn{
+	position: relative;
+	right: 35%;
+	width: 200px;
+	height: 40px;
+	top: 25px;
+	}
+	.Createnewentry{
+	position: relative;
+	left: 30%;
+	bottom: 50px;
+	top: -50px;
+	}
+	/* h1{
+		position: relative;
+	bottom: 8rem;
+	right: -3rem;
+	font-size: 23px;
+	width: 80%;
+	} */
+	.Symptom-head{
+	display: flex;
+	align-content: space-around;
+	justify-content: normal;
+	position: relative;
+	top: 10rem;
+	right: 4rem;
+	left: 3rem;
+	}.center{
+	display: flex;
+	justify-content: normal;
+	margin-left: 15px;
+	margin-top: -60px;
+	}
+}
+@media only screen and (min-width:401px) and (max-width:600px){
+	img{
+	left: -3%;
+	width: 97%;
+	height: 276px;
+	}
+	.head{
+		position: relative;
+	bottom: 0px;
+	left: 1rem;
+	top: 2rem;
+	font-size: 18px;
+	font-family: 'Eina-Bold';
+	}
+	.Createnewentry p{
+				position: relative;
+	right: 100px;
+	width: 262px;
+	text-align: center;
+	top: 20px;
+	}
+	.st-date-btn{
+			position: relative;
+	right: 35%;
+	width: 200px;
+	height: 40px;
+	top: 25px;
+	}
+	.Createnewentry{
+		position: relative;
+	left: 30%;
+	bottom: 50px;
+	top: -50px;
+	}
+	/* h1{
+		position: relative;
+	bottom: 8rem;
+	right: -3rem;
+	font-size: 23px;
+	width: 80%;
+	} */
+	.Symptom-head{
+	display: flex;
+	align-content: space-around;
+	justify-content: normal;
+	position: relative;
+	top: 10rem;
+	right: 4rem;
+	left: 3rem;
+	}.center{
+		display: flex;
+	justify-content: normal;
+	margin-left: 15px;
+	margin-top: -60px;
+	}
+}
+@media only screen and (min-width:601px) and (max-width:768px){
+	img{
+		/* position: relative; */
+	left: 1%;
+	height: 300px;
+	}
+	h1{
+top: 1rem;
+	}
+	.Createnewentry p{
+		position: relative;
+	right: 120px;
+	}
+	.st-date-btn{
+		position: relative;
+	right: 26%;
+	width: 200px;
+	}.Symptom-head{
+			display: flex;
+	align-content: space-around;
+	justify-content: center;
+	position: relative;
+	top: 40%;
+	right: 0rem;
+	left: 6rem;
+	}
+}
+@media only screen and (min-width:768px) and (max-width:992px){
+	img{
+		left: 8%;
+	height: 275px;
+	bottom: 36px;
+	width: 77%;
+	margin-left: 47px;
+	}h1{
+			position: absolute;
+	font-size: 32px;
+	color: #403A60;
+	/* font-weight: bold; */
+	left: 5rem;
+	}.Symptom-head{
+			display: flex;
+	align-content: space-around;
+	justify-content: center;
+	position: relative;
+	top: 40%;
+	right: 0rem;
+	left: 3rem;
+	}
+}
+@media only screen and (min-width:992px) and (max-width:1200px){
+	img{
+		height: 276px;
+	margin-left: 20%;
+	}.Createnewentry{
+			position: relative;
+	left: 7%;
+	top: 20px;
+	}h1{
+	position: absolute;
+	font-size: 32px;
+	color: #403A60;  
+	left: 4rem;
+	}.Symptom-head{
+			display: flex;
+	align-content: space-around;
+	justify-content: center;
+	position: relative;
+	top: 40%;
+	/* right: 1rem; */
+	left: 5rem;
+	}
+}
+@media only screen and (min-width:1200px) and (max-width:1500px){
+	img{
+	margin-left: 20%;
+	height: 276px;
+	}
+	.st-date-btn{
+	margin-left: 46px;
+	}.Createnewentry{
+			position: relative;
+	left: 7%;
+	top: 20px;
+	}h1{
+			font-size: 32px;
+	color: #403A60;
+	/* font-weight: bold; */
+	position: absolute;
+	left: 4rem;
+	}.Symptom-head{
+			display: flex;
+	align-content: space-around;
+	justify-content: center;
+	position: relative;
+	top: 40%;
+	/* right: 1rem; */
+	left: 4rem;
+	}
+}
+@media only screen and (min-width:1500px){
+.center{
+	display: flex;
+margin-left: 0px;
+}.st-date-btn{
+	margin-left: 38px;
+	}
+}
+/* .Createnewentry {
+	position: relative;
+	right: 75px;
+} */
+/* Original Solution found on Stackoverflow here:
+http://stackoverflow.com/questions/26573346/ios-safari-messes-up-input-type-date
+*/
+input[type="date"]
+{
+	display:block; 
+	/* Solution 1 */
+	 -webkit-appearance: textfield;
+	-moz-appearance: textfield;
+	min-height: 1.2em;  
+	/* Solution 2 */
+	/* min-width: 96%; */
+}

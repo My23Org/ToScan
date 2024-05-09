@@ -1,0 +1,26 @@
+.copyrights {
+	color: white;
+	background-color: #403A60;
+	text-align: left;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 20px;
+}
+
+.para {
+	text-align: left;
+	margin-left: 75px;
+}
+
+.link {
+	color: white;
+	background-color: #403A60;
+	float: right;
+	margin-top: -20px;
+	margin-right: 75px;
+	font-weight: bold;
+	text-decoration: none;
+	text-align: center;
+	font-size: 14px;
+	line-height: 20px;
+}

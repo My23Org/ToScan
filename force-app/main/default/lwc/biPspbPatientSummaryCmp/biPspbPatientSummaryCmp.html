@@ -1,0 +1,51 @@
+<template>
+	<!-- This component consolidates the patient summary details  -->
+	<lightning-layout multiple-rows class="main">
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+			<div class="custom-box2">
+				<div class="displayHeader">
+					<div class="header-logo-container">
+						<div>
+							<img src={LOGOSrc} alt="logo" width="133px" />
+						</div>
+						<img src={BGpp} alt="logo" class="marTB201" />
+					</div>
+					<div class="home-icon-container">
+						<c-bi-Pspb-Home-Ico-Cmp-For-Thankyoumsg></c-bi-Pspb-Home-Ico-Cmp-For-Thankyoumsg>
+					</div>
+				</div>
+				<div class="maincmp">
+					<div class="imageavatar">
+						<div class="childavatar">
+							<img src={selectedAvatarSrc} alt={selectedOption}
+								class="Avatrimg rounded d-block bg-logo" />
+							<p class="text-content">
+								Congratulations on completing your patient enrollment process!
+							</p>
+							<span class="Xmark">X</span>
+						</div>
+					</div>
+
+					<div class="child">
+						<img src={BGpp} alt="logo" class="marTB20" />
+
+						<c-bi-Pspb-Hcp-Prepulate-Summary></c-bi-Pspb-Hcp-Prepulate-Summary>
+					</div>
+				</div>
+				<div class="footer-container">
+					<div class="footer-logo-container">
+						<div>
+							<img src={FooterSrc} alt="logo" class="Foot" />
+						</div>
+					</div>
+					<div class="footer-containerMobile">
+						<c-bi-Pspb-Footer-Logo></c-bi-Pspb-Footer-Logo>
+					</div>
+					<div class="padR7">
+						<c-bi-Pspb-Footer-Quick-Links></c-bi-Pspb-Footer-Quick-Links>
+					</div>
+				</div>
+			</div>
+		</lightning-layout-item>
+	</lightning-layout>
+</template>

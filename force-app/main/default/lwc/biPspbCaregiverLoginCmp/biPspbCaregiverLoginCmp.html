@@ -1,0 +1,19 @@
+<!-- This  consolidates component the functionality for caregivers to view patient -->
+<template>
+	<lightning-layout multiple-rows class="layoutColor pad slds-p-top_xx-large slds-p-bottom_xx-large">
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4">
+			<!--Display the Avatar Navigation---->
+			<div class="custom-box1">
+				<c-bi-Pspb-Avatar-Navigation></c-bi-Pspb-Avatar-Navigation>
+			</div>
+		</lightning-layout-item>
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4">
+			<!--Display the Caregiver's patient profile---->
+			<div class="custom-box2">
+				<div>
+					<c-bi-Pspb-Caregiverpostlogin></c-bi-Pspb-Caregiverpostlogin>
+				</div>
+			</div>
+		</lightning-layout-item>
+	</lightning-layout>
+</template>

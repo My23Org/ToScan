@@ -1,0 +1,48 @@
+<!--This Card displays information related to the Work and Activity Impairment (WPAI), aiding in the presentation and understanding of its contents.-->
+<template>
+	<div class={flexCard}>
+		<div class="content">
+			<div>
+				<p class="dlqi">Work Productivity & Activity <br />Impairment (WPAI)</p>
+			</div>
+			<!--To Display Rollout and Completed Date-->
+			<p class={dlqi2}>{rollout}</p>
+			<p class={dlqi3}>{rolloutDate}</p>
+			<br />
+			<div if:false={showcompleteddate}>
+				<p class={dlqi2}>{expiresIntext}</p>
+				<p class={dlqi3}>{expiresIn} days</p>
+			</div>
+			<div if:true={showcompleteddate}>
+				<p class={dlqi2}>{completedon}</p>
+				<p class={dlqi3}>{completedondate}</p>
+			</div>
+			<img src={cardimage} alt="Your Image" class={image} />
+	</div>
+			<div class={bottomBar}>
+				<!--To Display Total number of Answered Questions and Total number of Questions-->
+				<p class={ans}>
+					<span class="ansq">{answeredQuestions}</span>/{totalquestioncount}
+					<span class="smalltxt"> {anstext}</span>
+				</p>
+				<div class="right">
+					<!--To Display the button with Dynamic Custom labels-->
+					<template if:false={isStartLabel}>
+						<button
+			label={buttonLabel}
+			onclick={handleButtonClick}
+			class="button"
+			data-it-button="WAPI: Resume"
+		  >
+			{buttonLabel}
+		  </button>
+					</template>
+					<template if:true={isStartLabel}>
+						<div class="circular-icon" onclick={handleButtonClick} data-it-button="WAPI: Start">
+							<img src={arrowimage} alt="Custom Image" class="circular-image" />
+		  </div>
+					</template>
+				</div>
+			</div>
+		</div>
+</template>

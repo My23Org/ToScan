@@ -1,0 +1,1913 @@
+<!-- The Lightning Web Component displays All posts, providing a concise overview of each post's content. -->
+<!-- Strings are hard coded in this HTML file to comply with the mobile responsiveness-->
+<template>
+  <!-- To display ToastMessage after deleting the Comment  -->
+  <template if:true={showdeletetoastmsg}>
+    <button class="toastmsgclose" title="Close" onclick={closetoastmsg}>
+      X
+    </button>
+    <div class="toastmsg">
+      <img src={deletetoast} data-scroll-target class="deletetoastimg" />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <p class="cmtdeltoastmsg">Comment deleted succesfully.</p>
+    </div>
+  </template>
+  <!-- To display ToastMessage after Follow the User  -->
+  <template if:true={showDiv}>
+    <button class="toastmsgclose" title="Close" onclick={closetstfollow}>
+      X
+    </button>
+    <div class="toastmsg">
+      <img data-scroll-target class="img" src={deletetoast} />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <p class="flwtoastmsg">You started following {username}.</p>
+    </div>
+  </template>
+  <!-- To display ToastMessage after UnFollow the User  -->
+  <template if:true={showDiv2}>
+    <button class="toastmsgclose" title="Close" onclick={closetstunflw}>
+      X
+    </button>
+    <div class="toastmsg">
+      <img data-scroll-target class="img" src={deletetoast} />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <p class="flwtoastmsg">You unfollowed {username} successfully.</p>
+    </div>
+  </template>
+  <!-- To display ToastMessage after Follow the User for Emoji -->
+  <template if:true={showDiv3}>
+    <button class="toastmsgclose" title="Close" onclick={closetstfollow}>
+      X
+    </button>
+    <div class="toastmsg">
+      <img data-scroll-target class="img" src={deletetoast} />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <p class="flwtoastmsg">You started following {usename}.</p>
+    </div>
+  </template>
+  <!-- To display ToastMessage after UnFollow the User for Emoji -->
+  <template if:true={showDiv4}>
+    <button class="toastmsgclose" title="Close" onclick={closetstunflw}>
+      X
+    </button>
+    <div class="toastmsg">
+      <img data-scroll-target class="img" src={deletetoast} />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <p class="flwtoastmsg">You unfollowed {usename} successfully.</p>
+    </div>
+  </template>
+  <div data-it-uid={userId} class="head">
+    <!-- This is the whole div includes leftside(avatar image and avatar content) and leftside(Posts)  -->
+    <div class="row">
+      <div class="leftside">
+        <img src={loggedUserAvatar} class="avatarimg" />
+        <br />
+        <div class="avatarcontent">
+          <p class="avatartext">
+            This is the patient community forum! Create posts, react and
+            comment, connect with others and build a supportive community in
+            your health journey.
+          </p>
+        </div>
+      </div>
+      <!-- This line is for mobile responsiveness based on the figma -->
+      <hr class="forMblresponse" />
+      <!-- To display ToastMessage after deleting the Comment only for mobile responsiveness -->
+      <template if:true={showdeletetoastmsg}>
+        <div class="toastmsgformobile">
+          <img src={deletetoast} class="deletetoastimg" />
+          <p class="tstmsg">Comment deleted succesfully.</p>
+          <button
+            class="toastmsgcloseformbl"
+            title="Close"
+            onclick={closetoastmsg}
+          >
+            &times;
+          </button>
+        </div>
+      </template>
+      <!-- To display ToastMessage after follow the User only for mobile responsiveness -->
+      <template if:true={showDiv}>
+        <div class="toastmsgformobile">
+          <img src={deletetoast} class="deletetoastimg" />
+          <p class="flwtoastmsg">You started following {username}.</p>
+          <button
+            class="toastmsgcloseformbl"
+            title="Close"
+            onclick={closetstfollow}
+          >
+            &times;
+          </button>
+        </div>
+        <!-- To display ToastMessage after Unfollow the User only for mobile responsiveness --> </template
+      ><template if:true={showDiv2}>
+        <div class="toastmsgformobile">
+          <img src={deletetoast} class="deletetoastimg" />
+
+          <p class="flwtoastmsg">You unfollowed {username} successfully.</p>
+
+          <button
+            class="toastmsgcloseformbl"
+            title="Close"
+            onclick={closetstunflw}
+          >
+            &times;
+          </button>
+        </div>
+      </template>
+      <div class="rightside">
+        <div class="bodyclr">
+          <br />
+          <!-- Allpost Title and Create Post button -->
+          <p data-scroll-target class="allpost">All Posts</p>
+          <button
+            class="allpostbtn"
+            onclick={goToCreatepost}
+            data-it-button="allpost: reate New Post"
+          >
+            Create New Post
+          </button>
+          <br />
+          <!-- if None of the user haven't created a post yet (post created by the users are 0) display this content -->
+          <template if:false={showallpost}>
+            <div class="allpostNone">
+              <img src={allpostimg} class="postimage" />
+              <p class="allpostmsg">
+                Welcome to the patient community forum! You don’t have any posts
+                at the moment. Share your thoughts and experiences with the
+                community by creating a new post
+              </p>
+              <br /><br />
+            </div>
+          </template>
+          <!-- To display all the posts created by the user -->
+          <template if:true={showallpost}>
+            <template for:each={allpost} for:item="allposts">
+              <div key={allposts.Id} class={allposts.Id}>
+                <div class="postcontainer">
+                  <!-- Title of the post  -->
+                  <div class="post-header">
+                    <p class="category">{allposts.BI_PSP_Category__c }</p>
+                    <br />
+                    <!-- when User clicks the profile/username show the follow/following popup  -->
+                    <img
+                      src={allposts.imageavatar}
+                      data-it-button="allpost: PostAvatar(Profile)"
+                      class="profileavatar"
+                      onclick={followUserpop}
+                      data-custom-feeditem-id={allposts.Id}
+                      data-button={allposts.btnchk}
+                      data-id={allposts.BI_PSP_AccountR__c}
+                      data-username={allposts.BI_PSP_AccountR__r.BI_PSP_CommunityUsername__c}
+                      data-acc={allposts.BI_PSP_AccountR__c}
+                      data-avatar={allposts.imageavatar}
+                    />
+                    <p
+                      class="username"
+                      onclick={followUserpop}
+                      data-it-button="allpost: PostAvatar(Username)"
+                      data-button={allposts.btnchk}
+                      data-id={allposts.BI_PSP_AccountR__c}
+                      data-username={allposts.BI_PSP_AccountR__r.BI_PSP_CommunityUsername__c}
+                      data-acc={allposts.BI_PSP_AccountR__c}
+                      data-avatar={allposts.imageavatar}
+                    >
+                      {allposts.postYouName}
+                    </p>
+                    <br />
+                    <!-- Date when the Post was created -->
+                    <p class="time">{allposts.formattedTimeDifference}</p>
+                    <!-- Follow/Following  button-->
+                    <!-- If the user clciks the button show the popup for follow/unfollow -->
+                    <template if:true={allposts.youbtn}>
+                      <button
+                        class={allposts.btnchk}
+                        data-it-button="allpost: Follow/Following Button"
+                        onclick={buttonfollowUserpop}
+                        data-button={allposts.btnchk}
+                        data-id={allposts.BI_PSP_AccountR__c}
+                        data-username={allposts.BI_PSP_AccountR__r.BI_PSP_CommunityUsername__c}
+                        data-acc={allposts.BI_PSP_AccountR__c}
+                        data-avatar={allposts.imageavatar}
+                      >
+                        {allposts.btnchk}
+                      </button>
+                    </template>
+                    <!-- follow profile popup -->
+                    <template if:true={followpopup}>
+                      <div class="backforpost">
+                        <div class="follow-profile-container">
+                          <p class="profile">Profile</p>
+                          <button
+                            onclick={closePopup}
+                            data-it-button="AllPost: Close Follow "
+                            class="times3"
+                          >
+                            X
+                          </button>
+                          <div class="imgname">
+                            <img src={avatr} class="popavatar" />
+                            <p class="username123">{username}</p>
+                          </div>
+                          <button
+                            class="popupbutton"
+                            data-it-button="allpost: Follow Popup"
+                            onclick={handleFollowPopupButtonClick}
+                          >
+                            Follow
+                          </button>
+                        </div>
+                      </div>
+                    </template>
+                    <!-- follow confirmation popup -->
+                    <template if:true={followpopup2}>
+                      <div class="backforpost">
+                        <div class="follow-popup-container second">
+                          <button
+                            onclick={closePopup}
+                            data-it-button="AllPost: Close UnFollow "
+                            class="times2follow"
+                          >
+                            X
+                          </button>
+                          <p class="popuptitle">Follow User?<br /></p>
+                          <div>
+                            <p class="popupcontent second">
+                              Are you sure you want to follow {username}?<br /><br />
+                            </p>
+                          </div>
+                          <div>
+                            <p class="popupcontent four">
+                              You'll now receive notifications whenever this
+                              user creates a new post. You can always change
+                              your notification preferences in your profile
+                              settings.
+                            </p>
+                          </div>
+                          <button
+                            class="follownonly"
+                            data-it-button="allpost: Follow Confirmation-No"
+                            onclick={closePopup}
+                          >
+                            No
+                          </button>
+                          <button
+                            class="followyes1"
+                            onclick={Followyes}
+                            data-it-button="allpost: Follow Confirmation-Yes"
+                          >
+                            Yes
+                          </button>
+                        </div>
+                      </div>
+                    </template>
+                    <!-- unfollow profile popup -->
+                    <template if:true={followingpopup}>
+                      <div class="backforpost">
+                        <div class="follow-profile-container">
+                          <p class="profile">Profile</p>
+                          <button
+                            onclick={closePopup}
+                            data-it-button="AllPost: Close Follow "
+                            class="times3"
+                          >
+                            X
+                          </button>
+                          <div class="imgname">
+                            <img src={avatr} class="popavatar" />
+                            <p class="username123">{username}</p>
+                          </div>
+                          <button
+                            class="popupbuttonfollowing"
+                            data-it-button="allpost: Following Popup"
+                            onclick={handleFollowingPopupButtonClick}
+                          >
+                            Following
+                          </button>
+                        </div>
+                      </div>
+                    </template>
+                    <!-- unfollow confirmation popup -->
+                    <template if:true={followingpopup2}>
+                      <div class="backforpost">
+                        <div class="following-popup-container">
+                          <button
+                            onclick={closePopup}
+                            data-it-button="AllPost: Close UnFollow "
+                            class="times2"
+                          >
+                            X
+                          </button>
+                          <p class="emojifollowingpopuptitle">
+                            Unfollow User?<br />
+                          </p>
+                          <div>
+                            <p class="popupcontent second">
+                              Are you sure you want to unfollow {username}?<br /><br />
+                            </p>
+                          </div>
+                          <div>
+                            <p class="popupcontent third">
+                              You'll no longer receive notifications whenever
+                              this user creates a new post.
+                            </p>
+                          </div>
+                          <div class="unfollowFlexContainer">
+                            <button
+                              class="followno btn"
+                              onclick={closePopup}
+                              data-it-button="allpost: Unfollow Confirmation-No"
+                            >
+                              No
+                            </button>
+                            <button
+                              class="followyes btn2"
+                              onclick={UnFollowingyes}
+                              data-it-button="allpost: Unfollow Confirmation-No"
+                            >
+                              Yes
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                    <!-- Post body -->
+                  </div>
+                  <div class="post-content">
+                    <p class="postbody">{allposts.BI_PSP_Phrase__c}</p>
+                    <br /><br />
+                    <!-- View Reaction button with total reaction count if the User clicks, it will show username of whoever reacted to the post -->
+                    <div class="totalReactoioncomment">
+                      <p
+                        data-custom-feeditem-id={allposts.Id}
+                        onclick={viewReaction}
+                        class="totalreaction"
+                        data-it-button="allpost: View Reactions"
+                      >
+                        {allposts.CountEmoji} Reactions
+                      </p>
+                      <!-- Total Comment Count of the Post if the user clicks ,it shows the comments -->
+                      <span
+                        class="totalcomment"
+                        data-custom-feeditem-title={allposts.BI_PSP_Category__c}
+                        data-custom-feeditem-body={allposts.BI_PSP_Phrase__c}
+                        data-custom-feeditem-id={allposts.Id}
+                        data-it-button="allpost: ViewComments"
+                        onclick={commentbtn}
+                        >{allposts.displayhide} {allposts.CommentCount} Comments
+                      </span>
+                      <hr class="lineforcomment" />
+                    </div>
+                    <!-- This popup is used to display the Usernames,whoever reacted to the post with specific emojis -->
+                    <template if:true={allposts.secondPopupClass}>
+                      <div class={allposts.secondPopupClass}>
+                        <!-- Background blur -->
+                        <div class="popupbgblur">
+                          <!-- White Box Popup  -->
+                          <div class="popup-content second-popup">
+                            <!-- Close Icon for close the Reaction Popup -->
+                            <button
+                              class="timesemoji"
+                              title="Close"
+                              data-it-button="allpost: ViewReaction Close "
+                              onclick={closeSecondPopup}
+                            >
+                              X
+                            </button>
+                            <h1 class="reactiontext">Reactions</h1>
+                            <br />
+                            <!-- All Emoji Button if the User click the emoji , it shows the Username who reacted to that post -->
+                            <div class="mypostemoji-buttons">
+                              <br />
+                              <div
+                                class="emoji-button"
+                                onclick={showTemplatethumbsup}
+                              >
+                                <img
+                                  src={imgThumbs}
+                                  class="viewreactionthumbsimg"
+                                />
+                                <p
+                                  class={emojitext}
+                                  onclick={showTemplatethumbsup}
+                                  data-emoji="thumbsup"
+                                  data-it-button="allpost: ViewReaction - ThumbsUp"
+                                >
+                                  Thumbs up
+                                </p>
+                              </div>
+                              <br />
+                              <div
+                                class="emoji-button"
+                                onclick={showTemplatesmile}
+                              >
+                                <img
+                                  src={imgSmile}
+                                  class="viewreactionsmileimg"
+                                />
+                                <p
+                                  class={emojitext1}
+                                  onclick={showTemplatesmile}
+                                  data-emoji="smile"
+                                  data-it-button="allpost: ViewReaction - Smile"
+                                >
+                                  Smile
+                                </p>
+                              </div>
+                              <div
+                                class="emoji-button"
+                                onclick={showTemplatefoldedhands}
+                              >
+                                <img
+                                  src={imgHands}
+                                  class="viewreactionhandsfoldedimg"
+                                />
+                                <p
+                                  class={emojitext2}
+                                  onclick={showTemplatefoldedhands}
+                                  data-emoji="foldedhands"
+                                  data-it-button="allpost: ViewReaction - Hands Folded"
+                                >
+                                  Hands Folded
+                                </p>
+                              </div>
+                              <br />
+                              <div
+                                class="emoji-button"
+                                onclick={showTemplateheart}
+                              >
+                                <img src={imgLike} />
+                                <p
+                                  class={emojitext3}
+                                  onclick={showTemplateheart}
+                                  data-emoji="heart"
+                                  data-it-button="allpost: ViewReaction - Heart"
+                                >
+                                  Heart
+                                </p>
+                              </div>
+                              <div
+                                class="emoji-button"
+                                onclick={showTemplatethinkingface}
+                              >
+                                <img
+                                  src={imgThought}
+                                  class="viewreactionthoughtimg"
+                                />
+                                <p
+                                  class={emojitext4}
+                                  onclick={showTemplatethinkingface}
+                                  data-emoji="thinkingface"
+                                  data-it-button="allpost: ViewReaction - Thoughtful"
+                                >
+                                  Thoughtful
+                                </p>
+                              </div>
+                            </div>
+                            <!-- If there is no reaction for that Emoji show this template -->
+                            <div class="reactedusers">
+                              <template if:true={noreactionforthisemoji}>
+                                <img src={NoComment} class="NoCommentImage" />
+                                <p class="noreacteduser">No reactions yet!</p>
+                                <br />
+                                <br />
+                              </template>
+                              <!-- If there are users reacted to the post with that Emoji -->
+                              <div
+                                if:true={displayTemplatethumbsup}
+                                class="reactedusers reactscroll"
+                              >
+                                <template if:true={displayTemplatethumbsup}>
+                                  <template
+                                    for:each={getthumbsup}
+                                    for:item="thumbsup"
+                                  >
+                                    <div
+                                      key={thumbsup.Id}
+                                      class="avatarImgandReactedUsercompress"
+                                    >
+                                      <br />
+                                      <div class="avatarImgandReactedUser">
+                                        <img
+                                          src={thumbsup.avatarDataforreaction}
+                                          data-it-button="allpost: ReactionAvatar(Profile) - ThumbsUp"
+                                          class="emojiprofile"
+                                          onclick={follorunfollemoji}
+                                          data-accid={thumbsup.BI_PSP_AccountE__c}
+                                          data-name={thumbsup.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={thumbsup.avatarDataforreaction}
+                                        />
+                                        <p
+                                          class="emojiusername"
+                                          data-it-button="allpost: ReactionAvatar(Username) - ThumbsUp"
+                                          onclick={follorunfollemoji}
+                                          data-accid={thumbsup.BI_PSP_AccountE__c}
+                                          data-name={thumbsup.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={thumbsup.avatarDataforreaction}
+                                        >
+                                          {thumbsup.reactionyouname}
+                                        </p>
+                                        <hr class="linereactions" />
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <!-- Show the Popup if the user click the Username /Avatar of other Users -->
+                                  <template if:true={emifollow}>
+                                    <div class="back">
+                                      <div class="follow-profile-container">
+                                        <p class="emojiprofilepop">Profile</p>
+                                        <button
+                                          onclick={emojiclosePopup}
+                                          data-it-button="AllPost: Close Follow "
+                                          class="times3"
+                                        >
+                                          X
+                                        </button>
+                                        <img
+                                          src={avtvarfor}
+                                          class="popavatar"
+                                        />
+                                        <p class="username123">{usename}</p>
+                                        <button
+                                          class="popupbutton secon"
+                                          onclick={emojiFollowPopupButtonClick}
+                                        >
+                                          Follow
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <template if:true={emojifollowpopup2}>
+                                    <div class="back">
+                                      <div class="follow-popup-container">
+                                        <button
+                                          onclick={emojiclosePopup}
+                                          data-it-button="AllPost: Close Follow "
+                                          class="times2follow"
+                                        >
+                                          X
+                                        </button>
+                                        <p class="popuptitle">
+                                          Follow User?<br />
+                                        </p>
+                                        <div>
+                                          <p class="popupcontent second">
+                                            Are you sure you want to follow
+                                            {usename}?<br /><br />
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <p class="popupcontent four">
+                                            You'll now receive notifications
+                                            whenever this user creates a new
+                                            post. You can always change your
+                                            notification preferences in your
+                                            profile settings.
+                                          </p>
+                                        </div>
+                                        <button
+                                          class="follownonly five"
+                                          onclick={emojiclosePopup}
+                                          data-it-button="AllPost:  Follow No "
+                                        >
+                                          No
+                                        </button>
+                                        <button
+                                          class="followyes1 five"
+                                          onclick={emojiFollowyes}
+                                          data-it-button="AllPost:  Follow Yes"
+                                        >
+                                          Yes
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <template if:true={emojifollowing}>
+                                    <div class="back">
+                                      <div class="follow-profile-container">
+                                        <p class="emojiprofilepop">Profile</p>
+                                        <button
+                                          onclick={emojiclosePopup}
+                                          data-it-button="AllPost: Close UnFollow "
+                                          class="times3"
+                                        >
+                                          X
+                                        </button>
+                                        <img
+                                          src={avtvarfor}
+                                          class="popavatar"
+                                        />
+                                        <p class="username123">{usename}</p>
+                                        <button
+                                          class="popupbuttonfollowing firs"
+                                          data-it-button="AllPost:  UnFollow "
+                                          onclick={emojiFollowingPopupButtonClick}
+                                        >
+                                          Following
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <template if:true={emojifollowingpopup2}>
+                                    <div class="back">
+                                      <div class="following-popup-container">
+                                        <button
+                                          onclick={emojiclosePopup}
+                                          data-it-button="AllPost: Close UnFollow "
+                                          class="times2"
+                                        >
+                                          X
+                                        </button>
+                                        <p
+                                          class="popleft emojifollowingpopuptitle"
+                                        >
+                                          Unfollow User?<br />
+                                        </p>
+                                        <div>
+                                          <div>
+                                            <p class="popupcontent second">
+                                              Are you sure you want to unfollow
+                                              {usename}?<br /><br />
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <p class="popupcontent third">
+                                              You'll no longer receive
+                                              notifications whenever this user
+                                              creates a new post.
+                                            </p>
+                                          </div>
+                                          <div class="unfollowFlexContainer">
+                                            <button
+                                              class="followno unflwpad"
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost:  UnFollow No "
+                                            >
+                                              No
+                                            </button>
+                                            <button
+                                              class="followyes unflwpad"
+                                              onclick={emojiUnFollowingyes}
+                                              data-it-button="AllPost:  UnFollow Yes"
+                                            >
+                                              Yes
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </template>
+                                </template>
+                              </div>
+                              <div
+                                if:true={displayTemplatesmile}
+                                class="reactedusers reactscroll"
+                              >
+                                <template if:true={displayTemplatesmile}>
+                                  <template
+                                    for:each={getsmile}
+                                    for:item="smile"
+                                  >
+                                    <div
+                                      key={smile.Id}
+                                      class="avatarImgandReactedUsercompress"
+                                    >
+                                      <br />
+                                      <div class="avatarImgandReactedUser">
+                                        <img
+                                          src={smile.avatarDataforreaction}
+                                          data-it-button="allpost: ReactionAvatar(Profile) - Smile"
+                                          class="emojiprofile"
+                                          onclick={follorunfollemoji}
+                                          data-accid={smile.BI_PSP_AccountE__c}
+                                          data-name={smile.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={smile.avatarDataforreaction}
+                                        />
+                                        <p
+                                          class="emojiusername"
+                                          data-it-button="allpost: ReactionAvatar(Username) - Smile"
+                                          onclick={follorunfollemoji}
+                                          data-accid={smile.BI_PSP_AccountE__c}
+                                          data-name={smile.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={smile.avatarDataforreaction}
+                                        >
+                                          {smile.reactionyouname}
+                                        </p>
+                                        <hr class="linereactions" />
+                                      </div>
+                                      <template if:true={emifollow}>
+                                        <div class="back">
+                                          <div class="follow-profile-container">
+                                            <p class="emojiprofilepop">
+                                              Profile
+                                            </p>
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              class="times3"
+                                              data-it-button="AllPost: Close Follow "
+                                            >
+                                              X
+                                            </button>
+                                            <img
+                                              src={avtvarfor}
+                                              class="popavatar"
+                                            />
+                                            <p class="username123">{usename}</p>
+                                            <button
+                                              class="popupbutton secon"
+                                              onclick={emojiFollowPopupButtonClick}
+                                            >
+                                              Follow
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+                                      <template if:true={emojifollowpopup2}>
+                                        <div class="back">
+                                          <div class="follow-popup-container">
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close Follow "
+                                              class="times2follow"
+                                            >
+                                              X
+                                            </button>
+
+                                            <p class="popuptitle">
+                                              Follow User?<br />
+                                            </p>
+                                            <div>
+                                              <p class="popupcontent second">
+                                                Are you sure you want to follow
+                                                {usename}?<br /><br />
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <p class="popupcontent four">
+                                                You'll now receive notifications
+                                                whenever this user creates a new
+                                                post. You can always change your
+                                                notification preferences in your
+                                                profile settings.
+                                              </p>
+                                            </div>
+                                            <button
+                                              class="follownonly five"
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost:  Follow No "
+                                            >
+                                              No
+                                            </button>
+                                            <button
+                                              class="followyes1 five"
+                                              onclick={emojiFollowyes}
+                                              data-it-button="AllPost:  Follow Yes "
+                                            >
+                                              Yes
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+                                      <template if:true={emojifollowing}>
+                                        <div class="back">
+                                          <div class="follow-profile-container">
+                                            <p class="emojiprofilepop">
+                                              Profile
+                                            </p>
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close UnFollow "
+                                              class="times3"
+                                            >
+                                              X
+                                            </button>
+                                            <img
+                                              src={avtvarfor}
+                                              class="popavatar"
+                                            />
+                                            <p class="username123">{usename}</p>
+                                            <button
+                                              class="popupbuttonfollowing firs"
+                                              onclick={emojiFollowingPopupButtonClick}
+                                            >
+                                              Following
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+                                      <template if:true={emojifollowingpopup2}>
+                                        <div class="back">
+                                          <div
+                                            class="following-popup-container"
+                                          >
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close UnFollow "
+                                              class="times2"
+                                            >
+                                              X
+                                            </button>
+                                            <p
+                                              class="emojifollowingpopuptitle popleft"
+                                            >
+                                              Unfollow User?<br />
+                                            </p>
+                                            <div>
+                                              <p class="popupcontent second">
+                                                Are you sure you want to
+                                                unfollow {usename}?<br /><br />
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <p class="popupcontent third">
+                                                You'll no longer receive
+                                                notifications whenever this user
+                                                creates a new post.
+                                              </p>
+                                            </div>
+                                            <div class="unfollowFlexContainer">
+                                              <button
+                                                class="followno unflwpad"
+                                                onclick={emojiclosePopup}
+                                                data-it-button="AllPost:  UnFollow No "
+                                              >
+                                                No
+                                              </button>
+                                              <button
+                                                class="followyes unflwpad"
+                                                onclick={emojiUnFollowingyes}
+                                                data-it-button="AllPost:  UnFollow Yes"
+                                              >
+                                                Yes
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </template>
+                                    </div>
+                                  </template>
+                                </template>
+                              </div>
+                              <div
+                                if:true={displayTemplatefoldedhands}
+                                class="reactedusers reactscroll"
+                              >
+                                <template if:true={displayTemplatefoldedhands}>
+                                  <template
+                                    for:each={getfoldedhands}
+                                    for:item="foldedhands"
+                                  >
+                                    <div
+                                      key={foldedhands.Id}
+                                      class="avatarImgandReactedUsercompress"
+                                    >
+                                      <br />
+                                      <div class="avatarImgandReactedUser">
+                                        <img
+                                          src={foldedhands.avatarDataforreaction}
+                                          data-it-button="allpost: ReactionAvatar(Profile) - HandsFolded"
+                                          class="emojiprofile"
+                                          onclick={follorunfollemoji}
+                                          data-accid={foldedhands.BI_PSP_AccountE__c}
+                                          data-name={foldedhands.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={foldedhands.avatarDataforreaction}
+                                        />
+                                        <p
+                                          class="emojiusername"
+                                          data-it-button="allpost: ReactionAvatar(Username) - HandsFolded"
+                                          onclick={follorunfollemoji}
+                                          data-accid={foldedhands.BI_PSP_AccountE__c}
+                                          data-name={foldedhands.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={foldedhands.avatarDataforreaction}
+                                        >
+                                          {foldedhands.reactionyouname}
+                                        </p>
+                                        <hr class="linereactions" />
+                                      </div>
+                                      <template if:true={emifollow}>
+                                        <div class="back">
+                                          <div class="follow-profile-container">
+                                            <p class="emojiprofilepop">
+                                              Profile
+                                            </p>
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close Follow "
+                                              class="times3"
+                                            >
+                                              X
+                                            </button>
+                                            <img
+                                              src={avtvarfor}
+                                              class="popavatar"
+                                            />
+                                            <p class="username123">{usename}</p>
+                                            <button
+                                              class="popupbutton secon"
+                                              onclick={emojiFollowPopupButtonClick}
+                                            >
+                                              Follow
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+                                      <template if:true={emojifollowpopup2}>
+                                        <div class="back">
+                                          <div class="follow-popup-container">
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close Follow "
+                                              class="times2follow"
+                                            >
+                                              X
+                                            </button>
+                                            <p class="popuptitle">
+                                              Follow User?<br />
+                                            </p>
+                                            <div>
+                                              <p class="popupcontent second">
+                                                Are you sure you want to follow
+                                                {usename}?<br /><br />
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <p class="popupcontent four">
+                                                You'll now receive notifications
+                                                whenever this user creates a new
+                                                post. You can always change your
+                                                notification preferences in your
+                                                profile settings.
+                                              </p>
+                                            </div>
+                                            <button
+                                              class="follownonly five"
+                                              onclick={emojiclosePopup}
+                                            >
+                                              No
+                                            </button>
+                                            <button
+                                              class="followyes1 five"
+                                              onclick={emojiFollowyes}
+                                            >
+                                              Yes
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+                                      <template if:true={emojifollowing}>
+                                        <div class="back">
+                                          <div class="follow-profile-container">
+                                            <p class="emojiprofilepop">
+                                              Profile
+                                            </p>
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              class="times3"
+                                              data-it-button="AllPost: Close UnFollow "
+                                            >
+                                              X
+                                            </button>
+                                            <img
+                                              src={avtvarfor}
+                                              class="popavatar"
+                                            />
+                                            <p class="username123">{usename}</p>
+                                            <button
+                                              class="popupbuttonfollowing firs"
+                                              onclick={emojiFollowingPopupButtonClick}
+                                            >
+                                              Following
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+                                      <template if:true={emojifollowingpopup2}>
+                                        <div class="back">
+                                          <div
+                                            class="following-popup-container"
+                                          >
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close UnFollow "
+                                              class="times2"
+                                            >
+                                              X
+                                            </button>
+                                            <p
+                                              class="emojifollowingpopuptitle popleft"
+                                            >
+                                              Unfollow User?<br />
+                                            </p>
+                                            <div>
+                                              <p class="popupcontent second">
+                                                Are you sure you want to
+                                                unfollow {usename}?<br /><br />
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <p class="popupcontent third">
+                                                You'll no longer receive
+                                                notifications whenever this user
+                                                creates a new post.
+                                              </p>
+                                            </div>
+                                            <div class="unfollowFlexContainer">
+                                              <button
+                                                class="followno unflwpad"
+                                                onclick={emojiclosePopup}
+                                              >
+                                                No
+                                              </button>
+                                              <button
+                                                class="followyes unflwpad"
+                                                onclick={emojiUnFollowingyes}
+                                              >
+                                                Yes
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </template>
+                                    </div>
+                                  </template>
+                                </template>
+                              </div>
+                              <div
+                                if:true={displayTemplateheart}
+                                class="reactedusers reactscroll"
+                              >
+                                <template if:true={displayTemplateheart}>
+                                  <template
+                                    for:each={getheart}
+                                    for:item="heart"
+                                  >
+                                    <div
+                                      key={heart.Id}
+                                      class="avatarImgandReactedUsercompress"
+                                    >
+                                      <br />
+                                      <div class="avatarImgandReactedUser">
+                                        <img
+                                          src={heart.avatarDataforreaction}
+                                          data-it-button="allpost: ReactionAvatar(Profile) - Heart"
+                                          class="emojiprofile"
+                                          onclick={follorunfollemoji}
+                                          data-accid={heart.BI_PSP_AccountE__c}
+                                          data-name={heart.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={heart.avatarDataforreaction}
+                                        />
+                                        <p
+                                          class="emojiusername"
+                                          data-it-button="allpost: ReactionAvatar(Username) - Heart"
+                                          onclick={follorunfollemoji}
+                                          data-accid={heart.BI_PSP_AccountE__c}
+                                          data-name={heart.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={heart.avatarDataforreaction}
+                                        >
+                                          {heart.reactionyouname}
+                                        </p>
+                                        <hr class="linereactions" />
+                                      </div>
+                                      <template if:true={emifollow}>
+                                        <div class="back">
+                                          <div class="follow-profile-container">
+                                            <p class="emojiprofilepop">
+                                              Profile
+                                            </p>
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close Follow "
+                                              class="times3"
+                                            >
+                                              X
+                                            </button>
+                                            <img
+                                              src={avtvarfor}
+                                              class="popavatar"
+                                            />
+                                            <p class="username123">{usename}</p>
+                                            <button
+                                              class="popupbutton secon"
+                                              onclick={emojiFollowPopupButtonClick}
+                                            >
+                                              Follow
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+
+                                      <template if:true={emojifollowpopup2}>
+                                        <div class="back">
+                                          <div class="follow-popup-container">
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close Follow "
+                                              class="times2follow"
+                                            >
+                                              X
+                                            </button>
+                                            <p class="popuptitle">
+                                              Follow User?<br />
+                                            </p>
+                                            <div>
+                                              <p class="popupcontent second">
+                                                Are you sure you want to follow
+                                                {usename}?<br /><br />
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <p class="popupcontent four">
+                                                You'll now receive notifications
+                                                whenever this user creates a new
+                                                post. You can always change your
+                                                notification
+                                                <br />preferences in your
+                                                profile settings.
+                                              </p>
+                                            </div>
+                                            <button
+                                              class="follownonly five"
+                                              onclick={emojiclosePopup}
+                                            >
+                                              No
+                                            </button>
+                                            <button
+                                              class="followyes1 five"
+                                              onclick={emojiFollowyes}
+                                            >
+                                              Yes
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+
+                                      <template if:true={emojifollowing}>
+                                        <div class="back">
+                                          <div class="follow-profile-container">
+                                            <p class="emojiprofilepop">
+                                              Profile
+                                            </p>
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              class="times3"
+                                            >
+                                              X
+                                            </button>
+                                            <img
+                                              src={avtvarfor}
+                                              class="popavatar"
+                                            />
+                                            <p class="username123">{usename}</p>
+                                            <button
+                                              class="popupbuttonfollowing firs"
+                                              onclick={emojiFollowingPopupButtonClick}
+                                            >
+                                              Following
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+
+                                      <template if:true={emojifollowingpopup2}>
+                                        <div class="back">
+                                          <div
+                                            class="following-popup-container"
+                                          >
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close UnFollow "
+                                              class="times2"
+                                            >
+                                              X
+                                            </button>
+                                            <p
+                                              class="emojifollowingpopuptitle popleft"
+                                            >
+                                              Unfollow User?<br />
+                                            </p>
+                                            <div>
+                                              <p class="popupcontent second">
+                                                Are you sure you want to
+                                                unfollow {usename}?<br /><br />
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <p class="popupcontent third">
+                                                You'll no longer receive
+                                                notifications whenever this user
+                                                creates a new post.
+                                              </p>
+                                            </div>
+                                            <div class="unfollowFlexContainer">
+                                              <button
+                                                class="followno unflwpad"
+                                                onclick={emojiclosePopup}
+                                              >
+                                                No
+                                              </button>
+                                              <button
+                                                class="followyes unflwpad"
+                                                onclick={emojiUnFollowingyes}
+                                              >
+                                                Yes
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </template>
+                                    </div>
+                                  </template>
+                                </template>
+                              </div>
+                              <div
+                                if:true={displayTemplatethinkingface}
+                                class="reactedusers reactscroll"
+                              >
+                                <template if:true={displayTemplatethinkingface}>
+                                  <template
+                                    for:each={getthinkingface}
+                                    for:item="thinkingface"
+                                  >
+                                    <div
+                                      key={thinkingface.Id}
+                                      class="avatarImgandReactedUsercompress"
+                                    >
+                                      <br />
+                                      <div class="avatarImgandReactedUser">
+                                        <img
+                                          src={thinkingface.avatarDataforreaction}
+                                          data-it-button="allpost: ReactionAvatar(Profile) - Thoughtful"
+                                          class="emojiprofile"
+                                          onclick={follorunfollemoji}
+                                          data-accid={thinkingface.BI_PSP_AccountE__c}
+                                          data-name={thinkingface.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={thinkingface.avatarDataforreaction}
+                                        />
+                                        <p
+                                          class="emojiusername"
+                                          onclick={follorunfollemoji}
+                                          data-it-button="allpost: ReactionAvatar(Username) - Thoughtful"
+                                          data-accid={thinkingface.BI_PSP_AccountE__c}
+                                          data-name={thinkingface.BI_PSP_AccountE__r.BI_PSP_CommunityUsername__c}
+                                          data-avat={thinkingface.avatarDataforreaction}
+                                        >
+                                          {thinkingface.reactionyouname}
+                                        </p>
+                                        <hr class="linereactions" />
+                                      </div>
+                                      <template if:true={emifollow}>
+                                        <div class="back">
+                                          <div class="follow-profile-container">
+                                            <p class="emojiprofilepop">
+                                              Profile
+                                            </p>
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close Follow "
+                                              class="times3"
+                                            >
+                                              X
+                                            </button>
+                                            <img
+                                              src={avtvarfor}
+                                              class="popavatar"
+                                            />
+                                            <p class="username123">{usename}</p>
+                                            <button
+                                              class="popupbutton secon"
+                                              onclick={emojiFollowPopupButtonClick}
+                                            >
+                                              Follow
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+
+                                      <template if:true={emojifollowpopup2}>
+                                        <div class="back">
+                                          <div class="follow-popup-container">
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close Follow "
+                                              class="times2follow"
+                                            >
+                                              X
+                                            </button>
+                                            <p class="popuptitle">
+                                              Follow User?<br />
+                                            </p>
+                                            <div>
+                                              <p class="popupcontent second">
+                                                Are you sure you want to follow
+                                                {usename}?<br /><br />
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <p class="popupcontent four">
+                                                You'll now receive notifications
+                                                whenever this user creates a new
+                                                post. You can always change your
+                                                notification
+                                                <br />preferences in your
+                                                profile settings.
+                                              </p>
+                                            </div>
+                                            <button
+                                              class="follownonly five"
+                                              onclick={emojiclosePopup}
+                                            >
+                                              No
+                                            </button>
+                                            <button
+                                              class="followyes1 five"
+                                              onclick={emojiFollowyes}
+                                            >
+                                              Yes
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+
+                                      <template if:true={emojifollowing}>
+                                        <div class="back">
+                                          <div class="follow-profile-container">
+                                            <p class="emojiprofilepop">
+                                              Profile
+                                            </p>
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close UnFollow "
+                                              class="times3"
+                                            >
+                                              X
+                                            </button>
+                                            <img
+                                              src={avtvarfor}
+                                              class="popavatar"
+                                            />
+                                            <p class="username123">{usename}</p>
+                                            <button
+                                              class="popupbuttonfollowing firs"
+                                              onclick={emojiFollowingPopupButtonClick}
+                                            >
+                                              Following
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </template>
+
+                                      <template if:true={emojifollowingpopup2}>
+                                        <div class="back">
+                                          <div
+                                            class="following-popup-container"
+                                          >
+                                            <button
+                                              onclick={emojiclosePopup}
+                                              data-it-button="AllPost: Close UnFollow "
+                                              class="times2"
+                                            >
+                                              X
+                                            </button>
+                                            <p
+                                              class="emojifollowingpopuptitle popleft"
+                                            >
+                                              Unfollow User?<br />
+                                            </p>
+                                            <div>
+                                              <p class="popupcontent second">
+                                                Are you sure you want to
+                                                unfollow {usename}?<br /><br />
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <p class="popupcontent third">
+                                                You'll no longer receive
+                                                notifications whenever this user
+                                                creates a new post.
+                                              </p>
+                                            </div>
+                                            <div class="unfollowFlexContainer">
+                                              <button
+                                                class="followno unflwpad"
+                                                onclick={emojiclosePopup}
+                                              >
+                                                No
+                                              </button>
+                                              <button
+                                                class="followyes unflwpad"
+                                                onclick={emojiUnFollowingyes}
+                                              >
+                                                Yes
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </template>
+                                    </div>
+                                  </template>
+                                </template>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                    <!-- If the user clicks the React Button it shows the popover with Emoji to react For the Post -->
+                    <div if:true={allposts.showEmojiPopup}>
+                      <div
+                        class="slds-popover slds-popover_tooltip slds-nubbin_bottom emoji-container"
+                      >
+                        <span
+                          class="emoji"
+                          data-reaction-type="1"
+                          data-it-button="allpost: React - ThumbsUp"
+                          data-custom-feeditem-id={allposts.Id}
+                          onclick={reactWith}
+                          ><img src={imgThumbs} class="emojthumbs" />
+                          <div class="emoji-popup">Thumbs Up</div>
+                        </span>
+                        <span
+                          class="emoji"
+                          data-reaction-type="2"
+                          data-it-button="allpost: React - Smile"
+                          data-custom-feeditem-id={allposts.Id}
+                          onclick={reactWith}
+                          ><img src={imgSmile} class="emojsmile" />
+                          <div class="emoji-popup1">Smile</div>
+                        </span>
+                        <span
+                          class="emoji"
+                          data-reaction-type="3"
+                          data-it-button="allpost: React - HandsFolded"
+                          data-custom-feeditem-id={allposts.Id}
+                          onclick={reactWith}
+                          ><img src={imgHands} class="emojhands" />
+                          <div class="emoji-popup2">Hands Folded</div>
+                        </span>
+                        <span
+                          class="emoji"
+                          data-reaction-type="4"
+                          data-it-button="allpost: React - Heart"
+                          data-custom-feeditem-id={allposts.Id}
+                          onclick={reactWith}
+                          ><img src={imgLike} class="emojheart" />
+                          <div class="emoji-popup3">Heart</div>
+                        </span>
+                        <span
+                          class="emoji"
+                          data-reaction-type="5"
+                          data-it-button="allpost: React - Thoughtful"
+                          data-custom-feeditem-id={allposts.Id}
+                          onclick={reactWith}
+                          ><img src={imgThought} class="emojthinks" />
+                          <div class="emoji-popup4">Thoughtful</div>
+                        </span>
+                      </div>
+                    </div>
+                    <!-- Show the loading after react/unreact for few seconds -->
+                    <div class="spinner-wrapper" if:true={showSpinner}>
+                      <div class="loader"></div>
+                    </div>
+                    <!-- If the User hasn't react the post show the button with name [React] -->
+                    <div class="btnReactoionComment">
+                      <template if:true={allposts.toreact}>
+                        <button
+                          class="Reactbtn"
+                          onclick={ReactionBtn}
+                          data-it-button="allpost: React "
+                          data-custom-feeditem-id={allposts.Id}
+                        >
+                          React
+                        </button>
+                      </template>
+                      <!-- If the User already react the post show the button with the Emoji of the reaction -->
+                      <template if:false={allposts.toreact}>
+                        <button
+                          class="Reactbtnclicked"
+                          onclick={unreact}
+                          data-it-button="allpost: Reacted"
+                          data-custom-feeditem-id={allposts.Id}
+                        >
+                          <span
+                            >{allposts.emojiyoureacted} &nbsp;
+                            <img
+                              src={allposts.emojiReactedImg}
+                              width="16px"
+                              height="16px"
+                              class="emojiReactedImg"
+                          /></span>
+                        </button>
+                      </template>
+                      <!-- Comment button to show the comments and open the only the clicked button's comment-->
+                      <button
+                        class="commentbtncss"
+                        data-custom-feeditem-title={allposts.BI_PSP_Category__c}
+                        data-custom-feeditem-body={allposts.BI_PSP_Phrase__c}
+                        data-custom-feeditem-id={allposts.Id}
+                        data-it-button="allpost: Comment"
+                        onclick={commentbtn}
+                      >
+                        Comment
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    if:true={allposts.commentbox}
+                    class="commentcontainerbox"
+                  >
+                    <!-- Show if comment button clicked-->
+                    <template if:true={allposts.commentbox}>
+                      <p class="CommentContent">Comments</p>
+                      <p class="selectcomenttext">Select Comment</p>
+                      <img src={loggedUserAvatar} class="commentimage" />
+                      <!-- Dropdown comments based on the category and Phrase -->
+                      <select
+                        onchange={handleCommentChange}
+                        class="dropdowncomments"
+                        data-custom-feeditem-title={allposts.BI_PSP_Category__c}
+                        data-custom-feeditem-body={allposts.BI_PSP_Phrase__c}
+                        data-custom-feeditem-id={allposts.Id}
+                        data-it-button="allpost: Dropdown Comment Option"
+                      >
+                        <!-- Set the First Option as disabled so that we can display it as "Select" otherwise it'll be the First Option by default -->
+                        <option value="" disabled selected hidden>
+                          Select
+                        </option>
+                        <template for:each={commentoption} for:item="option">
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                          <hr key={option.value} />
+                        </template>
+                      </select>
+                      <!-- If there is no comments display this NO comment content-->
+                      <template if:false={getComments}>
+                        <div class="noCommentContainer">
+                          <br />
+                          <img src={NoComment} class="NoCommentImage" />
+                          <p class="noCommentTxt">No Comments Yet!</p>
+                          <br />
+                        </div>
+                        <br />
+                      </template>
+                      <!-- If there is Comments disaplay the Username,date when the comment created and the body of the comment -->
+                      <template if:true={getComments}>
+                        <template
+                          for:each={displaycomment}
+                          for:item="commentitem"
+                        >
+                          <div key={commentitem.Id} class="CommentContainer">
+                            <img
+                              src={commentitem.avatarDataforcomment}
+                              data-it-button="allpost: Comment-Profile(Follow/Unfollow) Popup"
+                              class="viewcommentimage"
+                              onclick={follorunfollemoji}
+                              data-accid={commentitem.BI_PSP_AccountCmt__c}
+                              data-name={commentitem.BI_PSP_AccountCmt__r.BI_PSP_CommunityUsername__c}
+                              data-avat={commentitem.avatarDataforcomment}
+                            />
+                            <div class="oneCommentContainer">
+                              <template
+                                if:true={commentitem.isCurrentUserCommentCreator}
+                              >
+                                <button
+                                  class="threedotbtn"
+                                  onclick={threedotopen}
+                                  data-it-button="allpost: Threedot-MobileView"
+                                  data-custom-feeditem-id={commentitem.Id}
+                                >
+                                  &#8942;
+                                </button>
+                              </template>
+                              <p
+                                class="commentUserName"
+                                data-it-button="allpost: Profile-Username(Follow/Unfollow)Popup"
+                                onclick={follorunfollemoji}
+                                data-accid={commentitem.BI_PSP_AccountCmt__c}
+                                data-name={commentitem.BI_PSP_AccountCmt__r.BI_PSP_CommunityUsername__c}
+                                data-avat={commentitem.avatarDataforcomment}
+                              >
+                                {commentitem.youname}
+                              </p>
+                              <p class="timediff">
+                                {commentitem.formattedTimeDifferenceforcomment}
+                              </p>
+                              <p class="commentBody">
+                                {commentitem.BI_PSP_Comment__c}
+                              </p>
+                              <template if:true={emifollow}>
+                                <div class="backcomment">
+                                  <div class="follow-profile-container">
+                                    <p class="profile">Profile</p>
+                                    <button
+                                      onclick={emojiclosePopup}
+                                      data-it-button="allpost: Follow Popup Close"
+                                      class="times3 closeprofilecmnt"
+                                    >
+                                      X
+                                    </button>
+                                    <div class="imgname">
+                                      <img src={avtvarfor} class="popavatar" />
+                                      <p class="username123">{usename}</p>
+                                    </div>
+                                    <button
+                                      class="popupbutton"
+                                      onclick={emojiFollowPopupButtonClick}
+                                    >
+                                      Follow
+                                    </button>
+                                  </div>
+                                </div>
+                              </template>
+                              <template if:true={emojifollowpopup2}>
+                                <div class="backcomment">
+                                  <div class="follow-popup-container">
+                                    <button
+                                      onclick={emojiclosePopup}
+                                      class="times2follow closeflwcmnt"
+                                    >
+                                      X
+                                    </button>
+                                    <p class="popuptitle">Follow User?<br /></p>
+                                    <div>
+                                      <p class="popupcontent second">
+                                        Are you sure you want to follow
+                                        {usename}?<br /><br />
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p class="popupcontent four">
+                                        You'll now receive notifications
+                                        whenever this user creates a new post.
+                                        You can always change your notification
+                                        preferences in your profile settings.
+                                      </p>
+                                    </div>
+                                    <button
+                                      class="follownonly"
+                                      onclick={emojiclosePopup}
+                                    >
+                                      No
+                                    </button>
+                                    <button
+                                      class="followyes1"
+                                      onclick={emojiFollowyes}
+                                    >
+                                      Yes
+                                    </button>
+                                  </div>
+                                </div>
+                              </template>
+                              <template if:true={emojifollowing}>
+                                <div class="backcomment">
+                                  <div class="follow-profile-container">
+                                    <p class="profile">Profile</p>
+                                    <button
+                                      onclick={emojiclosePopup}
+                                      class="times3 closeprofilecmnt"
+                                    >
+                                      X
+                                    </button>
+                                    <div class="imgname">
+                                      <img src={avtvarfor} class="popavatar" />
+                                      <p class="username123">{usename}</p>
+                                    </div>
+                                    <button
+                                      class="popupbuttonfollowing"
+                                      onclick={emojiFollowingPopupButtonClick}
+                                    >
+                                      Following
+                                    </button>
+                                  </div>
+                                </div>
+                              </template>
+                              <template if:true={emojifollowingpopup2}>
+                                <div class="backcomment">
+                                  <div class="following-popup-container">
+                                    <button
+                                      onclick={emojiclosePopup}
+                                      class="times2 ten"
+                                    >
+                                      X
+                                    </button>
+                                    <p class="emojifollowingpopuptitle">
+                                      Unfollow User?<br />
+                                    </p>
+                                    <div>
+                                      <p class="popupcontent second">
+                                        Are you sure you want to unfollow
+                                        {usename}?<br /><br />
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p class="popupcontent third">
+                                        You'll no longer receive notifications
+                                        whenever this user creates a new post.
+                                      </p>
+                                    </div>
+                                    <div class="unfollowFlexContainer">
+                                      <button
+                                        class="followno"
+                                        onclick={emojiclosePopup}
+                                      >
+                                        No
+                                      </button>
+                                      <button
+                                        class="followyes"
+                                        onclick={emojiUnFollowingyes}
+                                      >
+                                        Yes
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </template>
+                              <!-- Display the Edit and delete Icon ,if the Comment Created by the User themself -->
+                              <template
+                                if:true={commentitem.isCurrentUserCommentCreator}
+                              >
+                                <div
+                                  if:true={commentitem.showeditthecomment}
+                                  onclick={closeshoweditthecomment}
+                                  class="showeditthecommentcompress"
+                                >
+                                  <div
+                                    class="closeshoweditthecomment"
+                                    title="Close"
+                                    data-it-button="allpost: Close Edit Box"
+                                    onclick={closeshoweditthecomment}
+                                  >
+                                    &times;
+                                  </div>
+                                </div>
+                                <template if:true={commentitem.threedotclass}>
+                                  <div
+                                    class={threedotclass}
+                                    data-commentid={commentitem.id}
+                                  >
+                                    <div class="threedotblurbg">
+                                      <div class="threedot-content">
+                                        <button
+                                          class="threedotclose"
+                                          title="Close"
+                                          data-it-button="allpost: Close ThreeDot Popup"
+                                          onclick={closethreedot}
+                                        >
+                                          &times;
+                                        </button>
+                                        <p class="action">Action</p>
+                                        <br />
+                                        <div class="editanddeletethreedots">
+                                          <button
+                                            class="editthreedots"
+                                            data-custom-feeditem-id={commentitem.Id}
+                                            onclick={editTheComment}
+                                          >
+                                            <img
+                                              src={editimg}
+                                              onclick={editTheComment}
+                                              data-it-button="allpost: Show Edit Dropdown(Mobile View)"
+                                              class="edit"
+                                            />Edit Commment
+                                          </button>
+                                          <br />
+                                          <br />
+                                          <button
+                                            class="deletethreedots"
+                                            data-custom-feeditem-id={commentitem.Id}
+                                            data-custom-postitem-id={commentitem.BI_PSP_FeedItem__c}
+                                            onclick={openFirstPopup}
+                                          >
+                                            <img
+                                              src={deleteimg}
+                                              data-it-button="allpost: Delete Comment Popup (Mobile View)"
+                                              class="deletecomment"
+                                            />&emsp; Delete Comment
+                                          </button>
+                                          <br />
+                                        </div>
+                                        <br />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </template>
+                                <div class="editanddelete">
+                                  <!-- edit Image -->
+                                  <img
+                                    src={editimg}
+                                    data-custom-feeditem-id={commentitem.Id}
+                                    class="editCmt"
+                                    data-it-button="allpost: Show Edit Dropdown"
+                                    onclick={editTheComment}
+                                  />
+                                  <!-- delete image -->
+                                  <img
+                                    src={deleteimg}
+                                    class="deletecomment"
+                                    data-custom-feeditem-id={commentitem.Id}
+                                    data-it-button="allpost: Show Delete Popup"
+                                    data-custom-postitem-id={commentitem.BI_PSP_FeedItem__c}
+                                    onclick={openFirstPopup}
+                                  />
+                                </div>
+                              </template>
+                              <!-- Edit the Comment  -->
+                              <template
+                                if:true={commentitem.showeditthecomment}
+                              >
+                                <label
+                                  for="Edit The Comment"
+                                  class={editTheCommentTxt}
+                                  >Edit The Comment</label
+                                >
+                                <select
+                                  onchange={handleCommentChangeedit}
+                                  class="dropdowncommentsnew"
+                                  title="Edit The Comment"
+                                  data-custom-feeditem-title={allposts.BI_PSP_Category__c}
+                                  data-custom-feeditem-body={allposts.BI_PSP_Phrase__c}
+                                  data-custom-feeditem-id={allposts.Id}
+                                  data-it-button="allpost: Edit Dropdown"
+                                >
+                                  <option value="" disabled selected hidden>
+                                    Select
+                                  </option>
+                                  <template
+                                    for:each={commentoption}
+                                    for:item="option"
+                                  >
+                                    <option
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </option>
+                                    <hr key={option.value} />
+                                  </template>
+                                </select>
+                              </template>
+                              <!-- Delete Comment Confirmation Popup -->
+                              <div class={firstPopupClass}>
+                                <div class="new-popup-content">
+                                  <div class="content">
+                                    <button
+                                      class="times"
+                                      title="Close"
+                                      onclick={closeFirstPopup}
+                                      data-it-button="allpost: Close DeleteComment Popup"
+                                    >
+                                      X
+                                    </button>
+                                    <h1 class="heading">Delete Comment?</h1>
+                                    <p class="paragh">
+                                      Are you sure you want to delete this
+                                      comment?
+                                    </p>
+                                    <br />
+                                    <div class="newpopupbtndiv">
+                                      <button
+                                        class="cancelbtn"
+                                        data-it-button="allpost: Delete Comment - No"
+                                        onclick={closeFirstPopup}
+                                      >
+                                        No
+                                      </button>
+                                      <button
+                                        class="submitbtn"
+                                        data-it-button="allpost: Delete Comment - Yes"
+                                        data-custom-feeditem-id={commentitem.Id}
+                                        onclick={handledelete}
+                                      >
+                                        Yes
+                                      </button>
+                                    </div>
+                                    <br />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <hr class="commentline" />
+                          </div>
+                        </template>
+                      </template>
+                    </template>
+                  </div>
+                </div>
+                <br />
+                <br />
+              </div>
+            </template>
+          </template>
+          <br />
+        </div>
+        <div if:true={isLoading}>
+          <!-- Show spinner or loading message -->
+          <lightning-spinner
+            alternative-text="Loading"
+            class="spinner-container"
+          ></lightning-spinner>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

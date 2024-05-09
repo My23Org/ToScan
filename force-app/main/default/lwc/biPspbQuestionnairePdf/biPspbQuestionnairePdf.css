@@ -1,0 +1,380 @@
+/*--Font Declaration---*/
+@font-face {
+	font-family: 'Eina-Regular';
+	src: url('/s/sfsites/c/resource/BI_PSP_WebEinaFonts/WebFonts/Eina01-Regular.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Eina-Light';
+	src: url('/s/sfsites/c/resource/BI_PSP_WebEinaFonts/WebFonts/Eina04-Light.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Eina-SemiBold';
+	src: url('/s/sfsites/c/resource/BI_PSP_WebEinaFonts/WebFonts/Eina04-SemiBold.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Eina-Bold';
+	src: url('/s/sfsites/c/resource/BI_PSP_WebEinaFonts/WebFonts/Eina04-Bold.woff') format('woff');
+}
+
+.wifourhundred {
+	width: 400px;
+}
+
+hr {
+	margin: 0;
+}
+
+.custom-box {
+	background-color: white;
+	border: 1px solid black;
+	border-radius: 10px;
+}
+
+.textAlignCenter {
+	text-align: center;
+}
+
+.grid-containerOneline {
+	display: grid;
+	grid-template-columns: auto auto;
+	gap: 10px;
+}
+
+.grid-containerGraph {
+	display: grid;
+	grid-template-columns: 400px 150px 150px 150px 150px 150px;
+	gap: 10px;
+}
+
+.displayBlock {
+	display: block;
+	text-align: center;
+	padding: 10px;
+}
+
+.FlexCenter {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.FlexCircleCenter {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.backcLOLOR {
+	background-color: #c6c5d3;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.grid-containerColorNotification {
+	display: grid;
+	grid-template-columns: max-content max-content max-content max-content max-content;
+	gap: 50px;
+}
+
+.grid-containerColors {
+	display: grid;
+	grid-template-columns: max-content max-content;
+	gap: 5px;
+}
+
+.height40 {
+	height: 40px;
+}
+
+.vertical-line {
+	border-left: 1px solid #000;
+	height: 65px;
+}
+
+.lineDesign {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.padLeft10 {
+	padding-left: 10px;
+}
+
+/*----Second Chart----*/
+.grid-containerBubble {
+	display: grid;
+	grid-template-columns: repeat(9, 80px);
+	gap: 10px;
+}
+
+.grid-containerChartBubbles {
+	display: grid;
+	grid-template-rows: repeat(9, auto);
+	gap: 5px;
+	margin: 30px 0px;
+}
+
+.FlexBubbleCenter {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	height: 20px;
+}
+
+.custom-Bubble-box {
+	background-color: white;
+	width: fit-content;
+}
+
+.highlightBack {
+	background-color: #f2e174;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+
+/*---New Design---*/
+.custom-box1 {
+	background-color: #B5B2C2;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+.custom-box2 {
+	background-color: #CFCDD5;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+
+.grid-containerCategory {
+	display: grid;
+	grid-template-columns: auto;
+	gap: 10px;
+	padding: 10px;
+}
+
+.grid-containerMonth {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	gap: 10px;
+}
+
+.selectWidth {
+	width: 300px;
+	height: 40px;
+	font-size: 16px;
+	border-radius: 4px;
+	font-family: 'Eina-SemiBold';
+	border-style: solid;
+	border-color: #2C333A;
+	border-width: 1px;
+}
+
+.monthSelection {
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 400;
+	font-family: 'Eina-Regular';
+}
+
+.monthSelectionBlack {
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 400;
+	font-family: 'Eina-Regular';
+	color: black;
+}
+
+.downloadButton {
+	font-family: 'Eina-SemiBold';
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 19px;
+	color: white;
+	padding: 9px 18px 9px 18px;
+	border-style: none;
+	border-radius: 12px;
+	background-color: #403A60;
+}
+
+.displayCenter {
+	display: flex;
+	flex-direction: column;
+	justify-content: end;
+	width: max-content;
+	margin-bottom: 10px;
+	margin-right: 10px;
+}
+
+.bubblecenter {
+	height: 80px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	border-left-style: solid;
+	border-left-width: thin;
+}
+
+.chartHead {
+	font-size: 16px;
+	font-weight: 400;
+	margin-bottom: 10px;
+	font-family: 'Eina-Bold';
+}
+
+.chartPara {
+	font-size: 14px;
+	font-weight: 400;
+	margin-bottom: 10px;
+	font-family: 'Eina-SemiBold';
+	margin-left: 10px;
+}
+
+.FlexCircleCenterText {
+	font-size: 14px;
+	font-weight: 400;
+	font-family: 'Eina-Regular';
+}
+
+.textCenter {
+	text-align: center !important;
+	width: 100px !important;
+	font-size: 12px;
+	font-weight: 400;
+	margin-bottom: 10px;
+	font-family: 'Eina-SemiBold';
+	margin-left: 10px;
+}
+
+.backRed {
+	background-color: #8D89A540;
+	height: 50px;
+}
+
+
+
+/*----Sumchart CMP----*/
+
+.custom-box2 {
+	width: -webkit-fill-available;
+	display: grid;
+}
+
+.displayHeader {
+	display: flex;
+	justify-content: end;
+}
+
+.footerLink {
+	text-decoration: none;
+	color: #403A60;
+	font-size: 14px;
+	font-weight: 400;
+}
+
+.grid-containerfooter {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	gap: 10px 20px;
+	padding: 10px;
+	width: fit-content;
+}
+
+.layoutColor {
+	background-color: #FBFAF5;
+	min-height: 400px;
+}
+
+.grid-containerTabs {
+	display: grid;
+	grid-template-columns: auto auto auto auto;
+	gap: 10px 20px;
+	padding: 10px;
+	width: fit-content;
+}
+
+.tabsDiv {
+	width: 100%;
+	text-align: left;
+}
+
+.tabClass {
+	width: 100%;
+	background-color: white;
+}
+
+.anchorText {
+	text-decoration: none;
+	color: #403A60;
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.anchorTextActive {
+	text-decoration: none;
+	color: #403A60;
+	font-size: 16px;
+	font-weight: 800;
+}
+
+/*--CSS Media Queries---*/
+
+
+@media only screen and (max-width: 400px) {
+	.pad {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+}
+
+@media only screen and (min-width: 601px) {
+	.pad {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+}
+
+@media only screen and (min-width: 768px) {
+	.pad {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+}
+
+@media only screen and (min-width: 992px) {
+	.pad {
+		padding-left: 10%;
+		padding-right: 10%;
+	}
+
+}
+
+@media only screen and (min-width: 1200px) {
+	.pad {
+		padding-left: 10%;
+		padding-right: 10%;
+	}
+
+}
+
+@media only screen and (min-width: 1500px) {
+	.pad {
+		padding-left: 10%;
+		padding-right: 10%;
+	}
+
+}
+
+/*---CMP Ends---*/
