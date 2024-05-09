@@ -28,7 +28,11 @@
   position: relative;
   right: 4px;
 }
+.terms{
+      font-size: 32px;
+    width: 80%;
 
+}
 .slds-form-element__helps {
   font-size: 14px;
   font-family: "Eina-regular";
@@ -46,7 +50,9 @@
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  font-weight: 600;
+  font-weight: 400;
+  font-family: 'Eina04-Semibold';
+  color: #403a60;
 }
 
 .text-content-for-mobile1 {
@@ -370,6 +376,7 @@
   bottom: 0;
   font-size: 33px;
   color: black;
+  cursor: pointer;
 }
 
 .textInput-err {
@@ -425,10 +432,15 @@
 }
 
 .hrline {
-  margin-top: 30px;
-  opacity: 0.1;
+  margin-top: 50px;
+  opacity: 1.1;
+  margin-bottom: 20px;
 }
-
+.hrlineone {
+  margin-top: 15px;
+  opacity: 1.1;
+  margin-bottom: 20px;
+}
 .hideuparrow {
   display: block;
   margin-left: 45px;

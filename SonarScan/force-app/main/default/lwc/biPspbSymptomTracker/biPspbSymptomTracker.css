@@ -1279,15 +1279,6 @@ img.currentlygpp-icon {
 	}
 } */
 @media only screen and (max-width:400px) {
-	.symptoms {
-	border-radius: 8px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	width: 79px;
-}
 	.lastmodifieddate {
 		position: absolute;
 		top: 490px;
@@ -1329,15 +1320,6 @@ img.currentlygpp-icon {
 	width: 139px !important; 
 } */
 @media only screen and (max-width:600px) {
-	.symptoms {
-	border-radius: 8px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	width: 80px;
-}
 	.slds-m-top_medium1 {
 		display: block;
 	}
@@ -1648,15 +1630,6 @@ p.alredy-data {
 }
 
 @media only screen and (min-width:768px) and (max-width:992px) {
-	.symptoms {
-	border-radius: 8px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	width: 85px;
-}
 	.st-date-row {
 		margin-left: 13%;
 	}
@@ -1684,15 +1657,6 @@ p.alredy-data {
 }
 
 @media only screen and (min-width:992px) and (max-width:1199px) {
-	.symptoms {
-	border-radius: 8px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	width: 100px;
-}
 	.st-date-row {
 		margin-left: 10%;
 	}
@@ -1741,7 +1705,6 @@ p.alredy-data {
 }
 
 @media only screen and (max-width:1200px) {
-
 	.Gpp-yes-btn {
 		float: none !important;
 		bottom: 0px !important;
@@ -1755,15 +1718,6 @@ p.alredy-data {
 }
 
 @media only screen and (min-width: 1201px) and (max-width: 1400px) {
-	.symptoms {
-	border-radius: 8px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	width: 104px;
-}
 
 	/* Styling for .Gpp-yes-btn within the specified media query */
 	.Gpp-yes-btn {

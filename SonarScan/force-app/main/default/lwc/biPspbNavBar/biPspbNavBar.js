@@ -288,6 +288,7 @@ export default class BiPspbNavBar extends LightningElement {
 	//Used to get the user and profile information of the current loggedin user to render the navigation bar details.
 	connectedCallback() {
 		try {
+			console.log('UserId--->'+Id);
 			this.currentPageUrl = window.location.href;
 			this.urlSegments = this.currentPageUrl.split('/');
 			this.baseUrl = `${this.urlSegments[0]}//${this.urlSegments[2]}`;

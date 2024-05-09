@@ -317,7 +317,7 @@ public with sharing class BI_PSPB_PersonalizedMessagesCtrl {
 						/* A deeply nested if statement has been implemented according to our business 
 						requirements to check the questionnaire response. */
 						// Categorize responses based on each question
-						if (questionName == questionOne) {
+						if (questionName == questionOne || questionName == questionTwelve) {
 							if (answer == noResponse) {
 								filteredResponses.add(socialLifeCategory);
 							}
@@ -329,40 +329,18 @@ public with sharing class BI_PSPB_PersonalizedMessagesCtrl {
 							) {
 								filteredResponses.add(socialLifeCategory);
 							}
-						} else if (questionName == questionFour) {
+						} else if (questionName == questionFour || questionName == questionSeven || questionName == questionFive || questionName == questionSix ||  questionName == questionNine) {
 							if (
 								answer == noResponse ||
 								answer == maybeResponse
 							) {
 								filteredResponses.add(managementCategory);
 							}
-						} else if (questionName == questionFive) {
-							if (
-								answer == noResponse ||
-								answer == maybeResponse
-							) {
-								filteredResponses.add(managementCategory);
-							}
-						} else if (questionName == questionSix) {
-							if (
-								answer == noResponse ||
-								answer == maybeResponse
-							) {
-								filteredResponses.add(managementCategory);
-							}
-						} else if (questionName == questionSeven) {
-							if (answer == noResponse) {
-								filteredResponses.add(managementCategory);
-							}
-						} else if (questionName == questionEight) {
+						}  else if (questionName == questionEight) {
 							if (answer == yesResponse) {
 								filteredResponses.add(managementCategory);
 							}
-						} else if (questionName == questionNine) {
-							if (answer == noResponse) {
-								filteredResponses.add(managementCategory);
-							}
-						} else if (questionName == questionTen) {
+						}  else if (questionName == questionTen) {
 							if (
 								answer == yesResponse ||
 								answer == maybeResponse
@@ -372,10 +350,6 @@ public with sharing class BI_PSPB_PersonalizedMessagesCtrl {
 						} else if (questionName == questionEleven) {
 							if (answer == yesResponse) {
 								filteredResponses.add(mentalHealthCategory);
-							}
-						} else if (questionName == questionTwelve) {
-							if (answer == noResponse) {
-								filteredResponses.add(socialLifeCategory);
 							}
 						} else if (questionName == questionThirteen) {
 							// Handle 'NA' or other conditions if needed
@@ -728,7 +702,7 @@ public with sharing class BI_PSPB_PersonalizedMessagesCtrl {
 								positiveResponses.add(articleTwentyNine);
 							}
 						}
-					} else if (questionName == questionFive) {
+					} else if (questionName == questionFive || questionName == questionTwelve) {
 						if (answer == noResponse || answer == maybeResponse) {
 							negativefound = 1;
 						}
@@ -894,31 +868,6 @@ public with sharing class BI_PSPB_PersonalizedMessagesCtrl {
 						}
 
 						if (answer == noResponse) {
-							positiveResponses.add(articleFifteen);
-							positiveResponses.add(articleTwentyOne);
-							positiveResponses.add(articleTwentyFour);
-							positiveResponses.add(articleThree);
-							if (statusOfPatient != null) {
-								if (statusOfPatient == chronicStatus) {
-									positiveResponses.add(articleTwentySeven);
-									positiveResponses.add(articleTwentyEight);
-									positiveResponses.add(articleTwentyNine);
-								} else if (statusOfPatient == acuteStatus) {
-									positiveResponses.add(articleTwentyFive);
-									positiveResponses.add(articleTwentySix);
-									positiveResponses.add(articleTwentyNine);
-								}
-							} else {
-								positiveResponses.add(articleTwentySeven);
-								positiveResponses.add(articleTwentyEight);
-								positiveResponses.add(articleTwentyNine);
-							}
-						}
-					} else if (questionName == questionTwelve) {
-						if (answer == noResponse || answer == maybeResponse) {
-							negativefound = 1;
-						}
-						if (answer == yesResponse) {
 							positiveResponses.add(articleFifteen);
 							positiveResponses.add(articleTwentyOne);
 							positiveResponses.add(articleTwentyFour);

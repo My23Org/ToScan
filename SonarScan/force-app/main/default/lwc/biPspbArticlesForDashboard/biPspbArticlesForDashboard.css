@@ -19,7 +19,8 @@
 }
 
 .imagecls {
-	width: "50px";
+	/* width: "50px"; */
+	cursor: pointer;
 }
 
 .backimg1 {

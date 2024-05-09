@@ -85,9 +85,9 @@ export default class biPspbPrepopulateSummaryPage extends LightningElement {
 	//to get caregiver records using recordid
 	@wire(getcaregiver, { CaregivercreateId: '$recordid' })
 	wiredRecordDetailsCaregiver({ error, data }) {
-		try {
-			// Null data is checked and AuraHandledException is thrown from the Apex
-			if (data) {
+		// Null data is checked and AuraHandledException is thrown from the Apex
+		if (data && data.length > 0) {
+			try {
 				this.caregiver = data;
 
 				this.age = true;
@@ -96,13 +96,15 @@ export default class biPspbPrepopulateSummaryPage extends LightningElement {
 				this.dispatchEvent(
 					new CustomEvent(sendavatarmsg, { detail: this.valueAvatar })
 				);
-			} else if (error) {
-				this.showToast(errormessage, error.body.message, errorvariant);// Catching Potential Error from Apex
 			}
-		} catch (err) {
-			this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from LWC
+			catch (err) {
+				this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from LWC
+			}
+		} else if (error && data.length > 0) {
+			this.showToast(errormessage, error.body.message, errorvariant);// Catching Potential Error from Apex
 		}
 	}
+
 
 	//to get physician records using recordid
 	@wire(getphysician, { leadId: '$recordid' })
@@ -125,9 +127,10 @@ export default class biPspbPrepopulateSummaryPage extends LightningElement {
 	//to display caregiver mail in thank you message
 	@wire(getcothanks, { CaregivercreateId: '$recordid' })
 	wiredRecordDetailcontact({ error, data }) {
-		try {
-			// Null data is checked and AuraHandledException is thrown from the Apex
-			if (data) {
+
+		// Null data is checked and AuraHandledException is thrown from the Apex
+		if (data && data.length > 0) {
+			try {
 				this.contdata = data;
 
 				if (this.contdata === true) {
@@ -138,12 +141,13 @@ export default class biPspbPrepopulateSummaryPage extends LightningElement {
 					this.messagecontent = toActiveMsg;
 					this.messagecontent2 = emailsentmsg + this.email;
 				}
-			} else if (error) {
-				this.showToast(errormessage, error.body.message, errorvariant);// Catching Potential Error from Apex
+			} catch (err) {
+				this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from LWC
 			}
-		} catch (err) {
-			this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from LWC
+		} else if (error && data.length > 0) {
+			this.showToast(errormessage, error.body.message, errorvariant);// Catching Potential Error from Apex
 		}
+
 	}
 
 	// Function to refresh wired data

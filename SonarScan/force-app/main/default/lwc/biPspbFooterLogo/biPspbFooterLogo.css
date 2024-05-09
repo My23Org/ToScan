@@ -239,11 +239,7 @@
 	.pad {
 		padding-left: 5%;
 		padding-right: 5%;
-		width: Fixed (1, 366px);
-		height: Hug (179px);
 		top: 2146px;
-		padding: 24px, 75px, 24px, 75px;
-		border: 1px, 0px, 0px, 0px;
 		gap: 32px;
 
 	}

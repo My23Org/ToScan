@@ -80,7 +80,7 @@
 							<div class="input-div">
 								<label for="FirstName" data-field="FirstName" class="input-label">First Name*</label>
 								<lightning-input class="textInput" field-name="FirstName" data-field="FirstName"
-									value={patientFirstName} onkeydown={handleKeyDown1} onchange={handleFieldChange}
+									value={patientFirstName} onpaste={handlePaste} onkeydown={handleKeyDown1} onchange={handleFieldChange}
 									placeholder="Enter last name" variant="label-hidden">
 								</lightning-input>
 								<span class="slds-form-element__help" if:true={firstNameerrorMessag}>
@@ -99,7 +99,7 @@
 								<label for="LastName" data-field="LastName" class="input-label">Last Name*</label>
 								<lightning-input field-name="LastName" data-field="LastName" onkeydown={handleKeyDown1}
 									value={patientLastName} id="LastName" variant="label-hidden" class="textInput"
-									onchange={handlelastname} placeholder="Enter last name"></lightning-input>
+									onchange={handlelastname} onpaste={handlePaste} placeholder="Enter last name"></lightning-input>
 								<span class="slds-form-element__help" if:true={lastnameerrorMessage}>
 									<lightning-icon icon-name='utility:warning' alternative-text='warning'
 										variant='error' size='x-small' title='warning'
@@ -172,7 +172,7 @@
 								<label for="phone" data-field="phone" class="input-label">Phone number*</label>
 								<span><lightning-input class="textInput" variant="label-hidden" field-name="Phone"
 										data-field="phone" maxlength="16" onkeydown={handleKeyDown}
-										onkeypress={validatePhoneInput} value={patientMobilePhone}
+										onkeypress={validatePhoneInput} onpaste={handlePaste} value={patientMobilePhone}
 										onchange={handleFielphone}
 										placeholder="Enter Phone number"></lightning-input></span>
 

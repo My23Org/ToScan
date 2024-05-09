@@ -34,7 +34,7 @@
 										Name*</label>
 									<lightning-input class="textInput" field-name="FirstName" data-field="FirstName"
 										placeholder="Enter First Name" variant="label-hidden" value={FirstName}
-										onchange={handlenamechange} onkeydown={handleKeyDown1}>
+										onchange={handlenamechange} onkeydown={handleKeyDown1} onpaste={handlePaste}>
 									</lightning-input>
 									<span class="slds-form-element__help" if:true={firstNameerrorMessage}>
 										<lightning-icon icon-name="utility:warning" alternative-text="warning"
@@ -46,7 +46,7 @@
 									<label for="LastName" data-field="LastName" class="input-label">Last Name*</label>
 									<lightning-input class="textInput" field-name="LastName" data-field="LastName"
 										placeholder="Enter Last Name" value={LastName} variant="label-hidden"
-										onchange={handlelastnamechange} onkeydown={handleKeyDown1}>
+										onchange={handlelastnamechange} onkeydown={handleKeyDown1} onpaste={handlePaste}>
 									</lightning-input>
 									<span class="slds-form-element__help" if:true={LastNameerrorMessage}>
 										<lightning-icon icon-name="utility:warning" alternative-text="warning"

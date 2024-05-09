@@ -109,6 +109,8 @@ import BI_PSPB_SelectaQuestion from '@salesforce/label/c.BI_PSPB_SelectaQuestion
 import BI_PSPB_RangeofMonths from '@salesforce/label/c.BI_PSPB_RangeofMonths';
 import expired from '@salesforce/label/c.BI_PSP_Expired';
 import completedLabel from '@salesforce/label/c.BI_PSP_Completed';
+import brandedUrlNavi from '@salesforce/label/c.BI_PSPB_BrandedSiteURL';
+import unAssignedUrlNavi from '@salesforce/label/c.BI_PSPB_UnassignedSiteURL';
 
 export default class BiPspbQuestionnarieSumChart extends LightningElement {
 	@track assessmentResponse;
@@ -309,27 +311,21 @@ export default class BiPspbQuestionnarieSumChart extends LightningElement {
 				.catch(error => {
 					this.showToast(errormessage, error.message, errorvariant);
 				})
-			const currentURL = window.location.href;
-			// Create a URL object
-			const urlObject = new URL(currentURL);
+		const currentURL = window.location.href;
+		const urlObject = new URL(currentURL);
+		const path = urlObject.pathname;
+		const pathComponents = path.split('/');
+		const desiredComponent = pathComponents.find((component) =>
+			[brandedurl.toLowerCase(), unassignedurl.toLowerCase()].includes(
+			component.toLowerCase()
+			)
+		);
 
-			// Get the path
-			const path = urlObject.pathname;
-
-			// Split the path using '/' as a separator
-			const pathComponents = path.split('/');
-
-			// Find the component you need (in this case, 'Branded')
-			const desiredComponent = pathComponents.find(component =>
-				[brandedurl.toLowerCase(), unassignedurl.toLowerCase()].includes(component.toLowerCase())
-			);
-
-			if (desiredComponent.toLowerCase() === brandedurl.toLowerCase()) {
-				this.urlq = brandedurl;
-			}
-			else {
-				this.urlq = unassignedurl;
-			}
+		if (desiredComponent.toLowerCase() === brandedurl.toLowerCase()) {
+			this.urlq = brandedUrlNavi;
+		} else {
+			this.urlq = unAssignedUrlNavi;
+		}
 		}
 		catch (error) {
 			this.showToast(errormessage, error.message, errorvariant);

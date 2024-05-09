@@ -523,6 +523,11 @@ clearFieldError(fieldName) {
         event.preventDefault();
     }
 }
+// Not allow paste event in firstname and last name
+	handlePaste(event) {
+		// Prevent default paste behavior
+		event.preventDefault();
+	}
 
 	//checks whether all fields have values and updates patient information
 	handle_Success() {

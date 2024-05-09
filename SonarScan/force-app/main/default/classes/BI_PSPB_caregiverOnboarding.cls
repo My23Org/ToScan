@@ -139,6 +139,14 @@ if (lstCaregiverAccId.isEmpty()) {
 				System.now()
 				);
 			}
+            else
+            {
+                List<Account> accountUpdate=[select id,HealthCloudGA__LowIncome__c from Account where Id IN:lstCaregiverAccId];
+                for (Account acc : accountUpdate) {
+   					 acc.HealthCloudGA__LowIncome__c = True;
+				}
+                update accountUpdate;
+            }
 			} //End if(portalProfile)
 		} //End if (lstCaregiverAccounts)
 		}

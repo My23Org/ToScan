@@ -1156,7 +1156,7 @@ a {
 		font-weight: 400;
 		color: white;
 		border: #403a60;
-		bottom: 135px;
+		bottom: 168px;
 		float: left;
 		right: 7px;
 	}
@@ -1184,6 +1184,13 @@ a {
 }
 
 @media only screen and (min-width:768px) and (max-width:992px) {
+	.Nosymptoms-errormsg {
+    margin-left: -168%;
+    font-size: 24px;
+    font-style: Eina04-Regular;
+    color: #403A60;
+    margin-top: 73px;
+	}
 	.grid-containerHeadingsSingle {
 		display: grid;
 		grid-template-columns: auto;
@@ -1366,6 +1373,13 @@ a {
 }
 
 @media only screen and (min-width:992px) and (max-width:1050px) {
+	.Nosymptoms-errormsg {
+    margin-left: -136%;
+    font-size: 24px;
+    font-style: Eina04-Regular;
+    color: #403A60;
+    margin-top: 73px;
+	}
 	.grid-containerHeadingsSingle {
 		display: grid;
 		grid-template-columns: auto;
@@ -1562,6 +1576,13 @@ a {
 }
 
 @media only screen and (min-width:1050px) and (max-width:1200px) {
+	.Nosymptoms-errormsg {
+    margin-left: -136%;
+    font-size: 24px;
+    font-style: Eina04-Regular;
+    color: #403A60;
+    margin-top: 68px;
+	}
 	.grid-containerHeadingsSingle {
 		display: grid;
 		grid-template-columns: auto;

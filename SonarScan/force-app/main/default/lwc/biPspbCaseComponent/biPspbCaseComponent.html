@@ -90,7 +90,7 @@
 																<h3 class="Attachments">Attachments</h3>
 
 																<template if:true={hasImage}>
-																	<img src={caseImageURL} alt="Case Image"
+																	<img src={caseImageURL.data} alt="Case Image"
 																		class="caseimg" />
 																</template>
 																<template if:false={hasImage}>
@@ -166,7 +166,7 @@
 									<div class="attachmentclass">
 										<h3 class="Attachments">Attachments</h3>
 										<template if:true={hasImage}>
-											<img src={caseImageURL} alt="Case Image" class="caseimg" />
+											<img src={caseImageURL.data} alt="Case Image" class="caseimg" />
 										</template>
 										<template if:false={hasImage}>
 											<p class="Noneclass">None</p>

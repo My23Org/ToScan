@@ -272,7 +272,7 @@ public without sharing class BI_PSPB_Symptomtrackerprimarypage {
 					WHERE
 						BI_PSP_Care_Program_Enrollee__c = :careProgramEnrolleeId
 						AND BI_PSP_Symptom_Staus__c != :symptomTrackerInactive
-					ORDER BY LastModifiedDate DESC
+					ORDER BY BI_PSP_EditEntrydates__c DESC
 					LIMIT 1
 				]; //USER_MODE cannot be implemented here, as it is querying health cloud object.
 

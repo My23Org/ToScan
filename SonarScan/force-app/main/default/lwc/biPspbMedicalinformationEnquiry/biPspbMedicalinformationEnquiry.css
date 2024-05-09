@@ -365,7 +365,7 @@ align-items: center;
 width: 395px;
 }
 
-chnageradiobtn1 .slds-radio .slds-radio_faux,
+.chnageradiobtn1 .slds-radio .slds-radio_faux,
 .slds-radio .slds-radio--faux {
 width: var(--lwc-squareIconMediumContent, 1rem);
 height: var(--lwc-squareIconMediumContent, 1rem);

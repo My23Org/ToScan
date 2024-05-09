@@ -131,9 +131,8 @@
 
 .bar {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin-top: -56px;
+    flex-direction: row;
+    align-items: center;
 }
 
 .container-bottom {
@@ -151,8 +150,10 @@
 
 .lineimg {
 	height: 320px;
-	position: relative;
-top: 233px;
+    position: relative;
+    top: -34px;
+    left: 50px;
+    margin-top: 0px;
 }
 
 .chart-image {

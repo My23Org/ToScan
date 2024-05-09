@@ -152,8 +152,7 @@ h3.lastedit {
 	font-weight: bold;
 	color: #403a60;
 	font-family: 'Eina-SemiBold';
-	margin-top: 20px;
-	margin: 29px 10px;
+	margin-top: 30px;
 	border-color: #403a60;
 	margin-bottom: 0px;
 	border: 1.5px solid;
@@ -168,8 +167,8 @@ h3.lastedit {
 	color: white;
 	border: #403a60;
 	font-family: 'Eina-SemiBold';
-	margin-top: 20px;
-	margin: 29px 10px;
+	margin-top: 30px;
+	margin-left: 10px;
 	margin-bottom: 0px;
 }
 
@@ -500,14 +499,13 @@ h1 {
 		font-weight: bold;
 		color: #403a60 !important;
 		font-family: 'Eina-SemiBold';
-		margin-top: 20px;
-		margin: 29px 10px;
 		border-color: #403a60 !important;
 	}
 
 	.confirm-btn-understand-1 {
 		width: 100% !important;
 		margin-bottom: 20px !important;
+		margin-left: 0px;
 	}
 
 	.hr1 {
@@ -1106,8 +1104,8 @@ h1 {
 		font-weight: bold;
 		color: white;
 		font-family: 'Eina-SemiBold';
-		margin-top: 20px;
-		margin: 29px 0px;
+		margin-top: 30px;
+		margin-right: 10px;
 		margin-bottom: 0px;
 		border: 1.5px solid;
 	}
@@ -1121,8 +1119,7 @@ h1 {
 		color: white;
 		border: #403a60;
 		font-family: 'Eina-SemiBold';
-		margin-top: 20px;
-		margin: 29px 0px;
+		margin-top: 29px;
 		margin-bottom: 0px;
 	}
 

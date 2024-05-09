@@ -150,23 +150,27 @@ export default class BiPspbSymptomTrackerGraph extends LightningElement{
 	// Determines the current URL and sets a navigation URL based on certain path components.
 	connectedCallback(){
 		this.throwerrormessage=false;
-		const queryParams = new URLSearchParams(window.location.search);
-				// Get the value of the 'value' parameter
-				this.receivedValue = queryParams.get(valuess);
-				// Check if the value is received
-				if(this.receivedValue){
-					this.showDiv = true
-				setTimeout(() => {
-			try {
-				// Your code here
-				this.showDiv = false;
-			} catch (error) {
-				this.showToast(errormessages, error.message, errorvariant);
-				// Handle the error as needed
-			}
-		}, 3000);		
+	const queryParams = new URLSearchParams(window.location.search);
+// Get the value of the 'valuess' parameter
+this.receivedValue = queryParams.get('value');
+// Check if the value is received
+if (this.receivedValue) {
+    this.showDiv = true;
+    setTimeout(() => {
+        try {
+            // Delete the 'valuess' parameter from the URL
+            queryParams.delete('value');
+            // Replace the current URL with the modified URL (without 'valuess' parameter)
+            window.history.replaceState({}, document.title, window.location.pathname + '?' + queryParams.toString());
+            this.showDiv = false;
+        } catch (error) {
+            this.showToast('Error', error.message, 'error');
+            // Handle the error as needed
+        }
+    }, 3000);
+}		
 					// You can use the value here as needed
-				}
+				
 				const currentURL = window.location.href;
 				// Create a URL object
 				const urlObject = new URL(currentURL);

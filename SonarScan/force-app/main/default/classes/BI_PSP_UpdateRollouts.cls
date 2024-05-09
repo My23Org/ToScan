@@ -39,14 +39,13 @@ public with sharing class BI_PSP_UpdateRollouts implements Schedulable {
     public void execute(SchedulableContext sc) {
         try {
             // Query for Assessment records that have passed their expiration date
-            /* USER_MODE is not used because Assessment is an Salesforce Industry object
-             using Healthcare license*/
-            List<Assessment> assessmentsToUpdate = [
+                List<Assessment> assessmentsToUpdate = [
                 SELECT Id, Name, ExpirationDateTime
                 FROM Assessment
                 WHERE ExpirationDateTime <= :DateTime.now()
+                 WITH USER_MODE
             ];
-
+			
             // Update Assessment records to mark them as expired
             if (!assessmentsToUpdate.isEmpty()) {
                 for (Assessment assess : assessmentsToUpdate) {
@@ -73,65 +72,7 @@ public with sharing class BI_PSP_UpdateRollouts implements Schedulable {
                 }
             }
 
-            // Query for Assessment records that need their expiration dates updated
-            /* USER_MODE is not used because Assessment is an Salesforce Industry object
-             using Healthcare license*/
-            matchingAssessments = [
-                SELECT Id, Name, AssessmentStatus, CreatedDate
-                FROM Assessment
-                WHERE
-                    AssessmentStatus = :expiredLabel
-                    AND Name != :qualiCategory
-            ];
-
-            // Iterate over matchingAssessments to update expiration dates
-            if (!matchingAssessments.isEmpty()) {
-                for (Assessment matchingAssess : matchingAssessments) {
-                    DateTime presentdttime = DateTime.now();
-                    Date presentdate = presentdttime.date();
-                    DateTime matchingdatetime = matchingAssess.ExpirationDateTime.addDays(
-                        30
-                    );
-                    Date matchingdate = matchingdatetime.date();
-                    // Check if the created date plus 30 days matches the current date
-                    if (presentdate.equals(matchingdate)) {
-                        // If it matches, update the expiration date by adding 30 days
-                        matchingAssess.ExpirationDateTime = matchingAssess.ExpirationDateTime.addDays(
-                            30
-                        );
-                    } else {
-                        BI_SFCOE_LOG_Util.logMessage(
-                            applicationName,
-                            BI_PSP_UpdateRollouts.class.toString(),
-                            '',
-                            System.now(),
-                            emptyAssessmentdate,
-                            BI_SFCOE_LOG_Util.LOG_SEVERITY_ERROR
-                        );
-                    }
-                }
-            }
-
-            // Update the records using Database class method
-            List<Database.SaveResult> matchingUpdateResults = Database.update(
-                matchingAssessments,
-                false
-            );
-
-            // Print the results of the update operation
-            for (Database.SaveResult sr : matchingUpdateResults) {
-                if (!sr.isSuccess()) {
-                    for (Database.Error error : sr.getErrors()) {
-                        errorMsg +='Error ' +error.getFields() +'--' +error.getMessage() +'\n';
-                    }
-                    if (!String.isBlank(errorMsg)) {
-                        BI_SFCOE_LOG_Util.handleDatabaseSaveResults(matchingUpdateResults,
-                            BI_PSP_UpdateRollouts.class.toString(),System.now()
-                        );
-                    }
-                }
-            }
-        } catch (Exception ex) {
+         } catch (Exception ex) {
             // Handle any exceptions occurred during execution.
 
             BI_SFCOE_LOG_Util.handleException(

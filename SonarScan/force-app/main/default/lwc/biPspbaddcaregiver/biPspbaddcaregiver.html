@@ -28,7 +28,7 @@
 						<div class="input-div">
 							<label for="FirstName" data-field="FirstName" class="input-label">First Name*</label>
 							<lightning-input class="textInput" field-name="FirstName" data-field="FirstName"
-								onkeydown={handleKeyDown1} value={FirstName} onchange={firstnamevalueget}
+								onkeydown={handleKeyDown1} value={FirstName} onpaste={handlePaste} onchange={firstnamevalueget}
 								placeholder="Enter First name" variant="label-hidden">
 							</lightning-input>
 							<span class="slds-form-element__help" if:true={FirstNameerrorMessage}>
@@ -40,7 +40,7 @@
 						<div class="input-div">
 							<label for="LastName" data-field="LastName" class="input-label">Last Name*</label>
 							<lightning-input field-name="LastName" data-field="LastName" value={LastName} id="LastName"
-								onkeydown={handleKeyDown1} variant="label-hidden" class="textInput"
+								onkeydown={handleKeyDown1} onpaste={handlePaste} variant="label-hidden" class="textInput"
 								onchange={Lastnamevalueget} placeholder="Enter last name"></lightning-input>
 							<span class="slds-form-element__help" if:true={LastNameerrorMessage}>
 								<lightning-icon icon-name='utility:warning' alternative-text='warning' variant='error'
@@ -98,7 +98,7 @@
 						<div class="input-div">
 							<label for="MobilePhone" class="input-label " data-field="phone">Phone Number*</label>
 							<lightning-input type="tel" field-name="MobilePhone" data-field="phone"
-								onchange={phonenumberEvent} onkeypress={validatePhoneInput} pattern="[0-9+]*"
+								onchange={phonenumberEvent} onpaste={handlePaste} onkeypress={validatePhoneInput} pattern="[0-9+]*"
 								maxlength="16" class="textInput" variant="label-hidden" value={MobilePhone}
 								placeholder="Enter phone number"
 								message-when-pattern-mismatch="Please enter a valid phone number">

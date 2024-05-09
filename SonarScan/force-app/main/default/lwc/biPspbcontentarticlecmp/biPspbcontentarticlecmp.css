@@ -42,11 +42,6 @@
 /*media query*/
 
 @media only screen and (max-width: 400px) {
-	.flex row {
-		display: flex;
-		flex-direction: column !important;
-	}
-
 	.flexrow {
 		display: flex;
 		flex-direction: column;
@@ -56,10 +51,6 @@
 }
 
 @media only screen and (min-width: 400px) and (max-width: 768px) {
-	.flex row {
-		display: flex;
-		flex-direction: column !important;
-	}
 
 	.flexrow {
 		display: flex;

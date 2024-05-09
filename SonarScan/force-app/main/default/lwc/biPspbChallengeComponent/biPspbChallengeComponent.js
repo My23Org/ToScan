@@ -455,9 +455,11 @@ export default class BiPspbChallengeComponent extends LightningElement {
 		console.log('this.updating-->', this.updating);
 		updateChallenges({
 			challenge: updatingChallenge[0].challengeIdToUpdate,
-			activeAvailable: this.updating
+			activeAvailable: this.updating,
+			userId: Id
 		})
 			.then((result) => {
+				console.log('result'+JSON.stringify(result))
 				if (result[0].error === null || result[0].error === undefined) {
 					const activeChallengeIds = new Set(
 						this.updateChallenge2.map(
@@ -478,6 +480,7 @@ export default class BiPspbChallengeComponent extends LightningElement {
 					this.isLoading = false;
 					this.congrats = false;
 					this.percentageCompleted = result[0].percentage;
+					console.log('this.percentageCompleted'+JSON.stringify(this.percentageCompleted))
 				}
 			})
 			.catch((error) => {
@@ -494,7 +497,7 @@ export default class BiPspbChallengeComponent extends LightningElement {
 			(challenges) => challenges.challengeIdToUpdate === componentId
 		);
 		this.updating = this.availableLabel;
-		updateChallenges({ challenge: componentId, activeAvailable: this.updating })
+		updateChallenges({ challenge: componentId, activeAvailable: this.updating, userId: Id })
 			.then(() => {
 				const activeChallengeIds = new Set(
 					this.availableChallenges.map(
@@ -544,7 +547,7 @@ export default class BiPspbChallengeComponent extends LightningElement {
 			(challenges) => challenges.challengeIdToUpdate === componentId
 		);
 		this.updating = this.activeLabel;
-		updateChallenges({ challenge: componentId, activeAvailable: this.updating })
+		updateChallenges({ challenge: componentId, activeAvailable: this.updating, userId: Id })
 			.then(() => {
 				this.isLoading = false;
 				window.location.assign(window.location.href);

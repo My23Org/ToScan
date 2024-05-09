@@ -119,6 +119,7 @@ export default class BiPspbHcpEnrollment extends LightningElement {
 	@track referringerrorMessage = false;
 	@track firstnameerrorMessage = false;
 	@track lastnameerrorMessage = false;
+	@track RelationshiperrorMessage=false;
 	@track doberrorMessage = false;
 	@track gendererrorMessage = false;
 	@track emailerrorMessage = false;
@@ -153,6 +154,7 @@ export default class BiPspbHcpEnrollment extends LightningElement {
 	@track cemailerrorvalid = false;
 	@track error;
 	@track errors;
+	@track fieldsmandatory='para'
 	@track errorss;
 	@track minorerror;
 	@track isAddNew = false;
@@ -755,6 +757,24 @@ Program, please complete the form on this page.`;
 
 		} else if (fieldName1 === BI_PSPB_CaregiverEmail) {
 			this.CaregiverFields.Email = targetValue;
+			if (!this.CaregiverFields.Email) {
+			this.template.querySelector('lightning-input.cEmail').className = 'textInput-err cEmail';
+			this.template.querySelector('label.cEmail').className = 'input-error-label cEmail';
+			this.careemailerrorMessage = true;
+		} else {
+			this.careemailerrorMessage = false;
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+			if (!emailRegex.test(this.CaregiverFields.Email)) {
+				this.cemailerrorvalid = true;
+				this.template.querySelector('lightning-input.cEmail').className = 'textInput-err cEmail';
+				this.template.querySelector('label.cEmail').className = 'input-error-label cEmail';
+			} else {
+				this.cemailerrorvalid = false;
+				this.template.querySelector('lightning-input.cEmail').className = 'textInput cEmail';
+				this.template.querySelector('label.cEmail').className = 'input-label cEmail';
+			}
+		}
 
 		} else if (fieldName1 === BI_PSPB_CaregiverPhone) {
 			this.CaregiverFields.Phone = targetValue;
@@ -784,6 +804,16 @@ Program, please complete the form on this page.`;
 
 		} else if (fieldName1 === BI_PSPB_CaregiverRelationship) {
 			this.selectedRelationship = targetValue;
+			if (!this.selectedRelationship) {
+			this.template.querySelector('lightning-combobox.cRel').className = 'textInput-err cRel';
+			this.template.querySelector('label.cRel').className = 'input-error-label cRel';
+			this.RelationshiperrorMessage = true;
+			} 
+			else {
+			this.RelationshiperrorMessage = false;
+			this.template.querySelector('lightning-combobox.cRel').className = 'textInput cRel';
+			this.template.querySelector('label.cRel').className = 'input-label cRel';
+			}
 
 
 		}
@@ -1045,7 +1075,7 @@ To enroll your patients in the Beyond GPP: The Spevigo® Patient Support Program
 		this.template.querySelector('li.li-two').classList.remove('slds-is-completed');
 		this.template.querySelector('li.li-two').classList.add('slds-is-active');
 		const divElement = this.template.querySelector('div.prescription-label');
-		divElement.textContent = "03 ";
+		divElement.innerHTML = '03&nbsp;';
 		//To achieve the mobile responsiveness, the following strings are hard coded. Custom Labels can't be used, since they truncate the strings.
 		//To achieve mobile responsiveness, we are using innerHTML. However, when attempting to use textContent, it does not meet the design requirements
 		const avatarcontent = this.template.querySelector('p.avatar-content')
@@ -1073,6 +1103,7 @@ well.`;
 		if (this.isAdult === true) {
 			this.handleClose();
 			this.currentStep = '2';
+			this.fieldsmandatory='para'
 			this.template.querySelector('div.stepFour').classList.add('slds-hide');
 			this.template.querySelector('div.stepTwo').classList.remove('slds-hide');
 			// Progress indicator
@@ -1132,6 +1163,7 @@ well.`;
 	goBackToStepFour() {
 		this.handleClose();
 		this.currentStep = '4';
+		this.fieldsmandatory='para';
 		this.template.querySelector('div.stepFive').classList.add('slds-hide');
 		this.template.querySelector('div.stepFour').classList.remove('slds-hide');
 	}
@@ -1212,6 +1244,7 @@ well.`;
 
 					else if (this.isAdult === true) { // Use === for equality check
 						this.currentStep = '4';
+						this.fieldsmandatory='paralast';
 						this.template.querySelector('div.stepTwo').classList.add('slds-hide');
 						this.template.querySelector('div.stepFour').classList.remove('slds-hide');
 						// Progress indicator
@@ -1247,7 +1280,7 @@ this page.`;
 						this.template.querySelector('li.li-three').classList.remove('slds-hide');
 						this.template.querySelector('li.li-three').classList.add('slds-is-active');
 						const prescontent = this.template.querySelector('div.prescription-label')
-						prescontent.textContent = '04&nbsp;'
+						prescontent.innerHTML = '04&nbsp;'
 						//To achieve the mobile responsiveness, the following strings are hard coded. Custom Labels can't be used, since they truncate the strings.
 						//To achieve mobile responsiveness, we are using innerHTML. However, when attempting to use textContent, it does not meet the design requirements
 						const avatarcontent = this.template.querySelector('p.avatar-content')
@@ -1684,6 +1717,7 @@ well.`;
 			this.template.querySelector('lightning-combobox.cRel').className = 'textInput cRel';
 			this.template.querySelector('label.cRel').className = 'input-label cRel';
 		}
+
 		if (this.CaregiverFields.Phone) {
 			if (!/^\+?[0-9]+$/.test(this.CaregiverFields.Phone)) {
 				this.cphoneerrorvalid = true;
@@ -2232,6 +2266,9 @@ well.`;
 		this.searchValue = event.detail.value;
 		if (this.searchValue === '') {
 			this.searchvaluelogo = true;
+			this.PrescriptionFields.DosageCode = '';
+			this.PrescriptionFields.Dosage = '';
+			this.PrescriptionFields.Unit = '';
 		}
 		this.selectedSearchResult = '';
 		const input = event.detail.value.toLowerCase();
@@ -2268,6 +2305,7 @@ well.`;
 				});
 		} else {
 			this.code = '';
+			
 		}
 		this.selectedSearchResult = this.picklistOrdered.find(
 			(picklistOption) => picklistOption.value === selectedValue
@@ -2453,6 +2491,7 @@ well.`;
 						// If none of the above conditions are met, execute the following code
 						this.handleClose();
 						this.currentStep = '4';
+						this.fieldsmandatory='paralast';
 						this.template.querySelector('div.stepThree').classList.add('slds-hide');
 						this.template.querySelector('div.stepFour').classList.remove('slds-hide');
 						// Progress indicator

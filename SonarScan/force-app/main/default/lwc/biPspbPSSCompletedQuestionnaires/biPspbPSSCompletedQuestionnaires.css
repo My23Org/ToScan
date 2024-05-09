@@ -1232,7 +1232,7 @@ Eina04-Bold */
 		cursor: pointer;
 		padding: 10px;
 		border: 1px solid #ccc;
-		margin-bottom: 10px;
+		/* margin-bottom: 10px; */
 		width: 90%;
 		margin: 0 52px 20px;
 		height: 82px;
@@ -1247,7 +1247,7 @@ Eina04-Bold */
 		border: 1.4px solid #403a60;
 		width: 90%;
 		margin: 0 52px 20px;
-		margin-bottom: 10px;
+		/* margin-bottom: 10px; */
 		height: 82px;
 		border-radius: 12px;
 		background-color: white;
@@ -1484,7 +1484,7 @@ Eina04-Bold */
 		cursor: pointer;
 		padding: 10px;
 		border: 1px solid #ccc;
-		margin-bottom: 10px;
+		/* margin-bottom: 10px; */
 		width: 100%;
 		margin: 0 52px 20px;
 		height: 82px;
@@ -1499,7 +1499,7 @@ Eina04-Bold */
 		border: 1.4px solid #403a60;
 		width: 100%;
 		margin: 0 52px 20px;
-		margin-bottom: 10px;
+		/* margin-bottom: 10px; */
 		height: 82px;
 		border-radius: 12px;
 		background-color: white;
@@ -1662,7 +1662,7 @@ Eina04-Bold */
 
 	.bot1 {
 		width: 39%;
-		margin-top: 32px;
+		margin-top: 54px;
 		margin-left: 11px;
 	}
 
@@ -1730,7 +1730,7 @@ Eina04-Bold */
 		cursor: pointer;
 		padding: 10px;
 		border: 1px solid #ccc;
-		margin-bottom: 10px;
+		/* margin-bottom: 10px; */
 		width: 90%;
 		margin: 0 52px 20px;
 		height: 82px;
@@ -1745,7 +1745,7 @@ Eina04-Bold */
 		border: 1.4px solid #403a60;
 		width: 90%;
 		margin: 0 52px 20px;
-		margin-bottom: 10px;
+		/* margin-bottom: 10px; */
 		height: 82px;
 		border-radius: 12px;
 		background-color: white;
@@ -2225,13 +2225,13 @@ Eina04-Bold */
 		cursor: pointer;
 		padding: 10px;
 		border: 1px solid #ccc;
-		margin-bottom: 10px;
+		/* margin-bottom: 10px; */
 		width: 96%;
-		margin: 0 40px 10px;
+		margin: 0 40px 10px 14px;
 		height: 82px;
 		border-radius: 12px;
 		background-color: white;
-		margin-left: 14px;
+		/* margin-left: 14px; */
 	}
 
 	.category-box1 {
@@ -2239,12 +2239,12 @@ Eina04-Bold */
 		padding: 10px;
 		border: 1.4px solid #403a60;
 		width: 96%;
-		margin: 0 40px 10px;
-		margin-bottom: 10px;
+		margin: 0 40px 10px 14px;
+		/* margin-bottom: 10px; */
 		height: 82px;
 		border-radius: 12px;
 		background-color: white;
-		margin-left: 14px;
+		/* margin-left: 14px; */
 	}
 
 	.image {

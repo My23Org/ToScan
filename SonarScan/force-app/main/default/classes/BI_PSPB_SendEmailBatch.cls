@@ -138,110 +138,20 @@ public class BI_PSPB_SendEmailBatch implements Database.Batchable<SObject>, Data
 						String userId = targetContact.Id;
 						String status = '';
 						String messageId = '';
-
-						if (String.isNotBlank(notificationDate)) {
-							payload =
-								'{' +
-								'"emailId": "' +
-								userEmail +
-								'",' +
-								'"body": {' +
-								'"firstname": "' +
-								userName +
-								'",' +
-								'"ubi-pspb-unsubscribe": "' +
-								notificationsettings +
-								'",' +
-								'"ubi-pspb-termsofuse": "' +
-								terms +
-								'",' +
-								'"ubi-pspb-privacynotice": "' +
-								policy +
-								'",' +
-								'"date": "' +
-								notificationDate +
-								'",' +
-								'"url": "' +
-								desturl +
-								'",' +
-								'"Username": "' +
-								uname +
-								'"' +
-								'},' +
-								'"subject": "' +
-								subject +
-								'",' +
-								'"templateID": "' +
-								templateId +
-								'"' +
-								'}';
-						} else if (String.isNotBlank(uname)) {
-							payload =
-								'{' +
-								'"emailId": "' +
-								userEmail +
-								'",' +
-								'"body": {' +
-								'"firstname": "' +
-								userName +
-								'",' +
-								'"ubi-pspb-unsubscribe": "' +
-								notificationsettings +
-								'",' +
-								'"ubi-pspb-termsofuse": "' +
-								terms +
-								'",' +
-								'"ubi-pspb-privacynotice": "' +
-								policy +
-								'",' +
-								'"url": "' +
-								desturl +
-								'",' +
-								'"Username": "' +
-								uname +
-								'"' +
-								'},' +
-								'"subject": "' +
-								subject +
-								'",' +
-								'"templateID": "' +
-								templateId +
-								'"' +
-								'}';
-						} else {
-							payload =
-								'{' +
-								'"emailId": "' +
-								userEmail +
-								'",' +
-								'"body": {' +
-								'"firstname": "' +
-								userName +
-								'",' +
-								'"ubi-pspb-unsubscribe": "' +
-								notificationsettings +
-								'",' +
-								'"ubi-pspb-termsofuse": "' +
-								terms +
-								'",' +
-								'"ubi-pspb-privacynotice": "' +
-								policy +
-								'",' +
-								'"url": "' +
-								desturl +
-								'",' +
-								'"Username": "' +
-								uname +
-								'"' +
-								'},' +
-								'"subject": "' +
-								subject +
-								'",' +
-								'"templateID": "' +
-								templateId +
-								'"' +
-								'}';
-						}
+									payload = '{' +
+				'"emailId": "' + userEmail + '",' +
+				'"body": {' +
+				'"firstname": "' + userName + '",' +
+				'"ubi-pspb-unsubscribe": "' + notificationsettings + '",' +
+				'"ubi-pspb-termsofuse": "' + terms + '",' +
+				'"ubi-pspb-privacynotice": "' + policy + '",' +
+				(String.isNotBlank(uname) ? '"Username": "' + uname + '",' : '') +
+				(String.isNotBlank(notificationDate) ? '"date": "' + notificationDate + '",' : '') +
+				'"url": "' + desturl + '"' +
+				'},' +
+				'"subject": "' + subject + '",' +
+				'"templateID": "' + templateId + '"' +
+				'}';
 
 						HttpRequest request = new HttpRequest();
 						request.setEndpoint(endpoint);

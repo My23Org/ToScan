@@ -269,7 +269,6 @@
 }
 
 .back {
-	background-color: #3f3f3d;
 	display: flex;
 	position: fixed;
 	top: 0;
@@ -437,7 +436,6 @@
 	font-size: 14px;
 	line-height: 16px;
 	border-radius: 12px;
-	margin-top: 50px;
 	border: #403a60 solid 1.5px;
 	background-color: white;
 	color: #403A60;
@@ -1698,7 +1696,6 @@
 		position: relative;
 		display: flex;
 		left: 30%;
-		height: 100px;
 		bottom: 146px;
 		background-color: #ecdca8;
 		color: #403A60;
@@ -2409,7 +2406,6 @@
 	}
 
 	.back {
-		background-color: #3f3f3d;
 		display: flex;
 		position: fixed;
 		top: 0;
@@ -2670,7 +2666,6 @@
 	}
 
 	.back {
-		background-color: #3f3f3d;
 		display: flex;
 		position: fixed;
 		top: 0;
@@ -2843,5 +2838,22 @@
 		margin: 55px -10px 11px 100px;
 		background-color: white;
 		font-family: 'Eina-SemiBold';
+	}
+}
+
+@media only screen and (min-width:1330px) and (max-width:1920px) {
+	.text{
+		width: 600px;
+		left: 90px;
+	}
+
+	.postimage{
+		margin-left: 310px;
+	}
+}
+
+@media only screen and (min-width:1400px) and (max-width:1920px) {
+	.widthformbl{
+		margin-left: 15%;
 	}
 }

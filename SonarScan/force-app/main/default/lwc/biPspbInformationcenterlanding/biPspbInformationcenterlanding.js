@@ -404,7 +404,7 @@ export default class BiPspbInformationcenterlanding extends LightningElement {
 				if (this.patientstatusval === statusacute) {
 					this.showtreatvideo = true;
 				} else {
-					this.showtreatvideo = true;
+					this.showtreatvideo = false;
 				}
 			}
 		} catch (error) {
@@ -500,9 +500,9 @@ export default class BiPspbInformationcenterlanding extends LightningElement {
 		if (this.patientstatusval === statusacute) {
 			if (this.urlq !== brandedurl) {
 				window.location.assign(this.siteUrlq + acutevideopage);
-			} else {
-				window.location.assign(this.siteUrlq + acutevideopage);
-			}
+			} 
+			window.location.assign(this.siteUrlq + acutevideopage);
+		
 			this.categoryval = spcategorywo;
 		} else if (
 			this.patientstatusval === statuschronic &&

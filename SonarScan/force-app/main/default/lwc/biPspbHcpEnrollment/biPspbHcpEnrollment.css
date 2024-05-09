@@ -161,6 +161,17 @@
 	margin: 0px auto 5px;
 	position: relative;
 }
+.paralast{
+	color: #FFF;
+	background: rgba(102, 97, 132, 1);
+	border-radius: 5px;
+	padding: 10px;
+	padding-left: 12px;
+	padding-right: 85px;
+	width: auto;
+	margin: 0px auto 5px;
+	position: relative;
+}
 
 .paras {
 	color: #FFF;
@@ -644,6 +655,10 @@ span.Matching {
 		padding-left: 10px;
 		padding-right: 86px;
 	}
+	.paralast{
+		padding-left: 10px;
+		padding-right: 74px;
+	}
 }
 
 @media only screen and (max-width:1200px) {
@@ -676,6 +691,9 @@ span.Matching {
 	}
 
 	.para {
+		display: none;
+	}
+	.paralast{
 		display: none;
 	}
 

@@ -554,18 +554,15 @@ public without sharing class BI_PSPB_TreatmentReminder {
 		try {
 			if (!string.isBlank(accountId)) {
 				//This method has CareProgramEnrollee object query were it won't support With User_Mode
-				List<CareProgramEnrollee> cpeList = [
+				CareProgramEnrollee cpEnrolle = [
 					SELECT Id
 					FROM CareProgramEnrollee
 					WHERE Id = :accountId
 					LIMIT 1
 				];
-				if (!cpeList.isEmpty()) {
-					// Collect the Id values into a separate list
-					Set<Id> cpeIds = new Set<Id>();
-					for (CareProgramEnrollee cpe : cpeList) {
-						cpeIds.add(cpe.Id);
-					}
+				
+				if (cpEnrolle != null) {					
+					Id cpeId = cpEnrolle.Id;
 					//This query has CareProgramEnrollee object query were it won't support With User_Mode
 					List<BI_PSPB_Treatment_Reminder__c> tasks = [
 						SELECT
@@ -577,7 +574,7 @@ public without sharing class BI_PSPB_TreatmentReminder {
 							BI_PSPB_Care_Program_Enrollee__c
 						FROM BI_PSPB_Treatment_Reminder__c
 						WHERE
-							BI_PSPB_Care_Program_Enrollee__c IN :cpeIds
+							BI_PSPB_Care_Program_Enrollee__c  =:cpeId
 							AND BI_PSPB_Date_of_Treatment__c != NULL
 							AND BI_PSPB_Reminder_Date__c > TODAY
 							AND BI_PSPB_Reminder_Date__c != TODAY

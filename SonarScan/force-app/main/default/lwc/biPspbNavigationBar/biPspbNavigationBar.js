@@ -85,6 +85,7 @@ import BI_PSPB_SecureLogout from '@salesforce/label/c.BI_PSPB_SecureLogout';
 import UPDATERX from '@salesforce/label/c.BI_PSPB_UpdatePrescriptionUrl';
 import completedLabel from '@salesforce/label/c.BI_PSP_Completed';
 import expired from '@salesforce/label/c.BI_PSP_Expired';
+import acuteVideoPage from '@salesforce/label/c.BI_PSPB_AcuteVideoPage';
 
 // To get Current UserId
 import Id from '@salesforce/user/Id';
@@ -206,6 +207,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 	brandedUrl = BRANDEDURL;
 	secureLogout = BI_PSPB_SecureLogout;
 	updateRx = UPDATERX;
+
 
     //Qualitative Date for topbar navigation
 	@wire(getPatientAfterThreemonthsAndFourteenWeeks)
@@ -382,7 +384,7 @@ export default class BiPspbNavigationBar extends LightningElement {
 		if (this.lastSegment) {
 			if (this.lastSegment === this.challenges || this.lastSegment === this.trophy) {
 				this.showChallenge = true;
-			} else if (this.lastSegment === this.infoLanding || this.lastSegment === this.articleCategory || this.lastSegment === this.searchResult || this.lastSegment === this.detailedArticle) {
+			} else if (this.lastSegment === this.infoLanding || this.lastSegment === this.articleCategory || this.lastSegment === this.searchResult || this.lastSegment === this.detailedArticle || this.lastSegment === acuteVideoPage) {
 				this.showInformationCenter = true;
 			} else if (this.lastSegment === this.symptomLanding || this.lastSegment === this.symptomTrackerGraph || this.lastSegment === this.symptomTrackerMain) {
 				this.showSymptomTracker = true;

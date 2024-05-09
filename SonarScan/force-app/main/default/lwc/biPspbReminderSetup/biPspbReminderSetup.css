@@ -4,7 +4,6 @@
 	height: 40px;
 	border-radius: 12px;
 	position: relative;
-	left: 0px;
 	bottom: 10px;
 	background-color: white;
 	color: #403a60;
@@ -462,7 +461,8 @@ sup {
 }
 
 @media only screen and (max-width:400px) {
-	.navigationcontent {
+	.navigationcontent 
+	{
 		width: 98%;
 		background-color: #ECDCA8;
 		padding: 3px 4px 0px 4px;
@@ -471,7 +471,26 @@ sup {
 		margin-top: 50px;
 		left: -5px;
 		/* width: 230%; */
-		height: 60px;
+		height: 80px;
+		margin-left: 35px;
+	}
+	.closing{
+		display: block;
+		position: relative;
+		bottom: 65px;
+        left: 38%;
+	}
+	.navigationcontentmobile
+	{
+		width: 108%;
+		background-color: #ECDCA8;
+		padding: 3px 4px 0px 4px;
+		font-size: -0.75em;
+		border-radius: 0.5em;
+		margin-top: 50px;
+		left: -5px;
+		/* width: 230%; */
+		height: 100px;
 		margin-left: 35px;
 	}
 
@@ -499,6 +518,26 @@ sup {
 		bottom: 40px;
 		left: 95%;
 	}
+	.close1{
+		display: block;
+		position: relative;
+		bottom: 80px;
+		left: 95%;
+	}
+	.circle button {
+	width: 80%;
+}
+.circle{
+	width: 100%;
+	position: relative;
+        right: 11%;
+}
+.clssbtn {
+	font-size: 13px;
+}
+.row{
+	width: 115%;
+}
 }
 
 @media only screen and (min-width:401px) and (max-width:600px) {
@@ -511,8 +550,27 @@ sup {
 		margin-top: 50px;
 		left: -5px;
 		/* width: 230%; */
-		height: 60px;
+		height: 80px;
 		margin-left: 40px;
+	}
+	.closing{
+		display: block;
+		position: relative;
+		bottom: 65px;
+        left: 40%;
+	}
+	.navigationcontentmobile
+	{
+		width: 100%;
+		background-color: #ECDCA8;
+		padding: 3px 4px 0px 4px;
+		font-size: -0.75em;
+		border-radius: 0.5em;
+		margin-top: 50px;
+		left: -5px;
+		/* width: 230%; */
+		height: 80px;
+		margin-left: 35px;
 	}
 
 	.navigationcontentdot {
@@ -532,7 +590,14 @@ sup {
 		margin-left: 95%;
 		cursor: pointer;
 		position: relative;
-		bottom: 42px;
+		bottom: 45px;
+	}
+	.close1{
+		display: block;
+		margin-left: 95%;
+		cursor: pointer;
+		position: relative;
+		bottom: 80px;
 	}
 }
 
@@ -540,6 +605,7 @@ sup {
 	.main {
 		width: 100%;
 	}
+
 
 	.buttonclass {
 		padding-left: 20px;
@@ -579,6 +645,8 @@ sup {
 
 	.slds-button {
 		width: 100% !important;
+		position: relative;
+        right: 2%;
 	}
 
 	.date-content {
@@ -909,6 +977,7 @@ sup {
 
 .slds-m-top_medium {
 	color: red;
+	margin-left: 20px;
 }
 
 .checkbox14 {
@@ -1131,7 +1200,7 @@ sup {
 
 @media only screen and (max-width:420px) {
 	.box {
-		width: 110% !important;
+		width: 115% !important;
 	}
 }
 
@@ -1139,7 +1208,19 @@ sup {
 	.toast {
 		top: -94px;
 	}
-
+	.navigationcontentmobile
+	{
+		width: 98%;
+		background-color: #ECDCA8;
+		padding: 3px 4px 0px 4px;
+		font-size: -0.75em;
+		border-radius: 0.5em;
+		margin-top: 50px;
+		left: -5px;
+		/* width: 230%; */
+		height: 60px;
+		margin-left: 35px;
+	}
 	.navigationcontent {
 		width: 50%;
 	}
@@ -1346,7 +1427,7 @@ sup {
 	}
 
 	.slds-button {
-		width: 500px;
+		width: 92%;
 	}
 
 	.btn {

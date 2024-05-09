@@ -1,7 +1,7 @@
 organization=my23org
 projectKey=My23Org_ToScan
 serverUrl=https://sonarcloud.io
-serverVersion=8.0.0.54160
+serverVersion=8.0.0.54268
 dashboardUrl=https://sonarcloud.io/dashboard?id=My23Org_ToScan
-ceTaskId=AY9MwDXPaakrgQfAV0HA
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AY9MwDXPaakrgQfAV0HA
+ceTaskId=AY9XhBL_29qJLb-moeKp
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AY9XhBL_29qJLb-moeKp

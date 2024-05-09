@@ -27,6 +27,34 @@
 .svgcls {
 	margin-left: 54px;
 }
+.svgfil{
+	fill:#403A60;
+	fill:color(display-p3 0.2510 0.2275 0.3765);
+	fill-opacity:1;
+}
+.vicon{
+	margin-left: 56px;
+}
+.pathstroke{
+	stroke:#403A60;
+	stroke-opacity:1;
+}
+
+.justformeleft{
+	margin-left:10px;
+}
+
+.headercontain{
+	width:156px;
+	height:24px;
+	margin-left: 7px;
+	margin-top: 20px; 
+	font:Eina-SemiBold; 
+	font-size:14px;
+}
+.svgdown{
+	margin-bottom:5px;
+}
 
 .descriptionsub {
 	font-size: 16px;
@@ -62,9 +90,6 @@ article img {
 .secondarticlecont {
 	width: 50%;
 }
-
-.article fourth {}
-
 .top-heading {
 	font-size: 24px;
 	font-weight: 400;
@@ -155,9 +180,9 @@ article h2 {
 
 .fourth {
 	background: rgba(236, 220, 168, 1) !important;
+	height: 471px;
+    width: 100%;
 }
-
-.search-container {}
 
 .search-bar1 {
 	width: 867px;
@@ -231,16 +256,15 @@ article h2 {
 	text-align: left;
 	text-decoration: none;
 	display: inline-block;
-	margin-left: 10px;
-
-	margin: 9px 2px;
 	cursor: pointer;
 	padding: 8px;
 	border-radius: 12px;
 	/* Add border-radius for curved edges */
 	height: 40px;
 	width: fit-content;
-
+	margin-top: 9px;
+	margin-bottom: 9px;
+	margin-left: 2px;
 	border: 15px;
 	border-color: #403a60;
 	outline: 1px solid #403a60;
@@ -452,11 +476,6 @@ article h2 {
 		display: none;
 	}
 
-	.article fourth {
-		height: auto;
-		width: 320px;
-	}
-
 	.headingvisual {
 		font-size: 16px !important;
 	}
@@ -621,11 +640,6 @@ article h2 {
 
 	.videofordes {
 		display: none;
-	}
-
-	.article fourth {
-		height: auto;
-		width: 320px;
 	}
 
 	.headingvisual {
@@ -825,11 +839,6 @@ article h2 {
 
 	.videofordes {
 		display: none;
-	}
-
-	.article fourth {
-		height: auto;
-		width: 320px;
 	}
 
 	.headingvisual {

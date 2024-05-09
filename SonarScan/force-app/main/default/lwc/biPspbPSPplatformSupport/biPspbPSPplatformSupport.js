@@ -95,10 +95,11 @@ label={descriptionEroor,descriptionEroor1000characters};
 
 connectedCallback() 
 {
+	loadStyle(this,caseradiobtn);
 try 
 {
 this.detectBrandedOrUnassigned();
-	loadStyle(this,caseradiobtn)
+	
 	getEnrolle({ userId: this.userId })
 		.then(result => {
 			if (result != null) {

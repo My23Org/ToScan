@@ -37,7 +37,9 @@
 .fillWidth {
   width: -webkit-fill-available;
 }
-
+.width100{
+  width: 100%;
+}
 .search-overlay {
   position: fixed;
   top: 0;

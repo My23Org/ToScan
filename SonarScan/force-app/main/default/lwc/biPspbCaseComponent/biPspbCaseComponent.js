@@ -61,7 +61,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 {
 	// Declaration of variable with @track
 	@track cases = [];
-	@track caseImageURL;
+	
 	@track caseTypeFilter = '';
 	@track typeFilter = lableAll;
 	@track statusFilter = lableAll;
@@ -113,7 +113,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 	// get method to retrieve the image	
 	get hasImage() {
-		return this.caseImageURL;
+		return this.caseImageURL && this.caseImageURL.data;
 	}
 
 	// To retireve current URL, based on that navigation will be set
@@ -177,6 +177,7 @@ export default class BiPspbCaseComponent extends NavigationMixin(LightningElemen
 	}
 	// To retrieve images from case records
 	@wire(getCaseImageURL, { caseId: '$caseId' })
+	caseImageURL;
 	wiredGetCaseImageURL({ error, data }) {
 		// Null data is checked and AuraHandledException is thrown from the Apex
 		if (data) {

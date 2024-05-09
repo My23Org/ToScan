@@ -858,8 +858,20 @@ export default class PatientEnrollmentForm extends NavigationMixin(
 
   handleHcpAccessCode(event) {
     this.accessCode = event.detail.value;
+    const hcpAccessCodeField = this.template.querySelector(
+      'lightning-input[data-field="hcpaccesscode"]'
+    );
+    if (this.showAccessCode) {
+      if (!hcpAccessCodeField.value) {
+        this.accessCodeErrorMessage = true;
+        hcpAccessCodeField.className = "textInput-err";
+        isValid = false;
+      } else {
+        this.accessCodeErrorMessage = false;
+        hcpAccessCodeField.className = "textInput";
+      }
+    }
   }
-
   handleChange(event) {
     this.selectedReferringPractitioner = event.detail.value;
   }

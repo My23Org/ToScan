@@ -864,7 +864,7 @@ handleFileInputChange(event) {
 		 const newtotalsizeimg = [...this.totalSize];
         const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
       
-        const maxImagesAllowed = 5;
+        const maxImagesAllowed = 4;
 
         if (newImageUrls.length + files.length > maxImagesAllowed) {
             // Trying to upload more than 5 images, show error message
@@ -875,20 +875,27 @@ handleFileInputChange(event) {
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
+			console.log(this.totalSize,"totalSize")
             if (file.type.includes('image')) {
 				//   this.totalSize += file.size;
 
-				  console.log( this.totalSize,' this.totalSize',maxFileSize)
+				  console.log( file.size,' file.size')
+				   console.log( maxFileSize,' maxFileSize')
+
+
+
                 if (file.size <= maxFileSize) {
                   newtotalsizeimg.push(file.size);
-	           if (totalSize > maxFileSize) {
-                        // Individual file size exceeds 5MB after adding, show error message
-                        newTotalSizeImg.pop();
-                        throw new Error('Total image size exceeds 5MB.');
-                    }
+	         
+					const reader = new FileReader();
+                    reader.onload = () => {
+                        newImageUrls.push(reader.result);
+                        this.imageUrls = [...newImageUrls];
+                    };
 				 let sum = 0;
 				 for(let j=0; j < this.totalSize.length; j++){
                     sum += this.totalSize[j];
+					console.log(sum,"sum")
 					if(sum > maxFileSize){
 						     this.uploadedlarge = true;
 							 this.totalSize.splice(j, 1);
@@ -899,11 +906,7 @@ handleFileInputChange(event) {
 					}
 
 				 }
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        newImageUrls.push(reader.result);
-                        this.imageUrls = [...newImageUrls];
-                    };
+                    
                     reader.readAsDataURL(file);
                 } else {
                     // Individual file size exceeds 5MB, show error message

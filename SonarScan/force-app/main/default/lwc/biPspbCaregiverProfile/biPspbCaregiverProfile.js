@@ -919,6 +919,11 @@ export default class BiPspbCareGiverProfile extends LightningElement {
 			event.preventDefault();
 		}
 	}
+	// Not allow paste event in firstname and last name
+	handlePaste(event) {
+		// Prevent default paste behavior
+		event.preventDefault();
+	}
 
 	// Allow only numbers 0-9 and + symbol for mobile number
 	handleKeyDown(event) {

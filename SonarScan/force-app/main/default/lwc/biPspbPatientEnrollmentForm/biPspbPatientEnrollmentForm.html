@@ -220,7 +220,8 @@
 				</div>
 				<template if:true={showinfoquestion}>
 					<hr class="hrline">
-					<div class={addNewHCPSectionClass} onclick={accordionBodyChange}> <!--disabled if removed, impacts the functionality-->
+					<div class={addNewHCPSectionClass} onclick={accordionBodyChange}>
+						<!--disabled if removed, impacts the functionality-->
 						Click here to add physician information &nbsp;
 						<lightning-icon icon-name='utility:chevrondown' alternative-text='chevrondown' size='x-small'
 							title='chevrondown' if:false={accordionStatus} class="lighticon">
@@ -319,7 +320,7 @@
 					</div>
 				</div>
 				<template if:true={showinfoquestion}>
-					<hr class="hrline" />
+					<hr class="hrlineone" />
 				</template>
 				<div class="btn-div">
 					<button class="prev-button prebtn" onclick={goBackToStepOne}>Previous</button>
@@ -465,9 +466,9 @@
 							<div class="slds-modal__container">
 								<!-- HEADER Section   -->
 								<div class="slds-modal__header">
-									<lightning-button alternative-text="Close this window" size="large" variant="bare-inverse"
-										onclick={closeModal} class="slds-modal__close">X</lightning-button> <!--alternative text, size, variant if removed, impacts the functionality-->
-									<h1>Terms and Conditions</h1>
+									<span onclick={closeModal} class="slds-modal__close">X</span>
+									<!--alternative text, size, variant if removed, impacts the functionality-->
+									<h1 class="terms">Terms and Conditions</h1>
 								</div>
 								<!-- Body Section   -->
 								<div class="slds-modal__content slds-p-around_medium">

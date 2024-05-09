@@ -212,7 +212,6 @@
 	.avatarcontent {
 		padding: 7px;
 		position: absolute;
-		right: 22px;
 		left: 30%;
 		right: 20%;
 		/* bottom: 26%; */
@@ -239,7 +238,6 @@
 		position: relative;
 		top: 30px;
 		padding: none;
-		left: 6px;
 		width: auto;
 		left: 0px;
 	}
@@ -348,7 +346,6 @@
 		position: relative;
 		top: 30px;
 		padding: none;
-		left: 6px;
 		width: auto;
 		left: 0px;
 	}

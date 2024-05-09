@@ -84,18 +84,7 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				notificationSubject = notificationSms.developername;
 				emailSubject = notificationsEmail.developername;
 				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_Challenges;
-			} else if (NotificationTypes == BI_PSPB_constantsClass.video) {
-				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
-					BI_PSPB_constantsClass.generalVideoSms
-				);
-				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
-					BI_PSPB_constantsClass.generalVideoEmail
-				);
-				urlPage = BI_PSPB_constantsClass.urlArticle;
-				notificationSubject = notificationSms.developername;
-				emailSubject = notificationsEmail.developername;
-				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_GeneralContent;
-			} else if (NotificationTypes == BI_PSPB_constantsClass.article) {
+			} else if (NotificationTypes == BI_PSPB_constantsClass.video || NotificationTypes == BI_PSPB_constantsClass.article) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
 					BI_PSPB_constantsClass.generalVideoSms
 				);
@@ -155,10 +144,10 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				notificationType = BI_PSPB_constantsClass.ACTION_TYPE_SymptomTracker;
 			} else if (NotificationTypes == BI_PSPB_constantsClass.tr1) {
 				BI_PSPB_Notification__mdt notificationSms = BI_PSPB_Notification__mdt.getInstance(
-					BI_PSPB_constantsClass.actionT3Sms
+					BI_PSPB_constantsClass.actionT1Sms
 				);
 				BI_PSPB_Notification__mdt notificationsEmail = BI_PSPB_Notification__mdt.getInstance(
-					BI_PSPB_constantsClass.actionT3Email
+					BI_PSPB_constantsClass.actionT1Email
 				);
 				urlPage = BI_PSPB_constantsClass.urlDashboard;
 				notificationSubject = notificationSms.developername;
@@ -412,7 +401,19 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 					new List<BI_PSP_Notification_Setting__c>()
 				);
 			}
-
+			for (BI_PSP_Notification_Setting__c setting : [
+    			SELECT Id, 
+				BI_PSP_Patient__c, 
+				BI_PSP_Email__c, 
+				BI_PSP_SMS__c
+    			FROM BI_PSP_Notification_Setting__c
+    			WHERE BI_PSP_Patient__c IN :accountToNotificationsMaps.keySet() 
+				AND BI_PSP_Notification_Type__c = :NotificationType
+			]) {
+    			if (accountToNotificationsMaps.containsKey(setting.BI_PSP_Patient__c)) {
+        			accountToNotificationsMaps.get(setting.BI_PSP_Patient__c).add(setting);
+    			}
+			}
 			// Iterate through BI_PSPB_Enrollee_Caregiver__c records
 			//Since Careprogramenrollee lookup field is used we cannot use USER_MODE here.
 			for (BI_PSPB_Enrollee_Caregiver__c enrolleCaregiverId : [
@@ -428,44 +429,36 @@ public with sharing class BI_PSPB_smsAndEmailHandler {
 				WHERE BI_PSPB_Patient__c IN :accountRec
 			]) {
 				if (enrolleCaregiverId.BI_PSPB_Patient__c != null) {
-					Id personContactId = enrolleCaregiverId.BI_PSPB_Caregiver__r.PersonContactId;
-					Id accIds = enrolleCaregiverId.BI_PSPB_Patient__r.Id;
 					Date birthdate = enrolleCaregiverId.BI_PSPB_Patient__r.BI_PSP_Birthdate__c;
-
 					if (birthdate != null) {
 						Integer age = Date.today().year() - birthdate.year();
-						if (age < 18 && personContactId != null) {
-							notificationCare.add(personContactId);
-							notificationCareAcc.add(accIds);
+						if (age < 18) {
+							notificationCare.add(enrolleCaregiverId.BI_PSPB_Caregiver__r.PersonContactId);
+							notificationCareAcc.add(enrolleCaregiverId.BI_PSPB_Patient__r.Id);
 						}
 					}
 				}
 			}
-
-			// Process caregiver notifications and associate them with notification settings
 			for (Id acccId : notificationCareAcc) {
 				// Get notification settings for this Account Id
-				List<BI_PSP_Notification_Setting__c> notificationSettings = accountToNotificationsMaps.get(
-					acccId
-				);
-				// Add caregiver notifications to the corresponding notification settings
+				List<BI_PSP_Notification_Setting__c> notificationSettings = accountToNotificationsMaps.get(acccId);
 				if (notificationSettings != null) {
-					for (
-						BI_PSP_Notification_Setting__c notificationSetting : notificationSettings
-					) {
-						for (Id contactId : notificationCare) {
-							if (notificationSetting.BI_PSP_Email__c == true) {
-								contactIdsToSendEmail.add(contactId);
+							for (
+								BI_PSP_Notification_Setting__c notificationSetting : notificationSettings
+							) {
+								for (Id contactId : notificationCare) {
+									if (notificationSettings[0].BI_PSP_Email__c == true) {
+										contactIdsToSendEmail.add(contactId);
+									}
+								}
+								for (Id contactId : notificationCare) {
+									if (notificationSettings[0].BI_PSP_SMS__c == true) {
+										contactIdsToSendSMS.add(contactId);
+									}
+								}
 							}
 						}
-						for (Id contactId : notificationCare) {
-							if (notificationSetting.BI_PSP_SMS__c == true) {
-								contactIdsToSendSMS.add(contactId);
-							}
-						}
-					}
-				}
-			}
+			}			
 			if (!contactIdsToSendEmail.isEmpty()) {
 				BI_PSPB_SendEmailBatch sendEmail = new BI_PSPB_SendEmailBatch(
 					contactIdsToSendEmail,

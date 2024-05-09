@@ -393,7 +393,8 @@ return successList; //we are having rendering functionality for null, so Aurahan
 @AuraEnabled
 public static list<ChallengeWrapper> updateChallenges(
 String challenge,
-string activeAvailable
+String activeAvailable,
+String userId
 ) {
 try {
 	boolean validOne;
@@ -447,8 +448,12 @@ try {
 		OR HealthCloudGA__Description__c = :System.Label.BI_PSP_SymptomTwo
 		OR HealthCloudGA__Description__c = :System.Label.BI_PSP_QuestionnaireLevel1
 		OR HealthCloudGA__Description__c = :System.Label.BI_PSP_QuestionnaireLevel2
-		OR HealthCloudGA__Description__c = :System.Label.BI_PSP_QuestionnaireLevel3)
+		OR HealthCloudGA__Description__c = :System.Label.BI_PSP_QuestionnaireLevel3
+		OR HealthCloudGA__Description__c = 'Connect to the Beyond GPP patient support program for 4 days in one month'
+		OR HealthCloudGA__Description__c = 'Connect to the Beyond GPP patient support program for 8 days in one month'
+		OR HealthCloudGA__Description__c = 'Connect to the Beyond GPP patient support program for 15 days in one month')
 	];
+	system.debug('carePlan; '+carePlan);
 	if (
 		carePlan.size() > 0 &&
 		!carePlan.isEmpty() &&
@@ -465,6 +470,7 @@ try {
 		WHERE
 			BI_PSP_CareProgramEnrollee__c = :challengetoUpdate.BI_PSP_Care_Program_Enrollee__r.Id
 		];
+		system.debug('assesList:'+assesList);
 		if (
 		carePlan[0].HealthCloudGA__Description__c ==
 		System.Label.BI_PSP_SymptomOne &&
@@ -629,6 +635,183 @@ try {
 			successMessage.error = BI_PSP_Complete_DLQI;
 			successMessage.percentage = 0;
 		}
+		} else if(carePlan[0].HealthCloudGA__Description__c == 'Connect to the Beyond GPP patient support program for 4 days in one month' &&
+		carePlan[0].BI_PSP_Challenge_Level__c == 'Level 1'){
+			// Get today's date
+			Date today = Date.today();
+			Integer successLoginCount = 0;
+			// Calculate the start date of the current month
+			Date startDate = today.toStartOfMonth();
+
+			// Calculate the end date of the current month
+			Date endDate = today.toStartOfMonth().addMonths(1).addDays(-1);
+
+			// Store the start and end dates in separate variables
+			Date startDateOfMonth = startDate;
+			Date endDateOfMonth = endDate;
+
+			String currentUserId = userId;
+			System.debug('currentUserId-->'+ currentUserId);
+
+			Set<Integer> uniqueDates = new Set<Integer>();
+
+			List<LoginHistory> loginHistoryRecords = [
+				SELECT id, UserId, LoginTime, Status, LoginType 
+				FROM LoginHistory 
+				WHERE UserId =: currentUserId AND LoginTime >=: startDateOfMonth AND LoginTime <=: endDateOfMonth
+			];	
+			System.debug('loginHistoryRecords-->'+ loginHistoryRecords);
+			// Collect unique dates from login records
+			for (LoginHistory logHistory : loginHistoryRecords) {
+				// Extract the date part from the LoginTime field
+				if(logHistory.Status == 'Success'){
+						System.debug('Date-->'+ logHistory.LoginTime);
+						Integer day = logHistory.LoginTime.dayGMT();
+				//Datetime loginDate = logHistory.LoginTime;
+				uniqueDates.add(day);
+					System.debug('uniqueDates-->'+ uniqueDates);
+				}
+			}
+
+			// Get the count of unique dates
+			Integer uniqueDateCount = uniqueDates.size();
+			System.debug('uniqueDateCount-->'+ uniqueDateCount);
+			if(uniqueDateCount != null){
+				if(uniqueDateCount >= 4){
+					saverecord = true;
+					//update challengetoUpdate;
+					successMessage.challengeUpdated = challengetoUpdate;
+					successMessage.percentage = 100;
+				}else{
+					saverecord = false;
+					successMessage.percentage = null;
+					successMessage.error =
+					BI_PSP_Complete4ST +
+					uniqueDateCount +
+					BI_PSP_CurrentlyCompleted;
+					successMessage.percentage =
+					(Decimal) uniqueDateCount /
+					4 *
+					100;
+					System.debug('successMessage.percentage-->'+ successMessage.percentage);
+				}
+			}
+		}
+		else if(carePlan[0].HealthCloudGA__Description__c == 'Connect to the Beyond GPP patient support program for 8 days in one month' &&
+		carePlan[0].BI_PSP_Challenge_Level__c == 'Level 2'){
+			// Get today's date
+			Date today = Date.today();
+			Integer successLoginCount = 0;
+			// Calculate the start date of the current month
+			Date startDate = today.toStartOfMonth();
+
+			// Calculate the end date of the current month
+			Date endDate = today.toStartOfMonth().addMonths(1).addDays(-1);
+
+			// Store the start and end dates in separate variables
+			Date startDateOfMonth = startDate;
+			Date endDateOfMonth = endDate;
+
+			String currentUserId = userId;
+			System.debug('currentUserId-->'+ currentUserId);
+
+			Set<Integer> uniqueDates = new Set<Integer>();
+
+			List<LoginHistory> loginHistoryRecords = [
+				SELECT id, UserId, LoginTime, Status, LoginType 
+				FROM LoginHistory 
+				WHERE UserId =: currentUserId AND LoginTime >=: startDateOfMonth AND LoginTime <=: endDateOfMonth
+			];	
+			System.debug('loginHistoryRecords-->'+ loginHistoryRecords);
+			// Collect unique dates from login records
+			for (LoginHistory logHistory : loginHistoryRecords) {
+				// Extract the date part from the LoginTime field
+				if(logHistory.Status == 'Success'){
+				Integer day = logHistory.LoginTime.dayGMT();
+				uniqueDates.add(day);
+				}
+			}
+
+			// Get the count of unique dates
+			Integer uniqueDateCount = uniqueDates.size();
+			System.debug('uniqueDateCount-->'+ uniqueDateCount);
+			if(uniqueDateCount != null){
+				if(uniqueDateCount >= 8){
+					saverecord = true;
+					//update challengetoUpdate;
+					successMessage.challengeUpdated = challengetoUpdate;
+					successMessage.percentage = 100;
+				}else{
+					saverecord = false;
+					successMessage.error =
+					BI_PSP_Complete4ST +
+					uniqueDateCount +
+					BI_PSP_CurrentlyCompleted;
+					successMessage.percentage =
+					(Decimal) uniqueDates.size() /
+					8 *
+					100;
+					System.debug('successMessage.percentage-->'+ successMessage.percentage);
+				}
+			}
+		}
+		else if(carePlan[0].HealthCloudGA__Description__c == 'Connect to the Beyond GPP patient support program for 15 days in one month' &&
+		carePlan[0].BI_PSP_Challenge_Level__c == 'Level 3'){
+			// Get today's date
+			Date today = Date.today();
+			Integer successLoginCount = 0;
+			// Calculate the start date of the current month
+			Date startDate = today.toStartOfMonth();
+
+			// Calculate the end date of the current month
+			Date endDate = today.toStartOfMonth().addMonths(1).addDays(-1);
+
+			// Store the start and end dates in separate variables
+			Date startDateOfMonth = startDate;
+			Date endDateOfMonth = endDate;
+
+			String currentUserId = userId;
+			System.debug('currentUserId-->'+ currentUserId);
+
+			Set<Integer> uniqueDates = new Set<Integer>();
+
+			List<LoginHistory> loginHistoryRecords = [
+				SELECT id, UserId, LoginTime, Status, LoginType 
+				FROM LoginHistory 
+				WHERE UserId =: currentUserId AND LoginTime >=: startDateOfMonth AND LoginTime <=: endDateOfMonth
+			];	
+			System.debug('loginHistoryRecords-->'+ loginHistoryRecords);
+			// Collect unique dates from login records
+			for (LoginHistory logHistory : loginHistoryRecords) {
+				// Extract the date part from the LoginTime field
+				if(logHistory.Status == 'Success'){
+				Integer day = logHistory.LoginTime.dayGMT();
+				uniqueDates.add(day);
+				}
+			}
+
+			// Get the count of unique dates
+			Integer uniqueDateCount = uniqueDates.size();
+			System.debug('uniqueDateCount-->'+ uniqueDateCount);
+			if(uniqueDateCount != null){
+				if(uniqueDateCount >= 15){
+					saverecord = true;
+					//update challengetoUpdate;
+					successMessage.challengeUpdated = challengetoUpdate;
+					successMessage.percentage = 100;
+				}else{
+					saverecord = false;
+					successMessage.error =
+					BI_PSP_Complete4ST +
+					uniqueDateCount +
+					BI_PSP_CurrentlyCompleted;
+					successMessage.percentage =
+					Math.round((Decimal) uniqueDates.size() /
+					15 *
+					100);
+					System.debug('successMessage.percentage-->'+ successMessage.percentage);
+				}
+			}
 		}
 	} else {
 		//update challengetoUpdate;

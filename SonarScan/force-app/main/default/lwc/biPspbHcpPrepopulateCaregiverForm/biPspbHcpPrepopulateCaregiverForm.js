@@ -1108,6 +1108,7 @@ export default class biPspbHcpPrepopulateCaregiverForm extends NavigationMixin(
 				'input-error-label';
 		} else {
 			this.dateofbirthrequire = false;
+			this.dateofbirthvaild = false;
 			dobField.className = 'textInput';
 			this.template.querySelector('label[data-field="dob"]').className =
 				'input-label';

@@ -214,17 +214,15 @@ export default class biPspbaddcaregiver extends LightningElement {
 
 	//firstname lastname regex
 	handleKeyDown1(event) {
-		// Allow only letters, backspace, and delete
-		if (!((event.keyCode >= 65 && event.keyCode <= 90) || // A-Z
-			(event.keyCode >= 97 && event.keyCode <= 122) ||  // a-z
-			event.keyCode === 8 ||  // Backspace
-			event.keyCode === 46 ||  // Delete
-			(event.keyCode >= 37 && event.keyCode <= 40) ||
-			event.keyCode === 9 ||  // Tab
-			(event.shiftKey && event.keyCode === 9)
-		)) {
-			event.preventDefault();
-		}
+    const allowedCharacters = /^[A-Za-z]+$/;
+    if (!allowedCharacters.test(event.key)) {
+        event.preventDefault();
+    }
+}
+// Not allow paste event in firstname and last name
+	handlePaste(event) {
+		// Prevent default paste behavior
+		event.preventDefault();
 	}
 
 

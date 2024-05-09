@@ -925,13 +925,6 @@ static void testUpdateRecentValue() {
                 );
                 insert symptomTracker;
     
-                AllergyIntolerance AllergyIntoleranceinsert = new AllergyIntolerance(
-                    PatientId = testAccount.Id,
-                    BI_PSP_Symptoms__c = cppt.Id,
-                    BI_PSP_Symptom_Name__c = symptomTracker.Id
-                );
-                insert AllergyIntoleranceinsert;
-    
                 // Create the wrapper object for update
                 BI_PSP_SymptomTracker.BI_PSPB_Symptomtrackerwrapeermethod inputWrapper = new BI_PSP_SymptomTracker.BI_PSPB_Symptomtrackerwrapeermethod();
                 inputWrapper.CareprogramId = testCpa.Id;

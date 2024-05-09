@@ -132,6 +132,58 @@ import tips from '@salesforce/label/c.BI_PSPB_tips';
 import feelingsetc from '@salesforce/label/c.BI_PSPB_manageFeelingsEtc';
 import evententer from '@salesforce/label/c.BI_PSP_EventEnter';
 import viewlabel from '@salesforce/label/c.BI_PSPB_View';
+import articleone from '@salesforce/label/c.BI_PSPB_articleOne';
+import articletwo from '@salesforce/label/c.BI_PSPB_articleTwo';
+import articlethree from '@salesforce/label/c.BI_PSPB_articleThree';
+import articlefour from '@salesforce/label/c.BI_PSPB_articleFour';
+import articlefive from '@salesforce/label/c.BI_PSPB_articleFive';
+import articlesix from '@salesforce/label/c.BI_PSPB_articleSix';
+import articleseven from '@salesforce/label/c.BI_PSPB_articleSeven';
+import articleeight from '@salesforce/label/c.BI_PSPB_articleEight';
+import articlenine from '@salesforce/label/c.BI_PSPB_articleNine';
+import articleten from '@salesforce/label/c.BI_PSPB_articleTen';
+import articleeleven from '@salesforce/label/c.BI_PSPB_articleEleven';
+import articletwelve from '@salesforce/label/c.BI_PSPB_articleTwelve';
+import articlethirteen from '@salesforce/label/c.BI_PSPB_articleThirteen';
+import articlefourteen from '@salesforce/label/c.BI_PSPB_articleFourteen';
+import articlefifteen from '@salesforce/label/c.BI_PSPB_articleFifteen';
+import articlesixteen from '@salesforce/label/c.BI_PSPB_articleSixteen';
+import articleseventeen from '@salesforce/label/c.BI_PSPB_articleSeventeen';
+import articleeighteen from '@salesforce/label/c.BI_PSPB_articleEighteen';
+import articletwenty from '@salesforce/label/c.BI_PSPB_articleTwenty';
+import articletwentyone from '@salesforce/label/c.BI_PSPB_articleTwentyOne';
+import articletwentytwo from '@salesforce/label/c.BI_PSPB_articleTwentyTwo';
+import articletwentythree from '@salesforce/label/c.BI_PSPB_articleTwentyThree';
+import articletwentyfour from '@salesforce/label/c.BI_PSPB_articleTwentyFour';
+import BI_PSPB_ArticleOneRT from '@salesforce/label/c.BI_PSPB_ArticleOneRT';
+import BI_PSPB_ArticleTwoRT from '@salesforce/label/c.BI_PSPB_ArticleTwoRT';
+import BI_PSPB_ArticleThreeRT from '@salesforce/label/c.BI_PSPB_ArticleThreeRT';
+import BI_PSPB_ArticleFourRT from '@salesforce/label/c.BI_PSPB_ArticleFourRT';
+import BI_PSPB_ArticleFiveRT from '@salesforce/label/c.BI_PSPB_ArticleFiveRT';
+import BI_PSPB_ArticleSixRT from '@salesforce/label/c.BI_PSPB_ArticleSixRT';
+import BI_PSPB_ArticleSevenRT from '@salesforce/label/c.BI_PSPB_ArticleSevenRT';
+import BI_PSPB_ArticleEightRT from '@salesforce/label/c.BI_PSPB_ArticleEightRT';
+import BI_PSPB_ArticleNineRT from '@salesforce/label/c.BI_PSPB_ArticleNineRT';
+import BI_PSPB_ArticleTenRT from '@salesforce/label/c.BI_PSPB_ArticleTenRT';
+import BI_PSPB_ArticleElevenRT from '@salesforce/label/c.BI_PSPB_ArticleElevenRT';
+import BI_PSPB_ArticleTwelveRT from '@salesforce/label/c.BI_PSPB_ArticleTwelveRT';
+import BI_PSPB_ArticleThirteenRT from '@salesforce/label/c.BI_PSPB_ArticleThirteenRT';
+import BI_PSPB_ArticleFourteenRT from '@salesforce/label/c.BI_PSPB_ArticleFourteenRT';
+import BI_PSPB_ArticleFifteenRT from '@salesforce/label/c.BI_PSPB_ArticleFifteenRT';
+import BI_PSPB_ArticleSixteenRT from '@salesforce/label/c.BI_PSPB_ArticleSixteenRT';
+import BI_PSPB_ArticleSeventeenRT from '@salesforce/label/c.BI_PSPB_ArticleSeventeenRT';
+import BI_PSPB_ArticleEighteenRT from '@salesforce/label/c.BI_PSPB_ArticleEighteenRT';
+import BI_PSPB_ArticleNineteenRT from '@salesforce/label/c.BI_PSPB_ArticleNineteenRT';
+import BI_PSPB_ArticleTwentyRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyRT';
+import BI_PSPB_ArticleTwentyOneRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyOneRT';
+import BI_PSPB_ArticleTwentyTwoRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyTwoRT';
+import BI_PSPB_ArticleTwentyThreeRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyThreeRT';
+import BI_PSPB_ArticleTwentyFourRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyFourRT';
+import BI_PSPB_ArticleTwentyFiveRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyFiveRT';
+import BI_PSPB_ArticleTwentySixRT from '@salesforce/label/c.BI_PSPB_ArticleTwentySixRT';
+import BI_PSPB_ArticleTwentySevenRT from '@salesforce/label/c.BI_PSPB_ArticleTwentySevenRT';
+import BI_PSPB_ArticleTwentyEightRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyEightRT';
+import BI_PSPB_ArticleTwentyNineRT from '@salesforce/label/c.BI_PSPB_ArticleTwentyNineRT';
 // To get Current UserId
 import Id from '@salesforce/user/Id';
 
@@ -179,6 +231,37 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 	description3;
 	threeDifferentNumbers;
 	titlear;
+	topics = {
+		[articleone]: [BI_PSPB_ArticleOneRT],
+		[articletwo]: [BI_PSPB_ArticleTwoRT],
+		[articlethree]: [BI_PSPB_ArticleThreeRT],
+		[articlefour]: [BI_PSPB_ArticleFourRT],
+		[articlefive]: [BI_PSPB_ArticleFiveRT],
+		[articlesix]: [BI_PSPB_ArticleSixRT],
+		[articleseven]: [BI_PSPB_ArticleSevenRT],
+		[articleeight]: [BI_PSPB_ArticleEightRT],
+		[articlenine]: [BI_PSPB_ArticleNineRT],
+		[articleten]: [BI_PSPB_ArticleTenRT],
+		[articleeleven]: [BI_PSPB_ArticleElevenRT],
+		[articletwelve]: [BI_PSPB_ArticleTwelveRT],
+		[articlethirteen]: [BI_PSPB_ArticleThirteenRT],
+		[articlefourteen]: [BI_PSPB_ArticleFourteenRT],
+		[articlefifteen]: [BI_PSPB_ArticleFifteenRT],
+		[articlesixteen]: [BI_PSPB_ArticleSixteenRT],
+		[articleseventeen]: [BI_PSPB_ArticleSeventeenRT],
+		[articleeighteen]: [BI_PSPB_ArticleEighteenRT],
+		[articlenineteen]: [BI_PSPB_ArticleNineteenRT],
+		[articletwenty]: [BI_PSPB_ArticleTwentyRT],
+		[articletwentyone]: [BI_PSPB_ArticleTwentyOneRT],
+		[articletwentytwo]: [BI_PSPB_ArticleTwentyTwoRT],
+		[articletwentythree]: [BI_PSPB_ArticleTwentyThreeRT],
+		[articletwentyfour]: [BI_PSPB_ArticleTwentyFourRT],
+		[articletwentyfive]: [BI_PSPB_ArticleTwentyFiveRT],
+		[articletwentysix]: [BI_PSPB_ArticleTwentySixRT],
+		[articletwentyseven]: [BI_PSPB_ArticleTwentySevenRT],
+		[articletwentyeight]: [BI_PSPB_ArticleTwentyEightRT],
+		[articletwentynine]: [BI_PSPB_ArticleTwentyNineRT]
+	}
 	// button labels
 	standarItemlink = [
 		{ id: 1, title: articlecategoryone, titleadb: articlecategoryvalone },
@@ -494,11 +577,13 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 							text: element.title,
 							text2: element.subtitle,
 							page: element.url,
-							titleadb: articlestring + ' ' + element.title
+							titleadb: articlestring + ' ' + element.title,
+							readtime: this.topics[element.title]
 						}
 					]);
 				});
 				if (this.results.length > 0) {
+
 					if (this.urlq !== brandedurl || this.urlq === brandedurl) {
 						if (this.patientstatusval === statusacute) {
 							const filteredDatanacute = this.results.filter(

@@ -3493,8 +3493,8 @@ overflow: hidden; */
 
 	.text {
 		width: 170%;
-		font-size: 16px;
-		font: 18px;
+		font-size: 18px;
+		/* font: 18px; */
 		line-height: 27px;
 		height: 60px;
 	}

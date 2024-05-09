@@ -75,6 +75,9 @@ export default class BiPspbReminderSetup extends LightningElement
 	@track value3;
 	@track treatvalue1;
 	@track treatvalue2;
+	@track closedot=true;
+	@track clss=true;
+	@track defaultcls=true;
 	@track disable14 = false;
 	@track disable10 = false;
 	@track disable7 = false;
@@ -84,6 +87,7 @@ export default class BiPspbReminderSetup extends LightningElement
 	@track checked3 = false;
 	@track checked1 = false;
 	@track showAfterSaveContent = true;
+	@track checkdata=false;
 	@track caregiver = false;
 	@track selectedOption = {
 		src: Default_avatar_JPEG_URL,
@@ -239,7 +243,12 @@ export default class BiPspbReminderSetup extends LightningElement
 	// To close the modal box
 	Xbtn() 
 	{
-		this.variable = false;
+		this.defaultcls=false;
+		this.clss=false;
+		this.cls=true;
+		this.closedot=true;
+		this.variable = true;
+		this.checkdata=false;
 	}
 	// To display the short names of the month
 	renderedCallback() 
@@ -282,6 +291,14 @@ export default class BiPspbReminderSetup extends LightningElement
 			}
 			});
 	}	
+	mobileclick()
+	{
+		this.clss=true;
+		this.showAfterSaveContent= false;
+		this.closedot=false;
+		this.checkdata=true;
+		this.variable=false;
+	}
 	// Handle change event when date is selected
 	handleDateChange(event) 
 	{
@@ -433,6 +450,7 @@ export default class BiPspbReminderSetup extends LightningElement
 		// Check if any required fields are not filled
 		this.showMessage = !this.selectedDate || this.value.length === 0;
 		this.showMessage2 = this.treatValue.length === 0;
+		this.showDiv = false;
 		this.showAddToCalendarBtn = true;
 		// Log selected reminders and treatments		
 		// Update selectedReminders and selectedTreatment arrays
@@ -448,12 +466,14 @@ export default class BiPspbReminderSetup extends LightningElement
 		} 
 		else 
 		{
+			
 			this.Doberrormessage = false;
 			lastnameField.className = 'textInput';
 			this.template.querySelector('label[data-field="DOB"]').className = 'input-label';
 		}
 		if (!this.showMessage2 && this.selectedDate && this.selectedReminders.length > 0) 
 		{
+			
 			let allReminderDates = [];
 			// Iterate over selectedReminders and selectedTreatment arrays
 			this.value.concat(this.treatValue).forEach((days, index) => 
@@ -514,6 +534,7 @@ export default class BiPspbReminderSetup extends LightningElement
 	// Save task records to Salesforce
 	saveTaskRecords() 
 	{
+		
 		const accountId = this.cpeId;	
 		const selectedDate = this.selectedDate;
 		const selectedReminders = this.selectedReminders;		
@@ -521,10 +542,11 @@ export default class BiPspbReminderSetup extends LightningElement
 		// Call Apex method to save reminder records
 		saveReminderDates({ accountId, selectedDate, selectedReminders, selectedTreatment })
 		// Null data is checked and AuraHandledException is thrown from the Apex
+		
 		.then(() => 
 		{
 			// Successful save
-			this.showDiv = true;
+			
 			this.showAfterSaveContent = false;	
 			// A delay is introduced to improve the user experience
 			setTimeout(() => 
@@ -541,6 +563,7 @@ export default class BiPspbReminderSetup extends LightningElement
 			{
 			// Error handling
 			this.showToast(errormessage,error.message, errorvariant);
+			
 		});		
 	}
 	// Handler for clicking the 'Add to Calendar' button

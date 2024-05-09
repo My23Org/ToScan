@@ -289,18 +289,25 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 				FROM BI_PSPB_Lead_Caregiver__c
 				WHERE BI_PSPB_Lead__c IN :leadIds
 			];
+			Set<String> emailAddresses = new Set<String>();
 			for (BI_PSPB_Lead_Caregiver__c leadCaregiver : leadCaregivers) {
+				emailAddresses.add(leadCaregiver.BI_PSPB_E_mail_ID__c);
 				leadCaregiverMap.put(
 					leadCaregiver.BI_PSPB_Lead__c,
 					leadCaregiver
+					
 				);
 			}
+
 			Id recordTypeId = Schema.SObjectType.contact.getRecordTypeInfosByName()
 				.get(caregiver)
 				.getRecordTypeId();
 			// We verify that all contact email addresses match existing email addresses; we are unable to use limit checks.
 			//To create the contact for a caregiver of a minor patient.
-			List<Contact> cont = [SELECT id, Name, email FROM contact WHERE RecordType.Id = :recordTypeId AND Email IN :leadCaregiverMap.keySet()];
+			system.debug('key'+ emailAddresses);
+			system.debug('record'+ recordTypeId);
+
+			List<Contact> cont = [SELECT id, Name, email FROM contact WHERE RecordType.Id = :recordTypeId AND Email IN :emailAddresses];
 			List<Contact> caregiverContactsToInsert = new List<Contact>();
 			List<BI_PSPB_Enrollee_Caregiver__c> enrolleeCaregiversToInsert = new List<BI_PSPB_Enrollee_Caregiver__c>();
 
@@ -315,10 +322,11 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 						BI_PSPB_Lead_Caregiver__c leadCaregiver = leadCaregiverMap.get(
 							lead.Id
 						);
+						system.debug('con' + cont);
 						//We are adding the nested if statement in accordance with the busness requirement.
 						if(!cont.isEmpty()) {
 						if (leadCaregiver != null &&
-							cont[0].email != leadCaregiver.BI_PSPB_E_mail_ID__c) {  
+							cont[0].email != leadCaregiver.BI_PSPB_E_mail_ID__c) { 
 							Contact caregiverContact = new Contact(
 								FirstName = leadCaregiver.BI_PSPB_First_Name__c,
 								LastName = leadCaregiver.BI_PSPB_Last_Name__c,
@@ -332,6 +340,19 @@ public with sharing class BI_PSPB_LeadConvertMultiple {
 
 							caregiverContactsToInsert.add(caregiverContact);
 						}
+					}else{
+						Contact caregiverContact = new Contact(
+								FirstName = leadCaregiver.BI_PSPB_First_Name__c,
+								LastName = leadCaregiver.BI_PSPB_Last_Name__c,
+								Email = leadCaregiver.BI_PSPB_E_mail_ID__c,
+								BI_PSPB_Birthdate__c = leadCaregiver.BI_PSPB_Date_of_Birth__c,
+								BI_PSPB_Preferred_Communication_Method__c = leadCaregiver.BI_PSPB_Preferred_Communication_Method__c,
+								BI_PSPB_Relationship_To_Patient__c = leadCaregiver.BI_PSPB_Relationship_To_Patient__c,
+								Phone = leadCaregiver.BI_PSPB_Phone_number__c,
+								BI_PSPB_GrantAccess__c = true,
+								RecordTypeId = recordTypeId);
+
+							caregiverContactsToInsert.add(caregiverContact);
 					}
 					}
 				} else {

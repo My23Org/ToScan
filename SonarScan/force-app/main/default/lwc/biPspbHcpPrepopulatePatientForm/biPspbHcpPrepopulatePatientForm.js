@@ -662,17 +662,19 @@ To enroll your patients in the Beyond GPP: The Spevigo® Patient Support Program
 						if (this.leadId !== '') {
 							this.Sldsprogree = true;
 							this.currentStep = '2';
-							this.template
-								.querySelector('div.stepOne')
-								.classList.add('slds-hide');
-							this.template
-								.querySelector('div.stepTwo')
-								.classList.remove('slds-hide');
-							// Progress indicator
-							this.template
-								.querySelector('div.slds-progress')
-								.classList.remove('slds-hide');
-							//innerhtml is used to achieve mobile responsiveness
+							const stepOneDiv = this.template.querySelector('div.stepOne');
+							if (stepOneDiv) {
+								stepOneDiv.classList.add('slds-hide');
+							}
+							const stepTwoDiv = this.template.querySelector('div.stepTwo');
+							if (stepTwoDiv) {
+								stepTwoDiv.classList.remove('slds-hide');
+							}
+							const progressDiv = this.template.querySelector('div.slds-progress');
+							if (progressDiv) {
+								progressDiv.classList.remove('slds-hide');
+							}
+
 							this.template.querySelector('p.avatar-content').innerHTML =
 								`Hello! Welcome to Beyond GPP: The Spevigo® Patient Support Program. We're excited to help you manage your generalized pustular psoriasis (GPP) and make the most of your Spevigo® therapy.
 <br>
@@ -728,7 +730,6 @@ Please continue by verifying your information. Click 'next' to proceed if the pr
 						this.mobilevalue2 = `Hello! Welcome to Beyond GPP: The Spevigo® Patient....`;
 					});
 			} catch (err) {
-				console.log('dddddd')
 				this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from Apex
 			}
 		} else {

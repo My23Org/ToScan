@@ -21,22 +21,32 @@
 	<div if:true={variable} class="navigationcontent" >
 		<pre class="contentbox"><div  if:true={showAfterSaveContent}><figcaption>Set reminders!<br><br>Use this page to record your treatment<br>date and notify us on your preferred<br>advance notification time.<br><br>Set it and leave it to us!</figcaption></div></pre>
 		<pre class="contentbox"><div if:false={showAfterSaveContent}><figcaption>Its done!<br><br>Your treatment and reminder is set.<br><br>Look out for the reminders!<br></figcaption></div></pre>
-		 <pre class="contentbox1" ><div if:true={showAfterSaveContent}><figcaption>Set reminders!<br>Use this page to record your...</figcaption></div></pre><span class="close" onclick={Xbtn} >X</span>
-		<pre class="contentbox1" ><div if:false={showAfterSaveContent}><figcaption>Its done! <span class="closing">X</span><br><br>Your treatment and reminder...</figcaption></div></pre>
+		 <pre class="contentbox1" ><div if:true={showAfterSaveContent}><figcaption>Set reminders!<br>Use this page to record your...</figcaption></div></pre><span if:true={defaultcls} class="close" onclick={Xbtn} >X</span>
+		<pre class="contentbox1" ><div if:false={showAfterSaveContent}><figcaption>Its done! <br><br>Your treatment and reminder...</figcaption></div></pre><span if:true={cls} class="closing">X</span>
 	</div>
-	<div>
-		<p  onclick={mobileclick}  class="navigationcontentdot">...</p>
+	<div class="navigationcontentmobile"  if:true={checkdata}>
+		<p>Set reminders! 
+		Use this page to record your treatment
+date and notify us on your preferred
+advance notification time.
+
+Set it and leave it to us!
+		</p>
+		<span if:true={clss} class="close1" onclick={Xbtn} >X</span>
+	</div>
+	<div if:true={closedot}>
+		<p onclick={mobileclick}  class="navigationcontentdot">...</p>
 	</div>
 	</div>
 	</div> 
 	<div class="show">
-<template if:true={showDiv}>
+<!-- <template if:true={showDiv}>
 	<div class="toast"><p class="para"><img  class="img4" src={rightimg}>  Prescription and treatment reminder set for upcoming treatment  </p>
 		<div class="notify">
 		<button class="buttonclass btncls"  onclick={handleclose}><p class="closingbtn">X</p> </button>
 		</div>
 	</div>
-</template>
+</template> -->
 	</div>
 	<div>
 			<hr class="line1">
