@@ -1925,11 +1925,9 @@ a {
 		letter-spacing: 0em;
 		text-align: left;
 		color: #403A60;
-		position: relative;
 	}
 
 	.downbtn {
-		position: relative;
 		height: 40px;
 		width: 172px;
 		border-radius: 12px;
@@ -1938,13 +1936,11 @@ a {
 		color: white;
 		border: #403a60;
 		float: right;
-		position: relative;
 
 	}
 
 	.past {
 		font-size: 32px;
-		position: relative;
 
 	}
 

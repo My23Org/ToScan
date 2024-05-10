@@ -400,13 +400,11 @@ export default class BiPspbInformationcenterlanding extends LightningElement {
 
 			if (this.urlq === brandedurl) {
 				this.showtreatvideo = true;
-			} else {
-				if (this.patientstatusval === statusacute) {
+			} else if (this.patientstatusval === statusacute) {
 					this.showtreatvideo = true;
 				} else {
 					this.showtreatvideo = false;
 				}
-			}
 		} catch (error) {
 			this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error
 		}
@@ -532,13 +530,11 @@ export default class BiPspbInformationcenterlanding extends LightningElement {
 					this.categoryval = spcategorywo;
 				} else if (this.patientstatusval === statuschronic) {
 					this.categoryval = spcategoryone;
-				} else {
-					if (this.urlq === brandedurl) {
+				} else if (this.urlq === brandedurl) {
 						this.categoryval = spcategoryone;
 					} else {
 						this.categoryval = spcategorywo;
 					}
-				}
 			} else if (error) {
 				// Handle the error
 				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex

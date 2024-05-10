@@ -310,13 +310,8 @@ export default class BiPspbrecentarticles extends LightningElement {
 
 	// Getter function to determine whether to display the category value for Spevigo.
 	get spevigocategoryval() {
-		if (
-			this.categoryval === chroniccategory ||
-			this.categoryval === acutecategory
-		) {
-			return false;
-		}
-		return true;
+		return !(this.categoryval === chroniccategory ||
+			this.categoryval === acutecategory);
 	}
 
 	// Getter method to determine the class of the button
@@ -618,14 +613,14 @@ export default class BiPspbrecentarticles extends LightningElement {
 		const filteredResults = [];
 		let count = 1;
 
-		for (let i = 0; i < shuffledResults.length; i++) {
-			const result = shuffledResults[i];
+		for (const element of shuffledResults) {
+			const result = element
 			let titleFound = false;
 
-			for (let j = 0; j < titlesToFilter.length; j++) {
+			for (const ele of titlesToFilter) {
 				if (
 					result.text.trim().toLowerCase() ===
-					titlesToFilter[j].trim().toLowerCase()
+					ele.trim().toLowerCase()
 				) {
 					titleFound = true;
 					break;

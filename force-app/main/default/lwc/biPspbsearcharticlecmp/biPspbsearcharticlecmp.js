@@ -262,7 +262,6 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 		[articletwentyeight]: [BI_PSPB_ArticleTwentyEightRT],
 		[articletwentynine]: [BI_PSPB_ArticleTwentyNineRT]
 	}
-
 	// button labels
 	standarItemlink = [
 		{ id: 1, title: articlecategoryone, titleadb: articlecategoryvalone },
@@ -719,8 +718,8 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 		this.searchitems = [];
 		// Filter related items based on the search term
 
-		for (let i = 0; i < this.originalsearchitems.length; i++) {
-			const item = this.originalsearchitems[i];
+		for (const element of this.originalsearchitems) {
+			const item = element;
 			if (item.text.toLowerCase().includes(searchTerm)) {
 				this.searchitems.push(item);
 			}
@@ -786,8 +785,8 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 		this.searchitems = [];
 
 		if (this.originalsearchitems.length > 1) {
-			for (let i = 0; i < this.originalsearchitems.length; i++) {
-				const item = this.originalsearchitems[i];
+			for (const element of this.originalsearchitems) {
+				const item = element;
 				if (item.text.toLowerCase().includes(searchTerm)) {
 					this.searchitems.push(item);
 				}
@@ -848,8 +847,8 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 
 				this.searchitems = [];
 				// Filter related items based on the search term
-				for (let i = 0; i < this.originalsearchitems.length; i++) {
-					const item = this.originalsearchitems[i];
+				for (const element of this.originalsearchitems) {
+					const item = element;
 					if (item.text.toLowerCase().includes(searchTerm)) {
 						this.searchitems.push(item);
 					}
@@ -865,14 +864,14 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 					this.shownoresults = false;
 				}
 
-				for (let i = 0; i < this.data_tags.length; i++) {
-					for (let j = 0; j < this.data_tags[i].searchTermn.length; j++) {
+				for (const element of this.data_tags) {
+					for (let j = 0; j < element.searchTermn.length; j++) {
 						if (
-							this.data_tags[i].searchTermn[j].toLowerCase() ===
+							element.searchTermn[j].toLowerCase() ===
 							searchval.toLowerCase()
 						) {
-							for (let k = 0; k < this.data_tags[i].standardItem.length; k++) {
-								this.standarItems.push(this.data_tags[i].standardItem[k]);
+							for (let k = 0; k < element.standardItem.length; k++) {
+								this.standarItems.push(element.standardItem[k]);
 							}
 							break;
 						}
@@ -935,14 +934,14 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 	filterResultsByTitles(titlesToFilter) {
 		const filteredResults = [];
 
-		for (let i = 0; i < this.results.length; i++) {
-			const result = this.results[i];
+		for (const element of this.results) {
+			const result = element
 			let titleFound = false;
 
-			for (let j = 0; j < titlesToFilter.length; j++) {
+			for (const ele of titlesToFilter) {
 				if (
 					result.text.trim().toLowerCase() ===
-					titlesToFilter[j].trim().toLowerCase()
+					ele.trim().toLowerCase()
 				) {
 					titleFound = true;
 					break;
@@ -1028,11 +1027,9 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 				if (displayvideotab) {
 					displayvideotab.style.display = 'none';
 				}
-			} else {
-				if (displayvideotab) {
+			} else if (displayvideotab) {
 					displayvideotab.style.display = '';
 				}
-			}
 
 			if (this.searchitems.length <= 3) {
 				// Update the height if the condition is met
@@ -1049,7 +1046,7 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 				this.heightofcal = spacecalculation;
 			}
 
-			if (this.showloadmore === false && !(this.searchitems.length <= 3)) {
+			if (this.showloadmore === false && this.searchitems.length > 3) {
 				flexiEle = this.template.querySelector('.flexiirow');
 
 				let spacecalculationnew = this.searchitems.length * 216.6 + 130;
@@ -1158,11 +1155,7 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 			this.currentPageUrl = window.location.href;
 			this.urlSegments = this.currentPageUrl.split('/');
 			this.baseUrl = `${this.urlSegments[0]}//${this.urlSegments[2]}`;
-			if (this.urlq === brandedurl) {
-				this.showbrandednav = true;
-			} else {
-				this.showbrandednav = true;
-			}
+			this.showbrandednav = true;
 		} catch (error) {
 			this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error
 		}

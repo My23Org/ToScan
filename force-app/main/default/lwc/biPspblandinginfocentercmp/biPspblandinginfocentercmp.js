@@ -45,18 +45,13 @@ export default class BiPspblandinginfocentercmp extends LightningElement {
 	// To navigate Acute or Chronic video page based on patient status
 	openPTVPage() {
 		if (this.urlq !== brandedurl) {
-			if (this.patientstatusval === statusacute) {
 				window.location.assign(this.siteUrlq + acutevideopage);
-			} else {
-				window.location.assign(this.siteUrlq + acutevideopage);
-			}
-		} else {
-			if (this.patientstatusval === statusacute) {
+
+		} else if (this.patientstatusval === statusacute) {
 				window.location.assign(this.siteUrlq + acutevideopage);
 			} else {
 				window.location.assign(this.siteUrlq + chronicvideopage);
 			}
-		}
 	}
 
 	/*There's no need to check for null because in Apex, we're throwing an AuraHandledException. 

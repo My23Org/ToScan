@@ -411,6 +411,9 @@ export default class BiPspbReminderSetup extends LightningElement {
       }
     }
   }
+  handleclose(){
+    this.showDiv=false;
+  }
   // Handle success after saving reminders
   handle_Success() {
     // Check if any required fields are not filled
@@ -520,7 +523,7 @@ export default class BiPspbReminderSetup extends LightningElement {
 
       .then(() => {
         // Successful save
-
+        this.showDiv = true;
         this.showAfterSaveContent = false;
         // A delay is introduced to improve the user experience
         setTimeout(() => {

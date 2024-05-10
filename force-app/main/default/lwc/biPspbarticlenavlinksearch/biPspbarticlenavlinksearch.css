@@ -32,7 +32,6 @@
 .options {
 	display: flex;
 	flex-direction: column;
-	/* align-items: center; */
 	margin-left: 71px;
 }
 
@@ -40,7 +39,6 @@
 	font-weight: 600;
 	font-size: 24px;
 	margin-bottom: 16px;
-	/* margin-left: 10px; */
 }
 
 .search-bar {
@@ -104,7 +102,6 @@
 
 .container-itembox {
 	height: 800px;
-	/* width: 1031px; */
 }
 
 .container-item {
@@ -113,7 +110,6 @@
 }
 
 .article-container {
-	/* display: flex; */
 	justify-content: space-between;
 	margin: 20px;
 }
@@ -136,9 +132,7 @@
 
 .article {
 	border: 1px solid #ccc;
-	/* padding: 10px; */
 	margin-bottom: 20px;
-	border: 1px solid rgba(0, 0, 0, 0.125);
 	height: 50%;
 	display: flex;
 }
@@ -173,7 +167,6 @@ article h2 {
 .article a {
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 18px;
 	border-radius: 50%;
 	border: 1px solid black;
 	margin-left: 17px;

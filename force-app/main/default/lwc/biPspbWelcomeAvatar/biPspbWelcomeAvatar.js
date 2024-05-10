@@ -18,7 +18,7 @@ import gencategorymessages from '@salesforce/label/c.BI_PSPB_messageCategoryOne'
 import errormessage from '@salesforce/label/c.BI_PSP_ConsoleError';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
 
-export default class biPspbWelcomeAvatar extends LightningElement {
+export default class BiPspbWelcomeAvatar extends LightningElement {
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
 	@track assessmentresponse = [];
 	@track currentUserName = '';

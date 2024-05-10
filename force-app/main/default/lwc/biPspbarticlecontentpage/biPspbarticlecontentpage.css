@@ -86,11 +86,8 @@
 	border-radius: 12px;
 	/* Add border-radius for curved edges */
 	height: 35px;
-	/* width: fit-content; */
 	border: 15px;
 	top: 666px;
-	/* border-color: #ECDCA8; */
-	/* outline: 2px solid #ECDCA8; */
 	/* Add outline with the desired color on hover */
 }
 
@@ -160,7 +157,7 @@ li {
 	padding: 8px 8px 8px 8px;
 	border-radius: 10px;
 	padding-left: 5px;
-	font-family: "Eina04-Regular";
+	font-family: "Eina-Regular";
 	display: none;
 	margin-left: 33px;
 	top: 704px;
@@ -244,7 +241,6 @@ li {
 }
 
 .minstag {
-	/* margin-left: 691px; */
 	margin-left: 88%;
 	margin-top: -38px;
 }
@@ -463,6 +459,7 @@ li {
 	.mobilew {
 		margin-left: 11px;
 		width: 320px;
+		width: auto;
 	}
 
 	.QuickLinks {
@@ -488,7 +485,7 @@ li {
 
 	.article-container {
 		height: fit-content;
-		width: 320px;
+		width: auto;
 		background-color: none;
 		color: #000000;
 	}
@@ -511,15 +508,6 @@ li {
 
 	.para {
 		display: none;
-	}
-
-	.article-container {
-		width: auto;
-		color: #000000;
-	}
-
-	.mobilew {
-		width: auto;
 	}
 
 	.minstag {
@@ -551,13 +539,14 @@ li {
 @media only screen and (min-width: 769px) and (max-width: 1380px) {
 	.mobilew {
 		margin-left: 11px;
-		width: 320px;
+		width: auto;
+
 	}
 
 	.article-container {
 		height: fit-content;
-		width: 320px;
 		background-color: none;
+		width: 84%;
 		color: #000000;
 	}
 
@@ -579,15 +568,6 @@ li {
 
 	.para {
 		display: none;
-	}
-
-	.article-container {
-		width: 84%;
-		color: #000000;
-	}
-
-	.mobilew {
-		width: auto;
 	}
 
 	.minstag {
