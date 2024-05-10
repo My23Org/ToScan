@@ -53,7 +53,6 @@ import spcategorytwo from '@salesforce/label/c.BI_PSPB_articleSpevigoCategoryTwo
 import spcategoryoneval from '@salesforce/label/c.BI_PSPB_spArticleCategoryValOne';
 import spcategorytwoval from '@salesforce/label/c.BI_PSPB_spArticleCategoryValTwo';
 import articlecategoryvalfive from '@salesforce/label/c.BI_PSPB_articleCategoryValFive';
-import articlecategoryvaltwo from '@salesforce/label/c.BI_PSPB_articleCategoryTwo';
 import articlecategoryvalthree from '@salesforce/label/c.BI_PSPB_articleCategoryValThree';
 import articlecategoryvalone from '@salesforce/label/c.BI_PSPB_articleCategoryValOne';
 import articlecategoryvalfour from '@salesforce/label/c.BI_PSPB_articleCategoryValFour';
@@ -342,7 +341,7 @@ export default class BiPspbarticlenavlinkspage extends LightningElement {
 		{
 			id: 2,
 			title: articlecategorytwo,
-			titleval: articlecategoryvaltwo
+			titleval: articlecategorytwo
 		},
 		{
 			id: 3,

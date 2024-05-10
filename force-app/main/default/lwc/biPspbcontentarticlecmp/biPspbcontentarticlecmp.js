@@ -119,11 +119,9 @@ export default class BiPspbcontentarticlecmp extends LightningElement {
 				if (displayvideotab) {
 					displayvideotab.style.display = 'none';
 				}
-			} else {
-				if (displayvideotab) {
+			} else if (displayvideotab) {
 					displayvideotab.style.display = '';
 				}
-			}
 		} catch (error) {
 			this.showToast(errormessage, error.message, errorvariant);
 		}

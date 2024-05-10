@@ -32,7 +32,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 	@track sliderValue = 0;
 	@track sliderValuetwo = zerovalue;
 	@track isCheckedselectall = false;
-	@track bodyparts = []
+	@track humanparts = []
 	@track itchinessvalues = pustulesvalue
 	@track itchinesserrors = false;
 	@track lastsymptomid
@@ -79,7 +79,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 											element.style.fill = '';
 										}
 									});
-									this.bodyparts = [...bodyPartsArr];
+									this.humanparts = [...bodyPartsArr];
 									this.totalElements = bodyPartsArr.length;
 									this.Itchinessvalues = false;
 									this.itchinesserrors = this.totalElements <= 0;
@@ -124,7 +124,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 								element.style.fill = '';
 							}
 						});
-						this.bodyparts = [...bodyPartsArr];
+						this.humanparts = [...bodyPartsArr];
 						this.totalElements = bodyPartsArr.length;
 						this.sliderValue = mybodyinternsity;
 						this.sliderValuetwo = mybodyinternsity;
@@ -175,10 +175,10 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 	updateElementCount() {
 		const elements = this.template.querySelectorAll('.body-part');
 		this.totalElements = elements.length;
-		this.bodyparts = [];
+		this.humanparts = [];
 		elements.forEach((ele) => {
 			const dataNameValue = ele.getAttribute('data-name');
-			this.bodyparts.push(dataNameValue);
+			this.humanparts.push(dataNameValue);
 		});
 		elements.forEach((element) => {
 			if (element.style.fill === blackvalue && this.buttonText === bodypartsselectall) {
@@ -199,7 +199,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 		const checkbox = event.target;
 		const isChecked = checkbox.checked;
 		if (isChecked) {
-			this.bodyparts = []
+			this.humanparts = []
 			this.isCheckedselectall = true;
 			this.totalElements = 30;
 			this.itchinesserrors = false;
@@ -222,7 +222,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 			targetElements.forEach((element) => {
 				const dataNameValue = element.getAttribute('data-name');
 				element.style.fill = '';
-				this.bodyparts = this.bodyparts.filter(item => item !== dataNameValue);
+				this.humanparts = this.bodyparts.filter(item => item !== dataNameValue);
 			});
 		}
 		this.clickCount++;
@@ -254,17 +254,17 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 		const currentColor = this.clickedElement.style.fill;
 		if (currentColor === 'rgb(141, 137, 165)') {
 			this.clickedElement.style.fill = '';
-			this.bodyparts = this.bodyparts.filter(item => item !== selectedValue);
+			this.humanparts = this.bodyparts.filter(item => item !== selectedValue);
 			this.totalElements--; // Reset to original color
 		} else {
 			this.clickedElement.style.fill = '#8D89A5';
-			this.bodyparts.push(selectedValue);
+			this.humanparts.push(selectedValue);
 			this.totalElements++;
 		}
 	}
 	// used to display slider values
 	async handleClickForAccept() {
-			console.log(this.bodyparts,'cbcb', this.lastsymptomid)
+			console.log(this.humanparts,'cbcb', this.lastsymptomid)
 		let itchinessallrecordinsert = {
 			SliderValue: parseFloat(this.sliderValue), // Convert to float if SliderValue is numeric
 			CareprogramId: this.accountId,
@@ -272,7 +272,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 			SymptomId: this.localStorageValueitchiness || this.lastsymptomid, // Use default value if lastsymptomid is null
 			Symptomname: this.itchinessvalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.moodvalues || '', // Use default value if moodvalues is null
-		};this.bodyparts = this.bodyparts;
+		};this.bodyparts = this.humanparts;
 		let itchinessallrecordupdate = {
 			SliderValue: parseFloat(this.sliderValue), // Convert to float if SliderValue is numeric
 			CareprogramId: this.accountId,
@@ -280,12 +280,12 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 			SymptomId: this.lastsymptomid || this.localStorageValueitchiness, // Use default value if lastsymptomid is null
 			Symptomname: this.itchinessvalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.moodvalues || '', // Use default value if moodvalues is null
-		};this.bodyparts = this.bodyparts;
+		};this.bodyparts = this.humanparts;
 		try {
-			if (this.bodyparts.length > 0 && this.sliderValue > 0) {
+			if (this.humanparts.length > 0 && this.sliderValue > 0) {
 				if (this.insertcount == 1) {
 					await recordUpdateAllergyIntolerance({
-						itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.bodyparts
+						itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.humanparts
 					})
 					// Null data is checked and AuraHandledException is thrown from the Apex
 						.then(result => {
@@ -293,7 +293,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 							if (result && result !== null) {
 											// Store data labeled as 'Pustule' in the session storage without altering custom labels.
 
-									sessionStorage.setItem('Pustule', this.bodyparts);
+									sessionStorage.setItem('Pustule', this.humanparts);
 								// Store data labeled as 'myDataintensity' in the session storage without altering custom labels.
 									sessionStorage.setItem('myDataintensity', this.sliderValue);
 								const updateEvent = new CustomEvent('updatechildprop', {
@@ -311,7 +311,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 
 					if (this.lastsymptomid && this.carePlanTemplateName === pustulesvalue) {
 						await recordUpdateAllergyIntolerance({
-							itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.bodyparts
+							itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.humanparts
 						})
 						// Null data is checked and AuraHandledException is thrown from the Apex
 							.then(result => {
@@ -319,7 +319,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 								if (result && result !== null) {
 											// Store data labeled as 'Pustule' in the session storage without altering custom labels.
 
-									sessionStorage.setItem('Pustule', this.bodyparts);
+									sessionStorage.setItem('Pustule', this.humanparts);
 								// Store data labeled as 'myDataintensity' in the session storage without altering custom labels.
 									sessionStorage.setItem('myDataintensity', this.sliderValue);
 									const updateEvent = new CustomEvent('updatechildprop', {
@@ -335,7 +335,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 					}
 					else {
 						await recordInsertAllergyIntolerance({
-							itchinessallrecordinsert: itchinessallrecordinsert, bodyParts: this.bodyparts
+							itchinessallrecordinsert: itchinessallrecordinsert, bodyParts: this.humanparts
 						})
 						// Null data is checked and AuraHandledException is thrown from the Apex
 							.then(result => {
@@ -343,7 +343,7 @@ export default class biPspbpustulessymptom extends NavigationMixin(LightningElem
 								if (result && result !== null) {
 								// Store data labeled as 'Pustule' in the session storage without altering custom labels.
 
-									sessionStorage.setItem('Pustule', this.bodyparts);
+									sessionStorage.setItem('Pustule', this.humanparts);
 								// Store data labeled as 'myDataintensity' in the session storage without altering custom labels.
 									sessionStorage.setItem('myDataintensity', this.sliderValue);
 									const updateEvent = new CustomEvent('updatechildprop', {

@@ -14,6 +14,7 @@
 	font-weight: 600;
 	line-height: 24px;
 	font-style: normal;
+	font-size: 16px;
 	font-family: "Eina-SemiBold";
 }
 
@@ -27,6 +28,9 @@
 
 .size {
 	color: #403a60;
+	font-size: 32px !important;
+    font-weight: bold !important;
+    padding-left: 20px !important;
 }
 
 .header {
@@ -45,6 +49,9 @@
 
 	margin: 8px 0px 0px 0px;
 	--lwc-heightInput: 40px;
+	font-size: 16px;
+	font-family: Eina-Regular;
+	
 }
 
 .textInput-err {
@@ -66,6 +73,7 @@
 	line-height: 24px;
 	font-style: normal;
 	font-family: "Eina-SemiBold";
+	font-size: 16px;
 }
 
 .input-error-label {

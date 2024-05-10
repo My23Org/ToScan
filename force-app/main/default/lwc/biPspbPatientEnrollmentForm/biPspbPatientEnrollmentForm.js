@@ -77,10 +77,10 @@ export default class PatientEnrollmentForm extends NavigationMixin(
   @track recordId;
   @track addNewHCPSectionClass = "addNewHcpSection"; // to invoke CSS class
   @track firstnameerrorMessage = false;
+  @track dobErrorMessage1 = false;
   @track physicianerrorMessage = false;
   @track physicianrequireMessage = false;
   @track lastnameerrorMessage = false;
-  @track doberrorMessage = false;
   @track gendererrorMessage = false;
   @track emailerrorMessage = false;
   @track carefirstnameerrorMessage = false;
@@ -865,7 +865,6 @@ export default class PatientEnrollmentForm extends NavigationMixin(
       if (!hcpAccessCodeField.value) {
         this.accessCodeErrorMessage = true;
         hcpAccessCodeField.className = "textInput-err";
-        isValid = false;
       } else {
         this.accessCodeErrorMessage = false;
         hcpAccessCodeField.className = "textInput";
@@ -1244,7 +1243,6 @@ export default class PatientEnrollmentForm extends NavigationMixin(
       }
 
       if (this.showReferringPractitioner) {
-        this.handleAccessCodeChange();
         if (!PhysicianField.value || this.searchresultempty1 === true) {
           this.physicianrequireMessage = true;
           this.physicianerrorMessage = false;
@@ -1912,6 +1910,36 @@ export default class PatientEnrollmentForm extends NavigationMixin(
       this.template.querySelector('label[data-field="dob"]').className =
         "input-label";
     }
+      const selectedDate1 = new Date(event.target.value);
+    const year = selectedDate1.getFullYear();
+    if (year < 1900) {
+      this.oneninezerozeroerrors = true;
+      dobField.className = "textInput-err";
+      this.template.querySelector('label[data-field="dob"]').className =
+        "input-error-label";
+    } else {
+      this.oneninezerozeroerrors = false;
+      dobField.className = "textInput";
+      this.template.querySelector('label[data-field="dob"]').className =
+        "input-label";
+    }
+     
+    const minAge = 18;
+    const userBirthYear = selectedDate1.getFullYear();
+    const currentYear = new Date().getFullYear();
+
+    if (currentYear - userBirthYear < minAge){
+      this.dobErrorMessage1 = true;
+       dobField.className = "textInput-err";
+      this.template.querySelector('label[data-field="dob"]').className =
+        "input-error-label";
+    }else{
+       this.dobErrorMessage1 = false;
+        dobField.className = "textInput";
+      this.template.querySelector('label[data-field="dob"]').className =
+        "input-label";
+    }
+    
     this.validateDate();
   }
 
@@ -1923,10 +1951,9 @@ export default class PatientEnrollmentForm extends NavigationMixin(
     // Validate that the date is not in the future
     const currentDate = new Date();
     const selectedDate = new Date(this.dob);
-    this.doberrorMessage = false;
-    this.oneninezerozeroerrors = false;
     if (selectedDate > currentDate) {
       this.dobErrorMessage = doberror;
+      this.dobErrorMessage1 =false;
       dobField.className = "textInput-err";
       this.template.querySelector('label[data-field="dob"]').className =
         "input-error-label";
@@ -1938,11 +1965,13 @@ export default class PatientEnrollmentForm extends NavigationMixin(
     const year = selectedDate1.getFullYear();
     if (year < 1900) {
       this.oneninezerozeroerrors = true;
+      console.log('its work')
       dobField.className = "textInput-err";
       this.template.querySelector('label[data-field="dob"]').className =
         "input-error-label";
     } else {
       this.oneninezerozeroerrors = false;
+      console.log('its not work')
       dobField.className = "textInput";
       this.template.querySelector('label[data-field="dob"]').className =
         "input-label";

@@ -515,7 +515,6 @@ export default class BiPspbChallengeComponent extends LightningElement {
 							return challenge;
 						}
 					}
-					return challenge;
 				});
 
 

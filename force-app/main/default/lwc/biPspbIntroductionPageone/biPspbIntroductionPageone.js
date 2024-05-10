@@ -287,7 +287,7 @@ export default class BiPspbIntroductionPageone extends LightningElement {
 	@track checkBoxArray;
 
 	@track records = [];
-
+	@track customClass='nds-form-element nds-form-containerthree';
 	@track savedArrayForPushResp = [];
 	@track concatenatedValues;
 
@@ -2107,12 +2107,14 @@ export default class BiPspbIntroductionPageone extends LightningElement {
 			this.fifthRadYes = true;
 			this.fifthRadNo = false;
 			this.countquestion = 16;
+			this.customClass='nds-form-element nds-form-containertwo';
 		}
 
 		if (val === this.no) {
 			this.fifthRadNo = true;
 			this.fifthRadYes = false;
 			this.sixthQuestionVisible = false;
+			this.customClass='nds-form-element nds-form-containerthree';
 			this.deleteYesBasedRes();
 			//if the response value is No then we will delete the repsones of sixth Questions and also make the checkboxes as unchecked.
 			const fifthIdStore = this.storeid5;

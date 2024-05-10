@@ -2151,12 +2151,13 @@ a {
 }
 
 .modal-close {
-	position: absolute;
-	top: -10px;
-	right: 10px;
-	cursor: pointer;
-	font-size: 20px;
-	color: #403A60;
+position: absolute;
+    top: -15px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 45px;
+    color: #403A60;
+    opacity: 0.8;
 }
 
 .modal-close:hover {

@@ -47,6 +47,7 @@ export default class biPspMood extends NavigationMixin(LightningElement) {
 	@track itchinessvalues = itchinessvalues;
 	@track allergyIntoleranceData;
 	@track carePlanTemplateName;
+	@track humanparts =''
 	//Variable declaration
 	wooriedmood = wooriedmood;
 	speechlessmood = speechlessmood;
@@ -277,7 +278,7 @@ export default class biPspMood extends NavigationMixin(LightningElement) {
 			SymptomId: this.localStorageValueitchiness || this.lastsymptomid, // Use default value if lastsymptomid is null
 			Symptomname: this.itchinessvalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.emojiName || '', // Use default value if moodvalues is null
-		};this.bodyparts = this.bodyparts;
+		};this.bodyparts = this.humanparts;
 		let itchinessallrecordupdate = {
 			SliderValue: parseFloat(this.sliderValue), // Convert to float if SliderValue is numeric
 			CareprogramId: this.accountId,
@@ -285,7 +286,7 @@ export default class biPspMood extends NavigationMixin(LightningElement) {
 			SymptomId: this.lastsymptomid || this.localStorageValueitchiness, // Use default value if lastsymptomid is null
 			Symptomname: this.itchinessvalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.emojiName || '', // Use default value if moodvalues is null
-		};this.bodyparts = this.bodyparts;
+		};this.bodyparts = this.humanparts;
 		//Try block to handle potential errors during record update or insertion
 		try {
 			if (this.insertcount == 1) {
@@ -313,7 +314,7 @@ export default class biPspMood extends NavigationMixin(LightningElement) {
 				//Check condition for update or insert based on last symptom id and care plan template name
 				if (this.lastsymptomid && this.carePlanTemplateName === itchinessvalues) {
 					await recordUpdateAllergyIntolerance({
-						itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.bodyparts
+						itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.humanparts
 					})
 					// Null data is checked and AuraHandledException is thrown from the Apex
 						.then(result => {
@@ -333,7 +334,7 @@ export default class biPspMood extends NavigationMixin(LightningElement) {
 				else {
 					//Insert new record if conditions don't match
 					await recordInsertAllergyIntolerance({
-						itchinessallrecordinsert: itchinessallrecordinsert, bodyParts: this.bodyparts
+						itchinessallrecordinsert: itchinessallrecordinsert, bodyParts: this.humanparts
 					})
 					// Null data is checked and AuraHandledException is thrown from the Apex
 						.then(result => {

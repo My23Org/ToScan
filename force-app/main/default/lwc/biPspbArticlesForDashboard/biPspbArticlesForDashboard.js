@@ -25,7 +25,6 @@ import unassignedval from '@salesforce/label/c.BI_PSP_Unassigned';
 import spcategoryone from '@salesforce/label/c.BI_PSPB_articleSpevigoCategoryOne';
 import spcategorytwo from '@salesforce/label/c.BI_PSPB_articleSpevigoCategoryTwo';
 import chronicstatus from '@salesforce/label/c.BI_PSPB_statusChronic';
-import unassignedsiteurl from '@salesforce/label/c.BI_PSPB_UnAssignedSiteUlr';
 import testsite from '@salesforce/label/c.BI_PSPB_TestsiteName';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import errorvariant from '@salesforce/label/c.BI_PSPB_errorVariant';
@@ -248,28 +247,19 @@ export default class BiPspbArticlesForDashboard extends LightningElement {
 				this.showToast(errormessage, error.body.message, errorvariant); // Catching Potential Error from Apex
 				// Handle error, if needed
 			});
-		if (this.urlq === brandedurl) {
+
 			window.location.assign(
 				this.baseUrl + this.siteurl + detailpageinfocenter + articlename
 			);
-		} else {
-			window.location.assign(
-				this.baseUrl + this.siteurl + detailpageinfocenter + articlename
-			);
-		}
+			
+		
 	}
 
 	// Used for navigation to landing page of information center
 	navtoinforcenter() {
-		if (this.urlq === brandedurl) {
 			window.location.assign(
 				this.baseUrl + this.siteurl + landingpageinfocenter
 			);
-		} else {
-			window.location.assign(
-				this.baseUrl + this.siteurl + landingpageinfocenter
-			);
-		}
 	}
 
 	/*There's no need to check for null because in Apex, we're throwing an AuraHandledException. 
@@ -318,7 +308,7 @@ export default class BiPspbArticlesForDashboard extends LightningElement {
 						this.image12 = this.results;
 					}
 
-					if (this.urlq === unassignedsiteurl) {
+					if (this.urlq === unassignedurl) {
 						if (this.patientstatusval === acute) {
 							this.showtreatvideo = true;
 
@@ -442,12 +432,10 @@ export default class BiPspbArticlesForDashboard extends LightningElement {
 					this.categoryval = spcategorytwo;
 				} else if (this.patientstatusval === chronicstatus) {
 					this.categoryval = spcategoryone;
-				} else {
-					if (this.urlq === brandedurl) {
+				} else if (this.urlq === brandedurl) {
 						this.categoryval = spcategoryone;
-					} else {
+				} else {
 						this.categoryval = spcategorytwo;
-					}
 				}
 			} else if (error) {
 				// Handle the error
@@ -489,7 +477,7 @@ export default class BiPspbArticlesForDashboard extends LightningElement {
 						this.image12 = this.results;
 					}
 
-					if (this.urlq === unassignedsiteurl) {
+					if (this.urlq === unassignedurl) {
 						if (this.patientstatusval === acute) {
 							this.showtreatvideo = true;
 
@@ -592,14 +580,14 @@ export default class BiPspbArticlesForDashboard extends LightningElement {
 		const filteredResults = [];
 		let count = 1;
 
-		for (let i = 0; i < shuffledResults.length; i++) {
-			const result = shuffledResults[i];
+		for (const element of shuffledResults) {
+			const result = element;
 			let titleFound = false;
 
-			for (let j = 0; j < titlesToFilter.length; j++) {
+			for (const ele of titlesToFilter) {
 				if (
 					result.text.trim().toLowerCase() ===
-					titlesToFilter[j].trim().toLowerCase()
+					ele.trim().toLowerCase()
 				) {
 					titleFound = true;
 					break;

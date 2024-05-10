@@ -33,7 +33,6 @@ import pcm from '@salesforce/label/c.BI_PSPB_ERROR_Message_For_Patient_Preffered
 import phonefield from '@salesforce/label/c.BI_PSPB_ERROR_Message_For_Caregiver_phone_number';
 import majordate from '@salesforce/label/c.BI_PSPB_ERROR_Message_For_Caregiver_major_date_of_birth';
 import dob from '@salesforce/label/c.BI_PSPB_ERROR_Message_For_Caregiver_Date_of_birth';
-import caregiverprofiledoberror from '@salesforce/label/c.BI_PSPB_ERROR_Message_For_Caregiver_Date_fo_birth';
 import undefinedvalue from '@salesforce/label/c.BI_PSP_Undefined';
 
 
@@ -180,8 +179,6 @@ export default class BiPspbCareGiverProfile extends LightningElement {
 		const currentYear = currentDate.getFullYear();
 
 		if (currentYear - userBirthYear < minAge) {
-			//   this.dobErrorMessage = false;
-
 			this.doberrorMessage = false;
 			this.minorerror = true;
 			this.minorerror3 = false;
@@ -628,7 +625,7 @@ export default class BiPspbCareGiverProfile extends LightningElement {
 		// Check if the selected date is in the future
 		if (dobDate > today) {
 			// Display the validation message
-			const errorMessage = caregiverprofiledoberror;
+			const errorMessage = dateofbirth;
 			this.template.querySelector('[data-field="dob-error"]').textContent =
 				errorMessage;
 
@@ -827,33 +824,6 @@ export default class BiPspbCareGiverProfile extends LightningElement {
 		if (validateform === true) {
 			return;
 		}
-
-		if (this.minorerror === true) {
-			let addcaregiverDetails = {
-				accountId: this.accountidval,
-				FirstName: this.FirstName,
-				LastName: this.LastName,
-				PersonEmail: this.PersonEmailval,
-				PersonBirthdate: this.Birthdate,
-				relations: this.Relationshipval,
-				phone: this.Phoneval,
-				PreferredMethodofContact: this.communicationmode
-			};
-
-			updateCaregiverDetails({
-				//   combinedString: combinedString
-				cgprofile: addcaregiverDetails
-			})
-				.then(() => {
-					this.updatePopup = true;
-
-					window.scrollTo({ top: 0, behavior: 'smooth' });
-				})
-				.catch((error) => {
-					this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error
-					// Handle error, if needed
-				});
-		} else {
 			let addcaregiverDetails = {
 				accountId: this.accountidval,
 				FirstName: this.FirstName,
@@ -877,7 +847,7 @@ export default class BiPspbCareGiverProfile extends LightningElement {
 					this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error
 					// Handle error, if needed
 				});
-		}
+		
 	}
 
 	handleCancel() {
@@ -936,7 +906,7 @@ export default class BiPspbCareGiverProfile extends LightningElement {
 		}
 	
 		// Define the allowed characters regex
-		const allowedCharacters = /^[0-9\+]+$/;
+		const allowedCharacters = /^[0-9+]+$/;
 	
 		// Check if the pressed key matches the allowed characters
 		if (!allowedCharacters.test(event.key)) {

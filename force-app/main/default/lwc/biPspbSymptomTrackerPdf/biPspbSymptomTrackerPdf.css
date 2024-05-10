@@ -39,9 +39,9 @@
 
 .chart-container {
 	display: flex;
-	justify-content: center;
-	margin-bottom: 18px;
-	margin-right: -133px;
+    justify-content: center;
+    margin-bottom: 59px;
+    margin-right: -133px;
 }
 
 /* To hide content during PDF Export*/
@@ -137,9 +137,9 @@
 
 .container-bottom {
 	display: flex;
-	flex-direction: column-reverse;
-	align-items: center;
-	height: 100%;
+    flex-direction: column-reverse;
+    align-items: center;
+    height: 129%;
 }
 
 .image-container {
@@ -149,9 +149,9 @@
 }
 
 .lineimg {
-	height: 320px;
+	    height: 352px;
     position: relative;
-    top: -34px;
+    top: 18px;
     left: 50px;
     margin-top: 0px;
 }
@@ -266,8 +266,9 @@
 
 .showEnd {
 	display: flex;
-	flex-direction: column;
-	justify-content: end;
+    flex-direction: column;
+    justify-content: end;
+    margin-bottom: -48px;
 }
 
 /*----Second Chart----*/

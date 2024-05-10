@@ -37,8 +37,6 @@ header h1 {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	display: flex;
-	align-items: center;
 	padding-top: 100px;
 	margin: right 100px;
 }

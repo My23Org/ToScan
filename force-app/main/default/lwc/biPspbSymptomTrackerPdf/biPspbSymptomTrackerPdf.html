@@ -58,7 +58,7 @@
 							<div class="showEnd">&#10095;</div>
 						</div>
 					</div>
-					<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center">
+<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center centeralign primarystyle">
 						<div class="grid-containerinline">
 							<div class="height40"><img src={DarkYellowEllipse} ></div>
 							<div>
@@ -119,6 +119,7 @@
 								<div class="showEnd">&#10094;</div>
 								<template for:each={barsone} for:item="bar">
 									<div key={bar.dates} data-item={bar.dates} class="bar">
+										<img class="lineimg" src={verticaline}>
 										<div class="container-bottom">
 											<div class="label">
 												<div class="pad10"><a data-item={bar.dates}
@@ -139,6 +140,7 @@
 								<div class="showEnd">&#10095;</div>
 							</div>
 						</div>
+						
 						<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center">
 							<div class="grid-containerinline">
 								<div class="height40"><img src={DarkYellowEllipse} width="10px"></div>
@@ -183,12 +185,13 @@
 								</div>
 							</div>
 						</div>
+						
 					</lightning-layout-item>
 					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
 						large-device-size="12">
 					</lightning-layout-item>
 					<template for:each={dateWithAllerytwo} for:item="bar">
-						<div class="slds-align_absolute-center" key={bar.symptom}>
+						<div class="centeralign primarysytle" key={bar.symptom}>
 							<c-bi-Pspb-Symptom-Primarypage showeditbtn={showeditbtn} symptomrecord={bar.symptom}>
 							</c-bi-Pspb-Symptom-Primarypage>
 						</div>
@@ -202,6 +205,7 @@
 								<div class="showEnd">&#10094;</div>
 								<template for:each={barstwo} for:item="bar">
 									<div key={bar.dates} data-item={bar.dates} class="bar">
+										<img class="lineimg" src={verticaline}>
 										<div class="container-bottom">
 											<div class="label">
 												<div class="pad10"><a data-item={bar.dates}
@@ -222,6 +226,7 @@
 								<div class="showEnd">&#10095;</div>
 							</div>
 						</div>
+					
 						<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center">
 							<div class="grid-containerinline">
 								<div class="height40"><img src={DarkYellowEllipse} width="10px"></div>
@@ -266,12 +271,13 @@
 								</div>
 							</div>
 						</div>
+					
 					</lightning-layout-item>
 					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
 						large-device-size="12">
 					</lightning-layout-item>
 					<template for:each={dateWithAllerythree} for:item="bar">
-						<div class="slds-align_absolute-center" key={bar.symptom}>
+						<div class="centeralign primarysytle" key={bar.symptom}>
 							<c-bi-Pspb-Symptom-Primarypage showeditbtn={showeditbtn} symptomrecord={bar.symptom}>
 							</c-bi-Pspb-Symptom-Primarypage>
 						</div>
@@ -285,6 +291,7 @@
 								<div class="showEnd">&#10094;</div>
 								<template for:each={barsthree} for:item="bar">
 									<div key={bar.dates} data-item={bar.dates} class="bar">
+										<img class="lineimg" src={verticaline}>
 										<div class="container-bottom">
 											<div class="label">
 												<div class="pad10"><a data-item={bar.dates}
@@ -305,6 +312,7 @@
 								<div class="showEnd">&#10095;</div>
 							</div>
 						</div>
+					
 						<div class="slds-p-top_large grid-containerColorNotification slds-align_absolute-center">
 							<div class="grid-containerinline">
 								<div class="height40"><img src={DarkYellowEllipse} width="10px"></div>
@@ -354,7 +362,8 @@
 						large-device-size="12">
 					</lightning-layout-item>
 					<template for:each={dateWithAlleryfour} for:item="bar">
-						<div class="slds-align_absolute-center" key={bar.symptom}>
+						<div class="centeralign primarysytle" key={bar.symptom}>
+							" key={bar.symptom}>
 							<c-bi-Pspb-Symptom-Primarypage showeditbtn={showeditbtn} symptomrecord={bar.symptom}>
 							</c-bi-Pspb-Symptom-Primarypage>
 						</div>
@@ -368,6 +377,7 @@
 								<div class="showEnd">&#10094;</div>
 								<template for:each={barsfour} for:item="bar">
 									<div key={bar.dates} data-item={bar.dates} class="bar">
+										<img class="lineimg" src={verticaline}>
 										<div class="container-bottom">
 											<div class="label">
 												<div class="pad10"><a data-item={bar.dates}
@@ -437,7 +447,7 @@
 						large-device-size="12">
 					</lightning-layout-item>
 					<template for:each={dateWithAlleryfive} for:item="bar">
-						<div class="slds-align_absolute-center" key={bar.symptom}>
+						<div class="centeralign primarysytle" key={bar.symptom}>
 							<c-bi-Pspb-Symptom-Primarypage showeditbtn={showeditbtn} symptomrecord={bar.symptom}>
 							</c-bi-Pspb-Symptom-Primarypage>
 						</div>

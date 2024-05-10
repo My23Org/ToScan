@@ -86,8 +86,8 @@ export default class BiPspbarticlenavlinksearch extends LightningElement {
 		const searchTerm = event.target.value.toLowerCase();
 		this.searchitems = [];
 
-		for (let i = 0; i < this.originalsearchitems.length; i++) {
-			const item = this.originalsearchitems[i];
+		for (const element of this.originalsearchitems) {
+			const item = element;
 			if (item.text.toLowerCase().includes(searchTerm)) {
 				this.searchitems.push(item);
 			}

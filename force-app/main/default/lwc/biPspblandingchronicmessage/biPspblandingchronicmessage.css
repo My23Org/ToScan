@@ -22,24 +22,6 @@
 	margin-top: -36px;
 }
 
-.emily {
-	font-family: "Eina-Bold", sans-serif;
-	font-size: 32px;
-	font-weight: 400;
-	line-height: 36px;
-	letter-spacing: 0em;
-	text-align: left;
-	width: 260px;
-	height: 35px;
-	top: 46px;
-	left: 256px;
-	position: absolute;
-	background: white;
-	color: #403a60;
-	/* Corrected the semicolon placement */
-	padding: 1px;
-}
-
 
 .image {
 	height: 160px;

@@ -447,7 +447,6 @@ button.bt1 {
 .card-header-gpp .card-header-text {
 	flex: 0.95;
 	font-size: 20px;
-	font-size: 20px;
 	font-weight: 400;
 	font-family: 'Eina-SemiBold';
 	color: #fff;
@@ -471,7 +470,6 @@ button.bt1 {
 .card-header-accord .card-header-text {
 	flex: 0.95;
 	font-size: 20px;
-	font-size: 20px;
 	font-weight: 400;
 	font-family: 'Eina-SemiBold';
 	color: #fff;
@@ -494,7 +492,6 @@ button.bt1 {
 
 .card-header-accord-symptoms .card-header-text {
 	flex: 0.95;
-	font-size: 20px;
 	font-size: 20px;
 	font-weight: 400;
 	font-family: 'Eina-SemiBold';
@@ -530,7 +527,6 @@ button.bt1 {
 .card-header-accord-btn .card-header-text {
 	flex: 0.95;
 	font-size: 20px;
-	font-size: 20px;
 	font-weight: 400;
 	font-family: 'Eina-SemiBold';
 	color: #fff;
@@ -564,7 +560,6 @@ button.bt1 {
 /*  */
 .card-header-accordfile-btn .card-header-text {
 	flex: 0.95;
-	font-size: 20px;
 	font-size: 20px;
 	font-weight: 400;
 	font-family: 'Eina-SemiBold';
@@ -1311,7 +1306,7 @@ img.currentlygpp-icon {
 
 	.symptoms img {
 		width: 118px;
-		height: 118x;
+		height: 118px;
 		margin-bottom: 13px;
 	}
 }
@@ -1612,14 +1607,12 @@ p.alredy-data {
 	position: relative;
 	bottom: 104px;
 	font-size: 14px;
-	font-family: 'Eina-Regular';
 	right: 110px;
 }
 
 .Gpp-yes-btn1[c-biPspbSymptomTracker_biPspbSymptomTracker] {
 	color: #2C333A !important;
 	font-weight: 300 !important;
-	font-family: 'Eina-Regular';
 	float: right;
 	position: relative;
 	bottom: 104px;
@@ -1867,10 +1860,8 @@ ul {
 	flex: 0.95;
 	font-size: 20px;
 	color: #403a60;
-	font-size: 20px;
 	font-weight: 400;
 	font-family: 'Eina-SemiBold';
-	color: #403a60;
 	border: 2px solid #C6AA76;
 	background: #ECDCA8 20%;
 	padding: 20px 9px;
@@ -1878,12 +1869,10 @@ ul {
 
 .accordcolorbtn {
 	flex: 0.95;
-	font-size: 20px;
 	color: #403a60;
 	font-size: 20px;
 	font-weight: 400;
 	font-family: 'Eina-SemiBold';
-	color: #403a60;
 	border: 2px solid #C6AA76;
 	background: #ECDCA8 20%;
 	padding: 20px 9px;

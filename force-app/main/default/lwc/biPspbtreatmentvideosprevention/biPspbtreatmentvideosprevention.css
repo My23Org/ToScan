@@ -149,7 +149,6 @@
 .button-anger {
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 18px;
 	border-radius: 50%;
 	/* height: 10vh; */
 	border: 1px solid black;
@@ -163,7 +162,6 @@
 .button-anger-prev {
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 18px;
 	border-radius: 50%;
 	/* height: 10vh; */
 	border: 1px solid black;

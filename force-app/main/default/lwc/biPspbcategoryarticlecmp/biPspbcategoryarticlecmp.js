@@ -299,15 +299,11 @@ export default class BiPspcategoryarticlecmp extends LightningElement {
 						this.categorytreatmentnew = spcategoryone;
 						this.categorytreatmentnewadb = spcategoryoneval;
 					}
-				} else {
-					if (this.patientstatusval === statusunassigned) {
-						this.showbrandednav = false;
-					} else {
+				}  else {
 						this.showbrandednav = true;
 						this.categorytreatmentnew = spcategorytwo;
 						this.categorytreatmentnewadb = spcategorytwoval;
 					}
-				}
 
 				// Handle the data
 			} else if (error) {
@@ -491,14 +487,14 @@ export default class BiPspcategoryarticlecmp extends LightningElement {
 		const filteredResults = [];
 		let count = 1;
 
-		for (let i = 0; i < shuffledResults.length; i++) {
-			const result = shuffledResults[i];
+		for (const element of shuffledResults) {
+			const result = element;
 			let titleFound = false;
 
-			for (let j = 0; j < titlesToFilter.length; j++) {
+			for (const ele of titlesToFilter) {
 				if (
 					result.text.trim().toLowerCase() ===
-					titlesToFilter[j].trim().toLowerCase()
+					ele.trim().toLowerCase()
 				) {
 					titleFound = true;
 					break;
@@ -954,7 +950,6 @@ export default class BiPspcategoryarticlecmp extends LightningElement {
 	handlesubmit(event) {
 		this.count = 1;
 		const finaltitle = event.currentTarget.dataset.name;
-		// this.final = finaltitle;
 		const articlename = finaltitle;
 		window.location.href =
 			this.baseUrl + this.siteurlq + categorypage + articlename;
@@ -1084,11 +1079,9 @@ export default class BiPspcategoryarticlecmp extends LightningElement {
 				if (displayvideotab) {
 					displayvideotab.style.display = 'none';
 				}
-			} else {
-				if (displayvideotab) {
+			} else if (displayvideotab) {
 					displayvideotab.style.display = '';
 				}
-			}
 		} catch (error) {
 			this.showToast(errormessage, error.message, errorvariant); // Catching Potential Error
 		}

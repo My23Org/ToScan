@@ -150,7 +150,7 @@ export default class biPspbaddcaregiver extends LightningElement {
 					this.MobilePhone = this.caregiverList[0].BI_PSPB_Contact_Id__r.Phone;
 					this.Email = this.caregiverList[0].BI_PSPB_Contact_Id__r.Email;
 					this.relations = this.caregiverList[0].BI_PSPB_Contact_Id__r.BI_PSPB_Relationship_To_Patient__c;
-					this.dobdate = this.caregiverList[0].BI_PSPB_Contact_Id__r.BI_PSPB_Birthdate__c;
+					this.dobdate = this.caregiverList[0].BI_PSPB_Contact_Id__r.BI_PSP_Birthdate__c;
 					this.savebutton = saveChanges;
 					if (this.Email !== '') {
 						this.isEmailReadOnly = true; // Set the email field as read-only

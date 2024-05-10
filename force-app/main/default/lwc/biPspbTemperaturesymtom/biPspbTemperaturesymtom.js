@@ -20,7 +20,7 @@ export default class biPspTemperaturesymtom extends NavigationMixin(LightningEle
 	//Proper naming conventions with camel case for all the variable will be followed in the future releases
 	//@track variable declaration
 	@track Boxedicon = Boxedicon;
-	@track bodyParts = ''
+	@track humanparts = ''
 	@track valoF = 99.5;
 	@track slider = 8
 	@track formatedTextVal;
@@ -132,7 +132,7 @@ export default class biPspTemperaturesymtom extends NavigationMixin(LightningEle
 			SymptomId: this.localStorageValueitchiness || this.lastsymptomid, // Use default value if lastsymptomid is null
 			Symptomname: this.temperaturevalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.moodvalues || '', // Use default value if moodvalues is null
-		};this.bodyparts = this.bodyparts;
+		};this.bodyparts = this.humanparts;
 		let itchinessallrecordupdate = {
 			SliderValue: parseFloat(this.sliderValue), // Convert to float if SliderValue is numeric
 			CareprogramId: this.accountId,
@@ -140,11 +140,11 @@ export default class biPspTemperaturesymtom extends NavigationMixin(LightningEle
 			SymptomId: this.lastsymptomid || this.localStorageValueitchiness, // Use default value if lastsymptomid is null
 			Symptomname: this.temperaturevalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.moodvalues || '', // Use default value if moodvalues is null
-		};this.bodyparts = this.bodyparts;
+		};this.bodyparts = this.humanparts;
 		try {
 			if (this.insertcount == 1) {
 				await recordUpdateAllergyIntolerance({
-					itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.bodyparts
+					itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.humanparts
 				})
 				// Null data is checked and AuraHandledException is thrown from the Apex
 					.then(result => {
@@ -164,7 +164,7 @@ export default class biPspTemperaturesymtom extends NavigationMixin(LightningEle
 			else {
 				if (this.lastsymptomid && this.carePlanTemplateName === temperaturevalues) {
 					await recordUpdateAllergyIntolerance({
-						itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.bodyparts
+						itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.humanparts
 					})
 					// Null data is checked and AuraHandledException is thrown from the Apex
 						.then(result => {
@@ -183,7 +183,7 @@ export default class biPspTemperaturesymtom extends NavigationMixin(LightningEle
 				}
 				else {
 					await recordInsertAllergyIntolerance({
-						itchinessallrecordinsert: itchinessallrecordinsert, bodyParts: this.bodyparts
+						itchinessallrecordinsert: itchinessallrecordinsert, bodyParts: this.humanparts
 					})
 					// Null data is checked and AuraHandledException is thrown from the Apex
 						.then(result => {

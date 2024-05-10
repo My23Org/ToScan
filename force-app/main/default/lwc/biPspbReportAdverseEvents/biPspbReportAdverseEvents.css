@@ -180,7 +180,6 @@ h4.fivemb {
 
 .main {
     width: 100%;
-    /* height: 640px; */
     display: flex;
     flex-direction: row;
 }
@@ -253,9 +252,8 @@ h4.fivemb {
 .medicalform label {
     margin-top: 3px;
     color: #403a60;
-    font-weight: bold;
     font-size: 18px;
-    font-weight: 800;
+    font-weight: 400;
     font-family: 'Eina-SemiBold';
     line-height: 28px;
 }
@@ -325,14 +323,6 @@ p {
 
 }
 
-/* .imgclass{
-    margin-bottom: 16px;
-    float: left;
-} */
-
-/* .buttonbox :active{
-    background-color: #403A60;
-} */
 .active {
     background-color: #403a60;
     border: 2px solid #403a60;
@@ -451,7 +441,6 @@ p.pinfo2 {
     vertical-align: middle;
     border: 1px solid red;
 
-    /* border: var(--lwc-borderWidthThin,1px) solid var(--slds-c-radio-color-border, var(--sds-c-radio-color-border, var(--slds-g-color-border-base-4, var(--lwc-colorBorderInput,#D4D4D4)))); */
     border-radius: var(--lwc-borderRadiusCircle, 50%);
     background: none;
     background-color: var(--slds-c-radio-color-background, var(--sds-c-radio-color-background, var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundInput, rgb(255, 255, 255)))));

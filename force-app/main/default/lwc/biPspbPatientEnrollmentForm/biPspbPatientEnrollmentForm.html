@@ -98,6 +98,10 @@
 						<img src={warningicons} width="12px" height="12px">
 						<span class="slds-form-element__helps">{dobErrorMessage}</span>
 					</div>
+					<div class="slds-form-element__help" if:true={dobErrorMessage1}>
+						<img src={warningicons} width="12px" height="12px">
+						<span class="slds-form-element__helps">You need to be 18 or above for self enrollment</span>
+					</div>
 					<div class="slds-form-element__help" if:true={oneninezerozeroerrors}>
 						<img src={warningicons} width="12px" height="12px">
 						<span class="slds-form-element__helps">Year of birth should not be older than 1900</span>
@@ -160,7 +164,7 @@
 					<label for="hcpAccess-yes" class="radio-label">Yes</label>
 					<input type="radio" id="hcpAccess-no" name="hcpAccess" value="No" onchange={handleAccessCodeChange}
 						class="radio-btn" />
-					<label for="hcpAccess-no" class="radio-label">No</label>
+					<label for="hcpAccess-no"  class="radio-label">No</label>
 				</div>
 				<div class="slds-form-element" if:true={showReferringPractitioner}>
 					<div class="slds-form-element__control SPClass">
@@ -348,7 +352,7 @@
 
 							<label class="input-label" data-field="conPhoneNumber">Phone Number</label>
 							<lightning-input field-name="Phone" variant="label-hidden" value={phone}
-								onkeydown={handleKeyDown} onchange={handlePhoneChange} class="textInput" maxlength="16"
+							onkeypress={handleKeyDown} onchange={handlePhoneChange} class="textInput" maxlength="16"
 								placeholder="+Enter Phone Number"></lightning-input>
 
 						</div>

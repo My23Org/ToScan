@@ -882,7 +882,7 @@ Program, please complete the form on this page.`;
 					this.resetForm();
 				})
 				.catch(error => {
-					this.showToast(errormessage, error.message, errorvariant);
+					this.showToast(errormessage, error.body.message, errorvariant);
 				});
 		}
 	}
@@ -2479,7 +2479,6 @@ well.`;
 //The Caregivervalidation() function likely validates caregiver data for uniqueness 
 //based on email and checks for existing caregiver records in the system.
 	Caregivervalidation(){
-			console.log('hh1')
 					if (!this.carevalidateForm()) {
 						// No need for a return here
 					} else if (this.errors === true || this.minorerror === true) {

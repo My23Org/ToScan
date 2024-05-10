@@ -93,7 +93,7 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 	@track isPopupOpendisable = true;
 	@track lastModifi = false;
 	@track entryDate;
-	 @track chsngedVal;
+	@track chsngedVal;
 	@track isDateUnique = false;
 	@track isGppExperiencing;
 	@track lastEntryDate;
@@ -193,8 +193,8 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 	@track intensity
 	@track carePlanTemplateNam;
 	@track whichsymptom;
-	@track fileTitle  = UploadedFile
-	@track filePath   = UploadedFilepng
+	@track fileTitle = UploadedFile
+	@track filePath = UploadedFilepng
 	dynamicValue = dynamicValue;
 	// Variable declaration
 	userId = Id;
@@ -299,9 +299,9 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		return date.toLocaleString(labelus, options);
 	}
 	connectedCallback() {
-			loadStyle(this, fileUploaderCSS);
+		loadStyle(this, fileUploaderCSS);
 		loadStyle(this, symptomimg);
-		
+
 		const queryParams = new URLSearchParams(window.location.search);
 		// Get the value of the 'value' parameter
 		this.receivedValue = queryParams.get('value');
@@ -351,7 +351,7 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		else {
 			this.urlq = unAssignedUrlNavi;
 		}
-	
+
 		//This code retrieves data labeled as 'stopprcocess' from the session storage without altering custom labels.
 		this.primarypage = localStorage.getItem('stopprcocess');
 		if (this.primarypage === dateinputpage) {
@@ -361,7 +361,7 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		this.lastsymptomid = localStorage.getItem('symptomlastid');
 		try {
 			getEnrolle({ userId: this.userId })
-			// Null data is checked and AuraHandledException is thrown from the Apex
+				// Null data is checked and AuraHandledException is thrown from the Apex
 				.then(result => {
 					if (result != null) {
 						if (result[0].patientEnrolle != null) {
@@ -389,11 +389,11 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		setInterval(() => {
 			//This code retrieves data labeled as 'Time' from the session storage without altering custom labels.
 			const localStorageValue = localStorage.getItem('Time', this.resultId)
-				//This code retrieves data labeled as 'gppvalues' from the session storage without altering custom labels.
+			//This code retrieves data labeled as 'gppvalues' from the session storage without altering custom labels.
 			this.sessionstrogegpp = sessionStorage.getItem('gppvalues', this.resultId)
 			this.gppvaluesradio = this.sessionstrogegpp;
 			this.time = localStorageValue
-				//This code retrieves data labeled as 'myData' from the session storage without altering custom labels.
+			//This code retrieves data labeled as 'myData' from the session storage without altering custom labels.
 			const newChangeValue = sessionStorage.getItem('myData');
 			//This code retrieves data labeled as 'redness' from the session storage without altering custom labels.
 			const newChangeValue1 = sessionStorage.getItem('redness');
@@ -621,7 +621,7 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		this.isDropdownOpen1 = false;
 	}
 	handlechnagedropdown() {
-//This code retrieves data labeled as from the session storage without altering custom labels using for all function.
+		//This code retrieves data labeled as from the session storage without altering custom labels using for all function.
 		const changeValue = sessionStorage.getItem('myData');
 		const changeValue1 = sessionStorage.getItem('redness');
 		const changeValue2 = sessionStorage.getItem('Paindata');
@@ -657,16 +657,16 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		}
 	}
 	// 
-	openItchinessModal() {
-		this.submitModal = true;
-		document.body.style.overflow = 'hidden';
-	}
-	closeItchinessModal() {
-		this.submitModal = false;
-		document.body.style.overflow = ''; // Reset to default
-	}
+	// openItchinessModal() {
+	// 	this.submitModal = true;
+	// 	document.body.style.overflow = 'hidden';
+	// }
+	// closeItchinessModal() {
+	// 	this.submitModal = false;
+	// 	document.body.style.overflow = ''; // Reset to default
+	// }
 	handleButtonClick() {
-//This code retrieves data labeled as from the session storage without altering custom labels for all function.
+		//This code retrieves data labeled as from the session storage without altering custom labels for all function.
 		const changeValue = sessionStorage.getItem('myData');
 		const changeValue1 = sessionStorage.getItem('redness');
 		const changeValue2 = sessionStorage.getItem('Paindata');
@@ -729,14 +729,14 @@ export default class SymptomTracker extends NavigationMixin(LightningElement) {
 		window.location.assign(this.urlq + symptomgraphpage + this.dynamicValue);
 	}
 	openItchinessModal() {
-this.showItchinessModal = true;
-document.body.style.overflow = 'hidden';
-}
-closeItchinessModal() {
-this.showItchinessModal = false;
-document.body.style.overflow = ''; // Reset to default
+		this.showItchinessModal = true;
+		document.body.style.overflow = 'hidden';
+	}
+	closeItchinessModal() {
+		this.showItchinessModal = false;
+		document.body.style.overflow = ''; // Reset to default
 
-}
+	}
 	// PainModal
 	openPainModal() {
 		this.showPainModal = true;
@@ -856,80 +856,44 @@ document.body.style.overflow = ''; // Reset to default
 			this.showToast(errormessage, error.message, errorvariant);
 		}
 	}
-	  @track totalSize = [];
+@track totalSize = [];
+
 handleFileInputChange(event) {
     const files = event.target.files;
+
     if (files && files.length > 0) {
         const newImageUrls = [...this.imageUrls];
-		 const newtotalsizeimg = [...this.totalSize];
         const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
-      
-        const maxImagesAllowed = 4;
+        const maxImagesAllowed = 5;
 
         if (newImageUrls.length + files.length > maxImagesAllowed) {
-            // Trying to upload more than 5 images, show error message
             this.isLimitReached = true;
-
-            
+            return;
         }
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-			console.log(file,"totalSize")
+
             if (file.type.includes('image')) {
-				//   this.totalSize += file.size;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    newImageUrls.push(reader.result);
+                    this.imageUrls = [...newImageUrls];
+                };
 
-				  console.log( file.size,' file.size')
-			
-	               const reader = new FileReader();
-                    reader.onload = () => {
-                        newImageUrls.push(reader.result);
-                        this.imageUrls = [...newImageUrls];
-                    };
-					  reader.readAsDataURL(file)
-
-
-                if (file.size <= maxFileSize) {
-				  console.log( maxFileSize,' maxFileSize')
-                  newtotalsizeimg.push(file.size);
-	         
-				;
-				 let sum = 0;
-				 for(let j=0; j < this.totalSize.length; j++){
-                    sum += this.totalSize[j];
-					console.log(this.totalSiz,"sum")
-					if(sum > maxFileSize){
-						     this.uploadedlarge = true;
-							 this.totalSize.splice(j, 1);
-                    throw new Error('Image file size exceeds 5MB.');
-					}
-					else{
-					    this.uploadedlarge = false;
-					}
-
-				 }
-                    
-                  
-                } else {
-                    // Individual file size exceeds 5MB, show error message
-                    this.uploadedlarge = true;
-					this.totalSize.pop()
-                    throw new Error('Image file size exceeds 5MB.');
-                 
-                }
+                reader.readAsDataURL(file);
+                this.totalSize.push(file.size);
             } else {
-                // Not an image file, show error message
-                this.uploadedlarge = false;
-                throw new Error('Only PNG, JPG, and PDF files are allowed.');
-              
+                // Show error message for invalid file types or sizes
+                this.uploadedlarge = true;
+                throw new Error('Invalid file type or size.');
             }
         }
     } else {
-        // No files selected or none of them are images
-        // this.imageUrls = [];
         this.isLimitReached = false;
     }
 }
+
 
 
 
@@ -1039,26 +1003,26 @@ handleFileInputChange(event) {
 	}
 
 	async handleSaveDate() {
-	
-			let accForInsert = this.accountId;
-			let myBoolean = false;
-			// Ensure isDateUnique is resolved before proceeding
-			await this.checkDateUniqueness();
-			if (this.isDateUnique === false) {
-				if (!this.lastsymptomid) {
-					this.resultId = await recordInsertSTs({ accId: accForInsert, gpp: myBoolean, editEntryDate: this.currentDate });
-				} else {
-					this.resultId = await recordInsertSTupdate({ symptomTrackerId: this.lastsymptomid, gpp: myBoolean, editEntryDate: this.currentDate2 });
-				}
+
+		let accForInsert = this.accountId;
+		let myBoolean = false;
+		// Ensure isDateUnique is resolved before proceeding
+		await this.checkDateUniqueness();
+		if (this.isDateUnique === false) {
+			if (!this.lastsymptomid) {
+				this.resultId = await recordInsertSTs({ accId: accForInsert, gpp: myBoolean, editEntryDate: this.currentDate });
+			} else {
+				this.resultId = await recordInsertSTupdate({ symptomTrackerId: this.lastsymptomid, gpp: myBoolean, editEntryDate: this.currentDate2 });
 			}
-			if (this.resultId) {
-				// Store data labeled as 'Time' in the session storage without altering custom labels.
-				localStorage.setItem('Time', this.resultId);
-				// Store data labeled as 'gppvalues' in the session storage without altering custom labels.
-				sessionStorage.setItem('gppvalues', this.resultId);
-				this.datamantroy = true;
-			}
-	
+		}
+		if (this.resultId) {
+			// Store data labeled as 'Time' in the session storage without altering custom labels.
+			localStorage.setItem('Time', this.resultId);
+			// Store data labeled as 'gppvalues' in the session storage without altering custom labels.
+			sessionStorage.setItem('gppvalues', this.resultId);
+			this.datamantroy = true;
+		}
+
 	}
 	async checkDateUniqueness() {
 		try {
@@ -1097,11 +1061,11 @@ handleFileInputChange(event) {
 	handleRadioChange(event) {
 		this.chsngedVal = event.detail.value;
 		this.gpp = this.chsngedVal;
-		console.log(this.gpp,"gpp")
-		
+		console.log(this.gpp, "gpp")
+
 		// Assuming that this.chsngedVal is a string, use 'true' (string) instead of true (boolean)
 		this.showMessage = this.chsngedVal === yes;
-		console.log(this.showMessage,"ragav")
+		console.log(this.showMessage, "ragav")
 	}
 	handleSavegpp() {
 		// Check if sessionStorage values are empty
@@ -1132,7 +1096,7 @@ handleFileInputChange(event) {
 
 			try {
 				updateGPPValue({ symptomTrackerId: this.gppvaluesradio ? this.gppvaluesradio : this.lastsymptomid, gpp: this.changeradiobtn })
-				// Null data is checked and AuraHandledException is thrown from the Apex
+					// Null data is checked and AuraHandledException is thrown from the Apex
 					.then((result) => {
 						if (result) {
 							this.accordcolor = 'card-header-gpp';
@@ -1217,20 +1181,20 @@ handleFileInputChange(event) {
 	}
 	@wire(getsymptomrecorddata, { symptomTrackerId: '$lastsymptomid' })
 	wiredGetsymptomrecorddata({ error, data }) {
-		if (data && data !== null){
+		if (data && data !== null) {
 			try {
 				this.satrdate = false;
 				this.symptomdata = data[0].BI_PSP_EditEntrydates__c;
 				this.symptomgpp = data[0].BI_PSP_Are_you_currently_experiencing__c;
 				this.chsngedVal = this.symptomgpp;
-				if(this.chsngedVal == true){
-                      this.chsngedVal =yes
+				if (this.chsngedVal == true) {
+					this.chsngedVal = yes
 				}
-				else{
-					this.chsngedVal =no
+				else {
+					this.chsngedVal = no
 
 				}
-				console.log(this.chsngedVal ,"ooooo",this.symptomgpp)
+				console.log(this.chsngedVal, "ooooo", this.symptomgpp)
 				this.currentlygpp = true;
 				this.datedisable = true;
 
@@ -1244,44 +1208,44 @@ handleFileInputChange(event) {
 
 				this.symptomgpp = true;
 
-				for (let symptomrecord of data) {
-					let getsymtomdate = symptomrecord.BI_PSP_EditEntrydates__c;
-					let getsymptomrecentbtn = symptomrecord.BI_PSP_Recent_Activities__c;
-					this.currentDate2 = new Date(getsymtomdate).toISOString()?.split('T')[0];
-					this.recntbtn = getsymptomrecentbtn?.split(';');
-					this.recentactivity = true;
-					this.accordcolor = 'card-header-gpp';
-					this.accordcolorbtn = 'card-header-accord';
-					//The use of setInterval ensures optimal timing for thumb label position updates, enhancing animation smoothness and performance
-					setInterval(() => {
-						this.recntbtn?.forEach(item => {
-							let element = this.template.querySelector(`[data-name='${item}']`);
-							if (element) {
-								element.style.backgroundColor = '#C6AA76';
-							} else {
-								console.warn(`Element with data-name='${item}' not found.`);
-							}
-						});
-					}, 1000);
-				}
+				// for (let symptomrecord of data) {
+				// 	let getsymtomdate = symptomrecord.BI_PSP_EditEntrydates__c;
+				// 	let getsymptomrecentbtn = symptomrecord.BI_PSP_Recent_Activities__c;
+				// 	this.currentDate2 = new Date(getsymtomdate).toISOString()?.split('T')[0];
+				// 	this.recntbtn = getsymptomrecentbtn?.split(';');
+				// 	this.recentactivity = true;
+				// 	this.accordcolor = 'card-header-gpp';
+				// 	this.accordcolorbtn = 'card-header-accord';
+				// 	//The use of setInterval ensures optimal timing for thumb label position updates, enhancing animation smoothness and performance
+				// 	setInterval(() => {
+				// 		this.recntbtn?.forEach(item => {
+				// 			let element = this.template.querySelector(`[data-name='${item}']`);
+				// 			if (element) {
+				// 				element.style.backgroundColor = '#C6AA76';
+				// 			} else {
+				// 				console.warn(`Element with data-name='${item}' not found.`);
+				// 			}
+				// 		});
+				// 	}, 1000);
+				// }
 			} catch (err) {
 				this.showToast(errormessage, err.message, errorvariant);
 			}
 		} else if (error) {
-			 this.showToast(errormessage, error.body.message, errorvariant);
+			this.showToast(errormessage, error.body.message, errorvariant);
 		}
 	}
 
 
-	@track oldimageurl= [];
+	@track oldimageurl = [];
 	@wire(getCaseImageURL, { symptomTrackerId: '$lastsymptomid' })
 
 
 	wiredgetCaseImageURL({ data, error }) {
-		if (data && data !== null){
+		if (data && data !== null) {
 			try {
 				this.caseImageURL = data;
-				console.log(this.caseImageURL,'mmmmmmmmmmmmmmmmmmmmm')
+				console.log(this.caseImageURL, 'mmmmmmmmmmmmmmmmmmmmm')
 				this.filemessage = true;
 				this.filechnagecolour = 'card-header-accord';
 
@@ -1291,12 +1255,12 @@ handleFileInputChange(event) {
 						if (record !== '') {
 							this.imageUrls = [...this.imageUrls, 'data:' + record];
 							this.oldimageurl = [...this.oldimageurl, 'data:' + record];
-							
+
 						}
 					}
 					this.firsttime = true;
 					this.recentimages = true;
-				} else if (this.imageUrls.length < 0) {
+				} else if (this.imageUrls.length > 0) {
 					this.filechnagecolour = 'card-header-accord';
 				}
 			} catch (err) {
@@ -1304,7 +1268,7 @@ handleFileInputChange(event) {
 				// Handle the error as needed
 			}
 		}
-	
+
 	}
 
 
@@ -1328,7 +1292,7 @@ handleFileInputChange(event) {
 	}
 	@wire(getAllergyIntolerancedata, { symptomTrackerId: '$lastsymptomid' })
 	wiredAllergyIntoleranceData({ error, data }) {
-		if (data && data !== null){
+		if (data && data !== null) {
 			try {
 				this.isPopupOpendisable = false;
 				this.whichsymptom = data;
@@ -1407,44 +1371,35 @@ handleFileInputChange(event) {
 
 
 	lastModifiedDate;
-		@wire(getSymptomTrackerDetails, { careProgramEnrolleeId: '$accountId' })
-		wiredResult({ error, data }) {
-			try {
-					console.log(data,'datattata')
-				if (data) {
-				
-					this.lastModifiedDate = data.lastModifiedDate;
-					this.lastModifiedtime = data.lasttime;
-							console.log(this.lastModifiedDate,'datattata')
-					let newdate3 = this.lastModifiedtime.split(', ');
-					const dateTime = new Date(newdate3);
-					// Get the hours, minutes, and seconds from the Date object
-					const hours = dateTime.getHours();
-					const minutes = dateTime.getMinutes();
-					const seconds = dateTime.getSeconds();
-					// Format the time in HH:mm:ss format (24-hour format)
-					const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-					this.lastModifi = true;
-					// Get the current date and time
-					let date = new Date(this.lastModifiedDate);
-					let options = { month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
-					let formattedDate = date.toLocaleString(undefined, options);
-					let newdate = formattedDate.split(', ');
-					this.formattedLastModifiedDate = `${newdate[0]} at ${formattedTime}`;
-					// Log the extracted time
-				}
-			} catch (err) {
-				console.error('An error occurred:', err);
-			}			
+	@wire(getSymptomTrackerDetails, { careProgramEnrolleeId: '$accountId' })
+	wiredResult({ error, data }) {
+		try {
+			console.log(data, 'datattata')
+			if (data) {
+
+				this.lastModifiedDate = data.lastModifiedDate;
+				this.lastModifiedtime = data.lasttime;
+				console.log(this.lastModifiedDate, 'datattata')
+				let newdate3 = this.lastModifiedtime.split(', ');
+				const dateTime = new Date(newdate3);
+				// Get the hours, minutes, and seconds from the Date object
+				const hours = dateTime.getHours();
+				const minutes = dateTime.getMinutes();
+				const seconds = dateTime.getSeconds();
+				// Format the time in HH:mm:ss format (24-hour format)
+				const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+				this.lastModifi = true;
+				// Get the current date and time
+				let date = new Date(this.lastModifiedDate);
+				let options = { month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
+				let formattedDate = date.toLocaleString(undefined, options);
+				let newdate = formattedDate.split(', ');
+				this.formattedLastModifiedDate = `${newdate[0]} at ${formattedTime}`;
+				// Log the extracted time
+			}
+		} catch (err) {
+			console.error('An error occurred:', err);
 		}
-		formatDate(date) {
-				const options = {
-						month: 'numeric',
-						day: 'numeric',
-						hour: 'numeric',
-						minute: 'numeric',
-						hour12: true,
-				};
-				return date.toLocaleString('en-US', options);
-		}
+	}
+
 }

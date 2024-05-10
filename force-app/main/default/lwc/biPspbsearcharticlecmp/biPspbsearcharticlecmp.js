@@ -262,6 +262,7 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 		[articletwentyeight]: [BI_PSPB_ArticleTwentyEightRT],
 		[articletwentynine]: [BI_PSPB_ArticleTwentyNineRT]
 	}
+
 	// button labels
 	standarItemlink = [
 		{ id: 1, title: articlecategoryone, titleadb: articlecategoryvalone },
@@ -1064,7 +1065,7 @@ export default class BiPspbsearcharticlecmp extends LightningElement {
 			}
 
 			if (window.innerWidth <= 1000) {
-				if (this.searchitems.length === 0 || this.searchitems.length < 0) {
+				if (this.searchitems.length <= 0) {
 					flexiEle.style.height = 600 + 'px';
 					this.heightofcal = 600;
 				} else if (this.searchitems.length === 1) {

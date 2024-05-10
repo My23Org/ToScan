@@ -99,7 +99,7 @@ export default class BiPspbarticlelikebtn extends LightningElement {
 			}
 
 
-		} catch (error) {
+		} catch (err) {
 			this.showToast(errormessage, err.message, errorvariant); // Catching Potential Error from lwc
 		}
 	}

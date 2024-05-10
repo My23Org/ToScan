@@ -198,7 +198,7 @@ if (this.receivedValue) {
 						.then(result => {
 							if (result[0].patientEnrolle != null) {
 								this.enrolleId = result[0].patientEnrolle.Id;
-								var urlParams = new URLSearchParams(window.location.href.split(Questionmark)[1]);
+								let urlParams = new URLSearchParams(window.location.href.split(Questionmark)[1]);
 								let eroll = urlParams.get(erolls);
 								let firstdate1 = urlParams.get(firstdateee);
 								let lastdate1 = urlParams.get(lastdateee);

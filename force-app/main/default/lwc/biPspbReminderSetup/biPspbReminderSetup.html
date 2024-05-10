@@ -34,22 +34,21 @@ Set it and leave it to us!
 		</p>
 		<span if:true={clss} class="close1" onclick={Xbtn} >X</span>
 	</div>
+	<div class="navigationcontentmobile"  if:true={checkingdata}>
+		<p>Its done!
+			Your treatment and reminder is set.			
+			Look out for the reminders!
+		</p>
+	</div>
 	<div if:true={closedot}>
 		<p onclick={mobileclick}  class="navigationcontentdot">...</p>
 	</div>
-	<!-- <div if:false={showAfterSaveContent}>
-		<p onclick={mobileclick1}  class="navigationcontentdot">...</p>
-	</div> -->
+	<div if:true={closingdot}>
+		<p onclick={mobileclick1}  class="navigationcontentdot1">...</p>
+	</div>
 	</div>
 	</div> 
 	<div class="show">
-<!-- <template if:true={showDiv}>
-	<div class="toast"><p class="para"><img  class="img4" src={rightimg}>  Prescription and treatment reminder set for upcoming treatment  </p>
-		<div class="notify">
-		<button class="buttonclass btncls"  onclick={handleclose}><p class="closingbtn">X</p> </button>
-		</div>
-	</div>
-</template> -->
 	</div>
 	<div>
 			<hr class="line1">

@@ -87,13 +87,11 @@
 
 .svgfil {
 	fill: #696969;
-	fill: color(display-p3 0.4125 0.4125 0.4125);
 	fill-opacity: 1;
 }
 
 .svgstylefil {
 	fill: #403a60;
-	fill: color(display-p3 0.251 0.2275 0.3765);
 	fill-opacity: 1;
 }
 
@@ -253,12 +251,6 @@ hr.search-bar-border-bottom {
 }
 
 .article-container {
-	/* display: flex;  */
-	/* justify-content: space-between;
-margin: 20px;
-margin-left: 40%;
-margin-top: -95%;
-position: relative; */
 	height: fit-content;
 	width: 100%;
 }
@@ -285,8 +277,6 @@ position: relative; */
 }
 
 .article {
-	border: 1px solid #ccc;
-	/* padding: 10px; */
 	margin-bottom: 20px;
 	border: 1px solid rgba(0, 0, 0, 0.125);
 	height: 50%;
@@ -385,7 +375,6 @@ svg {
 .leftlink {
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 18px;
 	border-radius: 50%;
 	border: 2px solid #403a60;
 	margin-left: 17px;
@@ -406,7 +395,6 @@ svg {
 .rightlink {
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 18px;
 	border-radius: 50%;
 	border: 2px solid #403a60;
 	margin-left: 17px;

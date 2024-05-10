@@ -78,6 +78,16 @@
       #744f0d 100%
     );
   }
+  	.displayflexCenter {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+  	.displayflexCenter1 {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
 }
 
 @media only screen and (min-width: 601px) {
@@ -118,6 +128,18 @@
   .showMobileBorder {
     display: none;
   }
+	.displayflexCenter {
+		display: flex;
+		min-height: 65vh;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.displayflexCenter1 {
+		display: flex;
+		min-height: 65vh;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
 }
 @media only screen and (min-width: 992px) {
   .pad {
@@ -133,6 +155,18 @@
   .showMobileBorder {
     display: none;
   }
+  	.displayflexCenter {
+		display: flex;
+		min-height: 65vh;
+		flex-direction: column;
+		justify-content: center;
+	}
+  	.displayflexCenter1 {
+		display: flex;
+		min-height: 65vh;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
 }
 @media only screen and (min-width: 1200px) {
   .pad {
@@ -148,6 +182,18 @@
   .showMobileBorder {
     display: none;
   }
+	.displayflexCenter {
+		display: flex;
+		min-height: 65vh;
+		flex-direction: column;
+		justify-content: center;
+	}
+  	.displayflexCenter1 {
+		display: flex;
+		min-height: 65vh;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
 }
 @media only screen and (min-width: 1500px) {
   .pad {
@@ -163,4 +209,43 @@
   .showMobileBorder {
     display: none;
   }
+	.displayflexCenter {
+		display: flex;
+		min-height: 65vh;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.displayflexCenter1 {
+		display: flex;
+		min-height: 65vh;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
+}
+@media only screen and (min-width: 1700px) {
+  .pad {
+    padding-right: 5%;
+    padding-left: 5%;
+  }
+  .tabClass {
+    display: grid;
+    width: 100%;
+    background-color: white;
+    border-bottom: 1.5px solid rgba(141, 137, 165, 0.5);
+  }
+  .showMobileBorder {
+    display: none;
+  }
+	.displayflexCenter {
+		display: flex;
+		min-height: 70vh;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.displayflexCenter1 {
+		display: flex;
+		min-height: 70vh;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
 }

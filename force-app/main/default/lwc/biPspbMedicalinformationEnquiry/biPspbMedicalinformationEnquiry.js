@@ -207,10 +207,8 @@ if (this.description) {
 	this.class5 = 'desc'; // invoked in CSS file
 	this.descriptionLengthError = false;
 }
-this.checkLength();
 this.descriptionerror = false;
 }
-checkLength() {}
 handleUploadFinished(event) {
 const uploadedFiles = event.detail.files;
 this.files = uploadedFiles;

@@ -29,7 +29,6 @@
 }
 .svgfil{
 	fill:#403A60;
-	fill:color(display-p3 0.2510 0.2275 0.3765);
 	fill-opacity:1;
 }
 .vicon{
@@ -118,7 +117,6 @@ article h2 {
 .leftlink {
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 18px;
 	border-radius: 50%;
 	border: 2px solid #403a60;
 	margin-left: 17px;

@@ -23,7 +23,7 @@ export default class biPspFatiguesymptom extends NavigationMixin(LightningElemen
 	@track fatiqueerrors = false;
 	@track sliderValuetwo = zerovalue;
 	@track valoF;
-	@track bodyParts = ''
+	@track humanparts = ''
 	@track sliderValue = 0;
 	@track fatiguevalues = fatiguevalues;
 	// As this is a css property which changes dynamically so we can't use custom label for this scenario
@@ -151,7 +151,7 @@ export default class biPspFatiguesymptom extends NavigationMixin(LightningElemen
 			SymptomId: this.localStorageValueitchiness || this.lastsymptomid, // Use default value if lastsymptomid is null
 			Symptomname: this.fatiguevalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.moodvalues || '', // Use default value if moodvalues is null
-		};this.bodyparts = this.bodyparts;
+		};this.bodyparts = this.humanparts;
 		let itchinessallrecordupdate = {
 			SliderValue: parseFloat(this.sliderValue), // Convert to float if SliderValue is numeric
 			CareprogramId: this.accountId,
@@ -159,13 +159,13 @@ export default class biPspFatiguesymptom extends NavigationMixin(LightningElemen
 			SymptomId: this.lastsymptomid || this.localStorageValueitchiness, // Use default value if lastsymptomid is null
 			Symptomname: this.fatiguevalues || '', // Use default value if itchinessvalues is null
 			Moodvalues: this.moodvalues || '', // Use default value if moodvalues is null
-		};this.bodyparts = this.bodyparts;
+		};this.bodyparts = this.humanparts;
 		try {
 			if (this.sliderValue > 0) {
 				// If slider value is positive and insertcount is 1, update allergy intolerance records
 				if (this.insertcount == 1) {
 					await recordUpdateAllergyIntolerance({
-						itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.bodyparts
+						itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.humanparts
 					})
 					// Null data is checked and AuraHandledException is thrown from the Apex
 						.then(result => {			
@@ -187,7 +187,7 @@ export default class biPspFatiguesymptom extends NavigationMixin(LightningElemen
 				else {
 					if (this.lastsymptomid && this.carePlanTemplateName === fatiguevalues) {
 						await recordUpdateAllergyIntolerance({
-							itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.bodyparts
+							itchinessallrecordupdate: itchinessallrecordupdate, bodyParts: this.humanparts
 						})
 						// Null data is checked and AuraHandledException is thrown from the Apex
 							.then(result => {
@@ -208,7 +208,7 @@ export default class biPspFatiguesymptom extends NavigationMixin(LightningElemen
 					}
 					else {
 						await recordInsertAllergyIntolerance({
-							itchinessallrecordinsert: itchinessallrecordinsert, bodyParts: this.bodyparts
+							itchinessallrecordinsert: itchinessallrecordinsert, bodyParts: this.humanparts
 						})
 						// Null data is checked and AuraHandledException is thrown from the Apex
 							.then(result => {
